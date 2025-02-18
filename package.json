@@ -1,0 +1,39 @@
+{
+  "name": "scheduler",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack serve --mode=development",
+    "watch:css": "sass --watch src/scss:dist/css",
+    "watch:ts": "tsc --watch",
+    "build": "webpack --mode=production",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.26.9",
+    "@babel/preset-env": "^7.26.9",
+    "@babel/preset-typescript": "^7.26.0",
+    "@eslint/js": "^9.20.0",
+    "@typescript-eslint/eslint-plugin": "^8.24.0",
+    "@typescript-eslint/parser": "^8.24.0",
+    "babel-loader": "^9.2.1",
+    "css-loader": "^7.1.2",
+    "eslint": "^9.20.1",
+    "eslint-config-prettier": "^10.0.1",
+    "eslint-plugin-prettier": "^5.2.3",
+    "globals": "^15.15.0",
+    "mini-css-extract-plugin": "^2.9.2",
+    "prettier": "^3.5.1",
+    "sass": "^1.85.0",
+    "sass-loader": "^16.0.5",
+    "typescript": "^5.7.3",
+    "typescript-eslint": "^8.24.0",
+    "webpack": "^5.98.0",
+    "webpack-cli": "^6.0.1",
+    "webpack-dev-server": "^5.2.0"
+  }
+}
