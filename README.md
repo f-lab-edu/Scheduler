@@ -11,3 +11,11 @@
 - 사용자가 등록한 스케줄을 보더와 캘린더를 통해 관리 및 확인이 가능
 - 등록한 스케줄을 우선순위와 상태에(예정,진행,완료) 따라 필터링 및 검색 기능
 - drag & drop과 같은 동작을 통해 보다 유연한 사용자 경험을 제공
+
+
+![Screenshot 2025-02-19 at 8 39 21 PM](https://github.com/user-attachments/assets/dbef6ece-7a40-4f51-8057-3bfbe6360786)
+![Screenshot 2025-02-19 at 8 40 15 PM](https://github.com/user-attachments/assets/94e48e89-3b87-44d1-9f94-716de9e2354c)
+![Screenshot 2025-02-19 at 8 40 29 PM](https://github.com/user-attachments/assets/d8540d31-1c35-4002-ad77-1fbc10cd4355)
+![Screenshot 2025-02-19 at 8 40 38 PM](https://github.com/user-attachments/assets/e4cb476a-ef74-4357-a259-332c06f2c56a)
+![Screenshot 2025-02-19 at 8 40 53 PM](https://github.com/user-attachments/assets/153b5698-2bd2-4447-87b1-466f733b90fe)
+![Screenshot 2025-02-19 at 8 41 02 PM](https://github.com/user-attachments/assets/9248bbbf-7529-422d-ac06-ee9953da384a)
