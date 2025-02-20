@@ -1,26 +1,26 @@
-export type Priorities = 'High' | 'Medium' | 'Low';
+export type TPriorities = 'High' | 'Medium' | 'Low';
 export type Tab = 'Board' | 'Calendar';
 export type DefaultListType = 'To do' | 'In Progress' | 'Done';
-export type ListType = DefaultListType | string;
+export type StatusListType = DefaultListType | string;
 
-export interface DefaultInfo {
+export interface IDefaultInfo {
   title: string;
   startDate: string;
   endDate?: string;
   priority: Priorities;
 }
 
-export interface Card extends DefaultInfo {
+export interface Card extends IDefaultInfo {
   description: string;
 }
 
-export interface List {
-  listType: ListType;
+export interface IStatusList {
+  listType: StatusListType;
   detailCard: Card[];
   totalCount: number;
 }
 
-export interface Filter {
-  listType: ListType[];
+export interface IFilter {
+  listType: StatusListType[];
   priorities: Priorities[];
 }
