@@ -2,9 +2,9 @@ import ActionGroup from './ActionGroup';
 import StatusList from './StatusList';
 
 export default class Contents {
-  taskList: IStatusList[];
+  // taskList: IStatusList[];
   constructor() {
-    this.taskList.push(new StatusList());
+    // this.taskList.push(new StatusList());
   }
   render(): HTMLElement {
     const ContentsWrapper = document.createElement('section');

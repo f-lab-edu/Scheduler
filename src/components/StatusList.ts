@@ -11,7 +11,7 @@ export default class StatusList {
     const listContainer = document.createElement('ul');
     listContainer.classList.add('task-list');
 
-    const taskList = new TaskList([]); //데이터
+    // const taskList = new TaskList([]); //데이터
 
     return listContainer;
   }
