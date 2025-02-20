@@ -16,11 +16,19 @@ $colors: (
   background: (
     startPurple: #430279,
     endBlack: #001b41,
+    searchBar: #011c41,
+  ),
+  border: (
+    gray: #a8a8a8,
+  ),
+  button: (
+    filter: #2d2a4f,
   ),
 );
 
 // 중복 사용으로 변수화
 $font-white: map.get(map.get($colors, font), default);
+$white: map.get($colors, white);
 
 @mixin card($color) {
   background-color: $color;
@@ -37,7 +45,7 @@ $font-white: map.get(map.get($colors, font), default);
 }
 
 .logo {
-  color: map.get($colors, white);
+  color: $white;
 }
 
 .tabs {
@@ -52,8 +60,8 @@ $font-white: map.get(map.get($colors, font), default);
   }
   .tab:first-child {
     margin-left: 70px;
-    color: map.get($colors, white);
-    border-bottom: 2px solid map.get($colors, white);
+    color: $white;
+    border-bottom: 2px solid $white;
   }
 
   button {
@@ -64,6 +72,7 @@ $font-white: map.get(map.get($colors, font), default);
     font-size: 25px;
     color: map.get(map.get($colors, font), tab);
     padding: 0 20px;
+    cursor: pointer;
   }
 }
 
@@ -73,6 +82,7 @@ $font-white: map.get(map.get($colors, font), default);
   background: linear-gradient(
     to bottom right,
     map.get(map.get($colors, background), startPurple),
+    map.get(map.get($colors, background), endBlack),
     map.get(map.get($colors, background), endBlack)
   );
 }
@@ -83,8 +93,9 @@ $font-white: map.get(map.get($colors, font), default);
 
   .left-action {
     display: flex;
-    gap: 5px;
+    gap: 14px;
     color: $font-white;
+    align-items: center;
 
     button {
       border: none;
@@ -92,10 +103,63 @@ $font-white: map.get(map.get($colors, font), default);
       outline: none;
       color: $font-white;
       background-color: map.get($colors, blue);
+      cursor: pointer;
     }
   }
 
   .right-actions {
     display: flex;
+    gap: 20px;
+
+    .search-bar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      width: 294px;
+      border: 1px solid map.get(map.get($colors, border), gray);
+      background-color: map.get(map.get($colors, background), searchBar);
+      border-radius: 30px;
+      padding: 8px 18px;
+
+      input {
+        width: 100%;
+        border: none;
+        outline: none;
+        background-color: transparent;
+        padding: 8px;
+        color: $font-white;
+      }
+    }
+
+    button {
+      border: none;
+      background-color: transparent;
+      outline: none;
+      color: $font-white;
+      background-color: map.get(map.get($colors, button), filter);
+      cursor: pointer;
+    }
+
+    .filter-button {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      border-radius: 20px;
+      padding: 12px;
+    }
   }
+}
+
+.plus-icon,
+.search-icon,
+.filter-icon {
+  filter: invert(100%);
+}
+
+.add-new-button {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 13px;
+  border-radius: 30px;
 }
