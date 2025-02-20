@@ -1,0 +1,101 @@
+@use 'sass:map';
+
+$colors: (
+  blue: #0851ee,
+  brightPurple: #600598,
+  white: #ffffff,
+  card: (
+    high: #5feef8,
+    medium: #c4a8ff,
+    low: #ffd277,
+  ),
+  font: (
+    default: #ffffff,
+    tab: #9b87a4,
+  ),
+  background: (
+    startPurple: #430279,
+    endBlack: #001b41,
+  ),
+);
+
+// 중복 사용으로 변수화
+$font-white: map.get(map.get($colors, font), default);
+
+@mixin card($color) {
+  background-color: $color;
+}
+
+.header {
+  width: 100%;
+  height: 125px;
+  background-color: map.get($colors, blue);
+  font-size: 40px;
+  display: flex;
+  align-items: center;
+  padding-left: 45px;
+}
+
+.logo {
+  color: map.get($colors, white);
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  height: 105px;
+  color: map.get(map.get($colors, font), tab);
+  background-color: map.get($colors, brightPurple);
+
+  .tab {
+    padding-top: 55px;
+  }
+  .tab:first-child {
+    margin-left: 70px;
+    color: map.get($colors, white);
+    border-bottom: 2px solid map.get($colors, white);
+  }
+
+  button {
+    border: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+    font-size: 25px;
+    color: map.get(map.get($colors, font), tab);
+    padding: 0 20px;
+  }
+}
+
+.contents {
+  height: 100vh;
+  padding: 19px 70px;
+  background: linear-gradient(
+    to bottom right,
+    map.get(map.get($colors, background), startPurple),
+    map.get(map.get($colors, background), endBlack)
+  );
+}
+
+.action-group {
+  display: flex;
+  justify-content: space-between;
+
+  .left-action {
+    display: flex;
+    gap: 5px;
+    color: $font-white;
+
+    button {
+      border: none;
+      background-color: transparent;
+      outline: none;
+      color: $font-white;
+      background-color: map.get($colors, blue);
+    }
+  }
+
+  .right-actions {
+    display: flex;
+  }
+}

@@ -48,6 +48,15 @@ export default {
           'sass-loader',
         ],
       },
+      // webpack5에서는 'file-loader' 필요 없음. 'asset/resource'로 대체 가능
+      {
+        // test: /\.(png|jpe?g|gif|svg)$/i,
+        test: /\.svg$/,
+        type: 'asset/resource',
+        generator: {
+          filename: 'assets/images/[name].[hash].[ext]', // 빌드될 경로 및 파일명 패턴
+        },
+      },
     ],
   },
 
