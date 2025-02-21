@@ -1,14 +1,17 @@
 export default class Header {
+  header: HTMLElement;
+  logo: HTMLElement;
+  constructor() {
+    this.header = document.createElement('header');
+    this.logo = document.createElement('div');
+
+    this.header.classList.add('header');
+
+    this.logo.classList.add('logo');
+    this.logo.textContent = 'Scheduler';
+    this.header.appendChild(this.logo);
+  }
   render(): HTMLElement {
-    const header = document.createElement('div');
-    const logo = document.createElement('div');
-
-    header.classList.add('header');
-
-    logo.classList.add('logo');
-    logo.textContent = 'Scheduler';
-    header.appendChild(logo);
-
-    return header;
+    return this.header;
   }
 }

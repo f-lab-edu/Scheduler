@@ -40,7 +40,6 @@ $white: map.get($colors, white);
 }
 
 .header {
-  width: 100%;
   height: 125px;
   background-color: map.get($colors, blue);
   font-size: 40px;
@@ -49,10 +48,6 @@ $white: map.get($colors, white);
   align-items: center;
   padding-left: 45px;
 }
-
-// .logo {
-//   color: $;
-// }
 
 .tabs {
   display: flex;
@@ -96,7 +91,7 @@ $white: map.get($colors, white);
   display: flex;
   justify-content: space-between;
 
-  .left-action {
+  .left-actions {
     display: flex;
     gap: 14px;
     color: $font-white;
@@ -175,6 +170,7 @@ $white: map.get($colors, white);
   gap: 2px;
   padding: 13px 13px 13px 8px;
   border-radius: 30px;
+  background-color: map.get($colors, blue);
 }
 
 .statusListItem {

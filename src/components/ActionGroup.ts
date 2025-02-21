@@ -1,40 +1,50 @@
 import plus from '@/assets/plus.svg';
 import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
+import Button from './common/Button';
 
 export default class ActionGroup {
-  render(): HTMLElement {
-    const actionWrapper = document.createElement('section');
-    actionWrapper.classList.add('action-group');
+  actionWrapper: HTMLElement;
+  constructor() {
+    this.actionWrapper = document.createElement('section');
+    this.actionWrapper.classList.add('action-group');
 
-    actionWrapper.innerHTML = `
-       <div class="left-action">
+    this.actionWrapper.innerHTML = `
+        <div class="left-actions">
             <div class="total-tasks">8 tasks</div>
-            <button class="add-new-button">
-              <img class="plus-icon" alt="plus button" />
-              <span>Add New</span>
-            </button>
-          </div>
-          <div class="right-actions">
+        </div>
+        <div class="right-actions">
             <div class="search-bar">
-              <img class="search-icon" alt="search icon" />
-              <input value="" placeholder="Type your search keyword" />
+                <img class="search-icon" src="${search}" alt="search icon" />
+                <input value="" placeholder="Type your search keyword" />
             </div>
-            <button class="filter-button">
-              <img class="filter-icon" alt="filter icon" />
-              <span>Filters</span>
-            </button>
-          </div>
+        </div>
     `;
 
-    const plusIcon = actionWrapper.querySelector('.plus-icon') as HTMLImageElement;
-    const searchIcon = actionWrapper.querySelector('.search-icon') as HTMLImageElement;
-    const filterIcon = actionWrapper.querySelector('.filter-icon') as HTMLImageElement;
+    const leftAction = this.actionWrapper.querySelector('.left-actions');
+    leftAction?.appendChild(
+      new Button({
+        buttonClass: 'add-new-button',
+        imgSrc: plus,
+        imgClass: 'plus-icon',
+        text: 'Add New',
+        onClick: () => console.log('Add New 버튼 클릭!'),
+      }).render(),
+    );
 
-    if (plusIcon) plusIcon.src = plus;
-    if (searchIcon) searchIcon.src = search;
-    if (filterIcon) filterIcon.src = filter;
+    const rightAction = this.actionWrapper.querySelector('.right-actions');
+    rightAction?.appendChild(
+      new Button({
+        buttonClass: 'filter-button',
+        imgSrc: filter,
+        imgClass: 'filter-icon',
+        text: 'Filters',
+        onClick: () => console.log('Filters 버튼 클릭!'),
+      }).render(),
+    );
+  }
 
-    return actionWrapper;
+  render(): HTMLElement {
+    return this.actionWrapper;
   }
 }

@@ -24,3 +24,11 @@ export interface IFilter {
   listType: StatusListType[];
   priorities: Priorities[];
 }
+
+export interface IButton {
+  buttonClass: string;
+  imgSrc?: string;
+  imgClass?: string;
+  text?: string;
+  onClick: () => void;
+}
