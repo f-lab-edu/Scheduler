@@ -1,4 +1,4 @@
-import plus from '@/assets/plus-lg.svg';
+import plus from '@/assets/plus.svg';
 import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
 
@@ -12,7 +12,7 @@ export default class ActionGroup {
             <div class="total-tasks">8 tasks</div>
             <button class="add-new-button">
               <img class="plus-icon" alt="plus button" />
-              <div>Add New</div>
+              <span>Add New</span>
             </button>
           </div>
           <div class="right-actions">
@@ -22,7 +22,7 @@ export default class ActionGroup {
             </div>
             <button class="filter-button">
               <img class="filter-icon" alt="filter icon" />
-              <div>Filters</div>
+              <span>Filters</span>
             </button>
           </div>
     `;

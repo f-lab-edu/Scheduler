@@ -10,8 +10,8 @@ $colors: (
     low: #ffd277,
   ),
   font: (
-    default: #ffffff,
-    tab: #9b87a4,
+    primary: #ffffff,
+    tabInactive: #9b87a4,
   ),
   background: (
     startPurple: #430279,
@@ -32,7 +32,7 @@ $colors: (
 );
 
 // 중복 사용으로 변수화
-$font-white: map.get(map.get($colors, font), default);
+$font-white: map.get(map.get($colors, font), primary);
 $white: map.get($colors, white);
 
 @mixin card($color) {
@@ -58,7 +58,7 @@ $white: map.get($colors, white);
   display: flex;
   width: 100%;
   height: 105px;
-  color: map.get(map.get($colors, font), tab);
+  color: map.get(map.get($colors, font), tabInactive);
   background-color: map.get($colors, brightPurple);
 
   .tab {
@@ -75,7 +75,7 @@ $white: map.get($colors, white);
     background-color: transparent;
     outline: none;
     font-size: 25px;
-    color: map.get(map.get($colors, font), tab);
+    color: map.get(map.get($colors, font), tabInactive);
     padding: 0 20px;
     cursor: pointer;
   }
@@ -159,6 +159,10 @@ $white: map.get($colors, white);
   }
 }
 
+.plus-icon {
+  width: 24px;
+}
+
 .plus-icon,
 .search-icon,
 .filter-icon {
@@ -169,7 +173,7 @@ $white: map.get($colors, white);
   display: flex;
   align-items: center;
   gap: 2px;
-  padding: 13px;
+  padding: 13px 13px 13px 8px;
   border-radius: 30px;
 }
 
