@@ -1,21 +1,14 @@
 import ActionGroup from './ActionGroup';
-import StatusList from './StatusList';
 
 export default class Contents {
-  // taskList: IStatusList[];
-  constructor() {
-    // this.taskList.push(new StatusList());
-  }
-  render(): HTMLElement {
-    const ContentsWrapper = document.createElement('section');
-    ContentsWrapper.classList.add('contents');
-
+  render(): string {
     const actionGroup = new ActionGroup().render();
-    // const taskList = new StatusList([]).render(); //데이터
+    console.log(actionGroup);
 
-    ContentsWrapper.appendChild(actionGroup);
-    // ContentsWrapper.appendChild(taskList);
-
-    return ContentsWrapper;
+    return `
+      <section class="contents">
+        ${actionGroup}
+      </section>
+    `;
   }
 }

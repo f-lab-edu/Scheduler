@@ -3,19 +3,22 @@ import Tab from '@/components/common/Tab';
 export default class Tabs {
   tabs: TabType[];
 
-  constructor($tabs: TabType[]) {
-    this.tabs = $tabs;
+  constructor(tabs: TabType[]) {
+    this.tabs = tabs;
   }
 
-  render(): HTMLElement {
-    const tabContainer = document.createElement('section');
-    tabContainer.classList.add('tabs');
+  render(): string {
+    const tabEl = this.tabs
+      .map((tabName) => {
+        const tab = new Tab(tabName);
+        return tab.render();
+      })
+      .join('');
 
-    this.tabs.forEach((tabName) => {
-      const tab = new Tab(tabName);
-      tabContainer.appendChild(tab.render());
-    });
-
-    return tabContainer;
+    return `
+      <section class="tabs">
+        ${tabEl}
+      </section>
+    `;
   }
 }
