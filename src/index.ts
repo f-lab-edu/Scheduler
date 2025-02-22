@@ -1,5 +1,7 @@
-function greet(name: string): string {
-  return `Hello, ${name}!`;
-}
+import '../style/reset.scss';
+import '../style/style.scss';
+import { App } from './App';
 
-console.log(greet("World"));
+const appRoot = document.getElementById('app') as HTMLElement;
+const app = new App();
+appRoot.innerHTML = app.render();
