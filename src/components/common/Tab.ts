@@ -1,7 +1,7 @@
-import { Tab as TabType } from '../../../types/types';
+import { TTab } from '../../../types/types';
 export default class Tab {
-  selected: TabType;
-  constructor(selected: TabType) {
+  selected: TTab;
+  constructor(selected: TTab) {
     this.selected = selected;
   }
 

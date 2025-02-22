@@ -1,9 +1,9 @@
-import { Tab as TabType } from 'types/types';
+import { TTab } from 'types/types';
 import Tab from '@/components/common/Tab';
 export default class Tabs {
-  tabs: TabType[];
+  tabs: TTab[];
 
-  constructor(tabs: TabType[]) {
+  constructor(tabs: TTab[]) {
     this.tabs = tabs;
   }
 

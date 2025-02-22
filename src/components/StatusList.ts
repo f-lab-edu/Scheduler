@@ -1,18 +1,39 @@
-import { IStatusList } from 'types/types';
+import { ICard, IStatusList } from 'types/types';
 import TaskList from './TaskList';
+import StatusHeader from './StatusHeader';
 
 export default class StatusList {
   statusList: IStatusList[];
-  constructor($statusList: IStatusList[]) {
-    this.statusList = $statusList;
+  state: ICard[];
+  constructor(statusList: IStatusList[]) {
+    this.statusList = statusList;
+    this.state = [
+      {
+        title: '프론트엔드공부',
+        startDate: 'Today',
+        endDate: '',
+        priority: 'High',
+        description: '기본내용',
+      },
+    ];
   }
 
-  render(): HTMLElement {
-    const listContainer = document.createElement('ul');
-    listContainer.classList.add('task-list');
+  render(): string {
+    const data = this.state.map((item) => {
+      const task = new TaskList(item);
+      return task.render();
+    });
 
-    // const taskList = new TaskList([]); //데이터
+    const statusData = this.statusList.map((status) => {
+      const statusHeader = new StatusHeader(status.listType, status.taskCount);
+      return statusHeader.render();
+    });
 
-    return listContainer;
+    return `
+      <ul class="task-list">
+          ${statusData}
+          ${data}
+      </ul>
+      `;
   }
 }
