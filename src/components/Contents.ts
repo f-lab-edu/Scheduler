@@ -1,5 +1,5 @@
 import { ICard, IStatusList, TTab } from 'types/types';
-import ActionGroup from './ActionGroup';
+import ActionGroup from './common/ActionGroup';
 import StatusList from './StatusList';
 
 export default class Contents {

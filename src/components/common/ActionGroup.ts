@@ -1,7 +1,7 @@
 import plus from '@/assets/plus.svg';
 import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
-import Button from './common/Button';
+import Button from './Button';
 
 export default class ActionGroup {
   // actionWrapper: HTMLElement;

@@ -1,5 +1,5 @@
 import { TTab } from 'types/types';
-import Tab from '@/components/common/Tab';
+import Tab from '@/components/tab/Tab';
 export default class Tabs {
   tabs: TTab[];
 
