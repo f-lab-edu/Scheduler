@@ -1,28 +1,31 @@
 export type TPriorities = 'High' | 'Medium' | 'Low';
-export type Tab = 'Board' | 'Calendar';
-export type DefaultListType = 'To do' | 'In Progress' | 'Done';
-export type StatusListType = DefaultListType | string;
+export type TTab = 'Board' | 'Calendar';
+export type TDefaultList = 'To do' | 'In Progress' | 'Done';
+export type TStatusList = TDefaultList | string;
 
+export interface ITabTaskInfo {
+  totalTaskCount: number;
+  tabName: TTab;
+}
 export interface IDefaultInfo {
   title: string;
   startDate: string;
   endDate?: string;
-  priority: Priorities;
+  priority: TPriorities;
 }
 
-export interface Card extends IDefaultInfo {
+export interface ICard extends IDefaultInfo {
   description: string;
 }
 
 export interface IStatusList {
-  listType: StatusListType;
-  detailCard: Card[];
-  totalCount: number;
+  listType: TStatusList;
+  taskCount: number;
 }
 
 export interface IFilter {
-  listType: StatusListType[];
-  priorities: Priorities[];
+  listType: TStatusList[];
+  priorities: TPriorities[];
 }
 
 export interface IButton {

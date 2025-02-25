@@ -20,7 +20,7 @@ export default {
   // 모듈을 해석(Resolve)할 때의 규칙
   resolve: {
     // import 시 확장자 처리
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js'],
     alias: { '@': path.resolve(__dirname, 'src') }, //별칭
   },
   //각 파일 유형별 로더(Loader) 규칙을 정의
@@ -28,7 +28,7 @@ export default {
     rules: [
       // TypeScript -> JavaScript (babel-loader)
       {
-        test: /\.ts$/,
+        test: /\.tsx?$/,
         //적용 제외할 디렉토리나 파일
         exclude: /node_modules/,
         // 어떤 로더를 사용해서 처리할지
@@ -36,6 +36,7 @@ export default {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env', '@babel/preset-typescript'],
+            plugins: [['@babel/plugin-transform-react-jsx', { pragma: 'createElement' }]],
           },
         },
       },
