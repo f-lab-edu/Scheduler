@@ -19,9 +19,14 @@ export default function createElement(
   }
 
   children.flat().forEach((child) => {
+    if (typeof child === 'number') {
+      child = String(child);
+    }
+
     if (typeof child === 'string') {
       child = document.createTextNode(child);
     }
+
     element.appendChild(child);
   });
 
