@@ -1,48 +1,51 @@
 import { TStatusList } from 'types/types';
-import Button from './common/Button';
 import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
+import './common/button/IconButton';
 
-export default class StatusHeader {
-  status: TStatusList;
-  count: number;
-  constructor(status: TStatusList, count: number) {
-    this.status = status;
-    this.count = count;
+export default class StatusHeader extends HTMLElement {
+  status: TStatusList = '';
+  count: string = '0';
+  connectedCallback() {
+    const status = this.getAttribute('status');
+    const count = this.getAttribute('count');
+    if (status && count) {
+      this.status = status;
+      this.count = count;
+    }
+    this.render();
   }
 
-  add() {
-    this.count += 1;
+  static get observedAttributes() {
+    return ['status', 'count'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'selected-tab' && oldValue !== newValue) {
+      this.render();
+    }
+  }
+
+  private createIconButton(buttonClass: string, imgSrc: string, imgClass: string) {
+    return `<icon-text-button button-class=${buttonClass} img-src="${imgSrc}" img-class=${imgClass}></icon-text-button>`;
   }
 
   render() {
-    const moreBtn = new Button({
-      buttonClass: 'more-button',
-      imgSrc: moreIcon,
-      imgClass: 'more-icon',
-      text: '',
-      onClick: () => console.log('more 버튼 클릭!'),
-    }).render();
-
-    const plusBtn = new Button({
-      buttonClass: 'add-task-button',
-      imgSrc: plusIcon,
-      imgClass: 'add-task-icon',
-      text: '',
-      onClick: () => this.add(),
-    }).render();
-
-    return `
+    const status = this.getAttribute('status');
+    const count = this.getAttribute('count');
+    this.innerHTML = `
       <div class="status-header">
           <div class="status-info">
-              <h2 class="status">${this.status}</h2>
-              <span class="task-count">${this.count}</span>
-          </div>
+              <h2 class="status">${status}</h2>
+              <span class="task-count">${count}</span>
+          </div>  
           <div class="status-btns">
-              ${moreBtn}
-              ${plusBtn}
+              ${this.createIconButton('more-button', moreIcon, 'more-icon')}
+              ${this.createIconButton('add-task-button', plusIcon, 'add-task-icon')}
           </div>
       </div>
     `;
   }
 }
+
+customElements.define('status-header', StatusHeader);

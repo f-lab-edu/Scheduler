@@ -1,6 +1,7 @@
 import './ActionGroup';
+import './StatusList';
 export default class Contents extends HTMLElement {
-  public selectedTab: string = 'Board';
+  selectedTab: string = 'Board';
 
   connectedCallback() {
     this.render();
