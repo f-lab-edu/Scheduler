@@ -2,17 +2,7 @@ import Tab from './common/Tab';
 
 export default class Tabs extends HTMLElement {
   private tabs: string[] = [];
-
-  static get observedAttributes() {
-    return ['data-tabs'];
-  }
-
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === 'data-tabs') {
-      this.tabs = newValue ? newValue.split(',') : [];
-      this.render();
-    }
-  }
+  public _selectedTab: string = '';
 
   connectedCallback() {
     const attr = this.getAttribute('data-tabs');
@@ -20,6 +10,15 @@ export default class Tabs extends HTMLElement {
       this.tabs = attr.split(',');
     }
 
+    this.render();
+  }
+
+  get selectedTab(): string {
+    return this._selectedTab;
+  }
+
+  set selectedTab(value: string) {
+    this._selectedTab = value;
     this.render();
   }
 
@@ -32,15 +31,27 @@ export default class Tabs extends HTMLElement {
       const $tabButton = document.createElement('button');
       $tabButton.classList.add('tab');
 
-      const tabEl = document.createElement('tab-element') as Tab;
-      tabEl.setAttribute('selected', tabName);
-      tabEl.textContent = tabName;
+      const $tabEl = document.createElement('tab-element') as Tab;
+      $tabEl.setAttribute('selected', tabName);
+      $tabEl.textContent = tabName;
 
-      $tabButton.appendChild(tabEl);
+      if (this.selectedTab === tabName) {
+        $tabButton.classList.add('active');
+      }
+
+      $tabButton.addEventListener('click', () => {
+        this.setActiveTab(tabName);
+      });
+
+      $tabButton.appendChild($tabEl);
       $section.appendChild($tabButton);
     });
 
     this.appendChild($section);
+  }
+  setActiveTab(tabName: string) {
+    this.selectedTab = tabName;
+    this.dispatchEvent(new CustomEvent('tab-change', { detail: tabName, bubbles: true }));
   }
 }
 

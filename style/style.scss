@@ -64,12 +64,16 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
   }
   .tab:first-child {
     margin-left: 70px;
+  }
+
+  .active {
     color: $white;
     border-bottom: 2px solid $white;
   }
 
   button {
     border: none;
+    border-bottom: 2px solid transparent;
     background-color: transparent;
     outline: none;
     font-size: 25px;
