@@ -1,32 +1,31 @@
-import { ICard, IStatusList, TTab } from 'types/types';
-import ActionGroup from './ActionGroup';
-import StatusList from './StatusList';
-export default class Contents {
-  connectedCallback() {}
+export default class Contents extends HTMLElement {
+  public selectedTab: string = 'Board';
+
+  connectedCallback() {
+    this.render();
+  }
+
+  static get observedAttributes() {
+    return ['selected-tab'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'selected-tab' && oldValue !== newValue) {
+      this.render();
+    }
+  }
+
+  render() {
+    const selectedTab = this.getAttribute('selected-tab') || 'Board';
+
+    this.innerHTML = `
+        <section class="contents">
+            <action-group></action-group>
+            ${selectedTab === 'Board' ? '<status-list>상태</status-list>' : '<calendar>캘린더</calendar>'}
+        </section>
+        
+        `;
+  }
 }
 
-// export default class Contents {
-//   tab: TTab;
-//   state: IStatusList[];
-
-//   constructor(tab: TTab, totalTaskCount: number) {
-//     this.tab = tab;
-//     this.state = [{ listType: 'To do', taskCount: 0 }];
-//   }
-
-//   render(): string {
-//     const actionGroup = new ActionGroup().render();
-//     console.log(actionGroup);
-
-//     const statusList = new StatusList(this.state).render();
-//     // TODO: Board 개발 후
-//     const calendar = '';
-
-//     return `
-//       <section class="contents">
-//           ${actionGroup}
-//           ${this.tab === 'Board' ? statusList : calendar}
-//       </section>
-//     `;
-//   }
-// }
+customElements.define('contents-element', Contents);
