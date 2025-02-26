@@ -20,7 +20,7 @@ export class App extends HTMLElement {
 
       $tabsEl.addEventListener('tab-change', (event: Event) => {
         const newTab = (event as CustomEvent).detail;
-        console.log('✅', event);
+
         this.selectedTab = newTab;
         //  contentsElement.setAttribute('content', newTab);
       });

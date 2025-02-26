@@ -1,5 +1,3 @@
-import Tab from './common/Tab';
-
 export default class Tabs extends HTMLElement {
   private tabs: string[] = [];
   public _selectedTab: string = '';
@@ -21,34 +19,29 @@ export default class Tabs extends HTMLElement {
     this._selectedTab = value;
     this.render();
   }
-
   render() {
-    this.innerHTML = '';
-    const $section = document.createElement('section');
-    $section.classList.add('tabs');
+    this.innerHTML = `
+    <section class="tabs">
+      ${this.tabs
+        .map(
+          (tabName) => `
+          <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
+            <tab-element selected="${tabName}">${tabName}</tab-element>
+          </button>
+        `,
+        )
+        .join('')}
+    </section>
+  `;
 
-    this.tabs.forEach((tabName) => {
-      const $tabButton = document.createElement('button');
-      $tabButton.classList.add('tab');
-
-      const $tabEl = document.createElement('tab-element') as Tab;
-      $tabEl.setAttribute('selected', tabName);
-      $tabEl.textContent = tabName;
-
-      if (this.selectedTab === tabName) {
-        $tabButton.classList.add('active');
-      }
-
+    this.querySelectorAll('.tab').forEach(($tabButton) => {
       $tabButton.addEventListener('click', () => {
+        const tabName = $tabButton.textContent?.trim() || '';
         this.setActiveTab(tabName);
       });
-
-      $tabButton.appendChild($tabEl);
-      $section.appendChild($tabButton);
     });
-
-    this.appendChild($section);
   }
+
   setActiveTab(tabName: string) {
     this.selectedTab = tabName;
     this.dispatchEvent(new CustomEvent('tab-change', { detail: tabName, bubbles: true }));
