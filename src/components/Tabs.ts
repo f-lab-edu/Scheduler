@@ -1,6 +1,6 @@
 export default class Tabs extends HTMLElement {
   private tabs: string[] = [];
-  public _selectedTab: string = '';
+  _selectedTab: string = '';
 
   connectedCallback() {
     const attr = this.getAttribute('data-tabs');
@@ -22,15 +22,15 @@ export default class Tabs extends HTMLElement {
   render() {
     this.innerHTML = `
     <section class="tabs">
-      ${this.tabs
-        .map(
-          (tabName) => `
-          <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
-            <tab-element selected="${tabName}">${tabName}</tab-element>
-          </button>
-        `,
-        )
-        .join('')}
+        ${this.tabs
+          .map(
+            (tabName) => `
+                <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
+                    <tab-element selected="${tabName}">${tabName}</tab-element>
+                </button>
+            `,
+          )
+          .join('')}
     </section>
   `;
 

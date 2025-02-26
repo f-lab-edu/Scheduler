@@ -1,3 +1,4 @@
+import './ActionGroup';
 export default class Contents extends HTMLElement {
   public selectedTab: string = 'Board';
 
@@ -17,11 +18,10 @@ export default class Contents extends HTMLElement {
 
   render() {
     const selectedTab = this.getAttribute('selected-tab') || 'Board';
-
     this.innerHTML = `
         <section class="contents">
             <action-group></action-group>
-            ${selectedTab === 'Board' ? '<status-list>상태</status-list>' : '<calendar>캘린더</calendar>'}
+            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
         </section>
         
         `;

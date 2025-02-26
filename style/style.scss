@@ -118,6 +118,7 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
 
   .right-actions {
     display: flex;
+    align-items: center;
     gap: 20px;
 
     .search-bar {

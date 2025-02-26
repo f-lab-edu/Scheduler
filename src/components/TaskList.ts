@@ -5,7 +5,6 @@ export default class TaskList {
   status: ICard;
   constructor(status: ICard) {
     this.status = status;
-    console.log(status);
   }
 
   render(): string {

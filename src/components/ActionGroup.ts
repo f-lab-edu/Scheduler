@@ -1,42 +1,39 @@
 import plus from '@/assets/plus.svg';
 import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
-import Button from './common/Button';
+import '@/components/common/button/IconTextButton';
+export default class ActionGroup extends HTMLElement {
+  private count: string = '';
+  connectedCallback() {
+    const totalCount = this.getAttribute('total-count');
+    if (totalCount) {
+      this.count = totalCount;
+    }
 
-export default class ActionGroup {
-  // actionWrapper: HTMLElement;
+    this.render();
+  }
 
-  render(): string {
-    const plusBtn = new Button({
-      buttonClass: 'add-new-button',
-      imgSrc: plus,
-      imgClass: 'plus-icon',
-      text: 'Add New',
-      onClick: () => console.log('Add New 버튼 클릭!'),
-    }).render();
+  private createIconTextButton(buttonClass: string, imgSrc: string, imgClass: string, text: string) {
+    return `<icon-text-button button-class=${buttonClass} img-src="${imgSrc}" img-class=${imgClass} text="Add New"></icon-text-button>`;
+  }
 
-    const filterBtn = new Button({
-      buttonClass: 'filter-button',
-      imgSrc: filter,
-      imgClass: 'filter-icon',
-      text: 'Filters',
-      onClick: () => console.log('Filters 버튼 클릭!'),
-    }).render();
-
-    return `
-      <section class="action-group">
-          <div class="left-actions">
-              <div class="total-tasks">8 tasks</div>
-              ${plusBtn}
-          </div>
-          <div class="right-actions">
-              <div class="search-bar">
-                  <img class="search-icon" src="${search}" alt="search icon" />
-                  <input value="" placeholder="Type your search keyword" />
-              </div>
-              ${filterBtn}
-          </div>
+  render() {
+    this.innerHTML = `
+        <section class="action-group">
+            <div class="left-actions">
+                <div class="total-tasks">8 tasks</div>
+                ${this.createIconTextButton('add-new-button', plus, 'plus-icon', 'Add New')}
+            </div>
+            <div class="right-actions">
+                <div class="search-bar">
+                    <img class="search-icon" src="${search}" alt="search icon" />
+                    <input value="" placeholder="Type your search keyword" />
+                </div>
+               ${this.createIconTextButton('filter-button', filter, 'filter-icon', 'Filters')}
+            </div>
         </section>
     `;
   }
 }
+
+customElements.define('action-group', ActionGroup);
