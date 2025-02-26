@@ -1,24 +1,47 @@
-import { TTab } from 'types/types';
-import Tab from '@/components/common/Tab';
-export default class Tabs {
-  tabs: TTab[];
+import Tab from './common/Tab';
 
-  constructor(tabs: TTab[]) {
-    this.tabs = tabs;
+export default class Tabs extends HTMLElement {
+  private tabs: string[] = [];
+
+  static get observedAttributes() {
+    return ['data-tabs'];
   }
 
-  render(): string {
-    const tabEl = this.tabs
-      .map((tabName) => {
-        const tab = new Tab(tabName);
-        return tab.render();
-      })
-      .join('');
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'data-tabs') {
+      this.tabs = newValue ? newValue.split(',') : [];
+      this.render();
+    }
+  }
 
-    return `
-      <section class="tabs">
-        ${tabEl}
-      </section>
-    `;
+  connectedCallback() {
+    const attr = this.getAttribute('data-tabs');
+    if (attr) {
+      this.tabs = attr.split(',');
+    }
+
+    this.render();
+  }
+
+  render() {
+    this.innerHTML = '';
+    const $section = document.createElement('section');
+    $section.classList.add('tabs');
+
+    this.tabs.forEach((tabName) => {
+      const $tabButton = document.createElement('button');
+      $tabButton.classList.add('tab');
+
+      const tabEl = document.createElement('tab-element') as Tab;
+      tabEl.setAttribute('selected', tabName);
+      tabEl.textContent = tabName;
+
+      $tabButton.appendChild(tabEl);
+      $section.appendChild($tabButton);
+    });
+
+    this.appendChild($section);
   }
 }
+
+customElements.define('tabs-element', Tabs);

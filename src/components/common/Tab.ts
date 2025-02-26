@@ -1,15 +1,47 @@
-import { TTab } from '../../../types/types';
-export default class Tab {
-  selected: TTab;
-  constructor(selected: TTab) {
-    this.selected = selected;
+export default class Tab extends HTMLElement {
+  private _selected?: string;
+
+  constructor() {
+    super();
   }
 
-  render(): string {
-    return `
-      <button class="tab">
-        ${this.selected}
-      </button>
+  static get observedAttributes() {
+    return ['selected'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'selected') {
+      this.selected = newValue;
+    }
+  }
+
+  set selected(value: string) {
+    this._selected = value;
+    this.render();
+  }
+
+  get selected(): string | undefined {
+    return this._selected;
+  }
+
+  connectedCallback() {
+    if (this.hasAttribute('selected')) {
+      this.selected = this.getAttribute('selected')!;
+    }
+    if (this._selected) {
+      this.render();
+    }
+  }
+
+  render() {
+    if (!this._selected) {
+      return;
+    }
+
+    this.innerHTML = `
+      <button class="tab">${this._selected}</button>
     `;
   }
 }
+
+customElements.define('tab-element', Tab);
