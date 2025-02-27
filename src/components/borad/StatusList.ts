@@ -45,6 +45,10 @@ export default class StatusList extends HTMLElement {
     this.updateStatusList();
   }
 
+  get totalTaskCount(): number {
+    return this.totalCount;
+  }
+
   get isClickedAddStatus() {
     return this._isClickedAddStatus;
   }
