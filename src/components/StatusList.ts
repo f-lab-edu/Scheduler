@@ -22,7 +22,7 @@ export default class StatusList extends HTMLElement {
         title: '프론트엔드공부',
         startDate: 'Today',
         endDate: '',
-        priority: 'High',
+        priority: 'Low',
         description: '기본내용',
       },
     ];

@@ -37,9 +37,27 @@ $colors: (
 $font-white: map.get(map.get($colors, font), primary);
 $white: map.get($colors, white);
 $gradation-black: map.get(map.get($colors, background), endBlack);
+$priorities: (
+  high: map.get(map.get($colors, card), high),
+  medium: map.get(map.get($colors, card), medium),
+  low: map.get(map.get($colors, card), low),
+);
 
 @mixin card($color) {
   background-color: $color;
+}
+
+@mixin task-card($color) {
+  background-color: $color;
+  margin-top: 20px;
+  padding: 18px 18px 32px;
+  border-radius: 20px;
+}
+
+@each $priority, $color in $priorities {
+  .#{$priority} {
+    @include task-card($color);
+  }
 }
 
 .header {
@@ -196,13 +214,6 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
   padding: 19px 12px;
   border-radius: 20px;
   background-color: map.get(map.get($colors, background), taskList);
-}
-
-.high {
-  background-color: map.get(map.get($colors, card), high);
-  margin-top: 20px;
-  padding: 18px 18px 32px;
-  border-radius: 20px;
 }
 
 .status-header {
