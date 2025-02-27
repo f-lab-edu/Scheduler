@@ -1,14 +1,32 @@
-import ActionGroup from './ActionGroup';
+import './ActionGroup';
+import './StatusList';
+export default class Contents extends HTMLElement {
+  selectedTab: string = 'Board';
 
-export default class Contents {
-  render(): string {
-    const actionGroup = new ActionGroup().render();
-    console.log(actionGroup);
+  connectedCallback() {
+    this.render();
+  }
 
-    return `
-      <section class="contents">
-        ${actionGroup}
-      </section>
-    `;
+  static get observedAttributes() {
+    return ['selected-tab'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'selected-tab' && oldValue !== newValue) {
+      this.render();
+    }
+  }
+
+  render() {
+    const selectedTab = this.getAttribute('selected-tab') || 'Board';
+    this.innerHTML = `
+        <section class="contents">
+            <action-group></action-group>
+            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
+        </section>
+        
+        `;
   }
 }
+
+customElements.define('contents-element', Contents);

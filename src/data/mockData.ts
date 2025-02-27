@@ -1,6 +1,6 @@
-import { List } from '../../types/types';
+import { IStatusList } from '../../types/types';
 
-export const cardList: List[] = [
+export const cardList: IStatusList[] = [
   {
     listType: 'To do',
     detailCard: [
@@ -26,7 +26,7 @@ export const cardList: List[] = [
         description: '마음의 양식',
       },
     ],
-    totalCount: 3,
+    totalTaskCount: 3,
   },
   {
     listType: 'In Progress',
@@ -46,7 +46,7 @@ export const cardList: List[] = [
         description: '프로젝트 시 지켜야할 사항은 어쩌구저쩌구저쩌구',
       },
     ],
-    totalCount: 2,
+    totalTaskCount: 2,
   },
   {
     listType: 'Done',
@@ -73,6 +73,6 @@ export const cardList: List[] = [
         description: '저기 가려면 1234버스 타고 가서 지하철 갈아타야함',
       },
     ],
-    totalCount: 3,
+    totalTaskCount: 3,
   },
 ];

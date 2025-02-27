@@ -12,12 +12,14 @@ $colors: (
   font: (
     primary: #ffffff,
     tabInactive: #9b87a4,
+    taskDescription: #4f4f4f,
   ),
   background: (
     startPurple: #430279,
     endBlack: #001b41,
     searchBar: #011c41,
-    taskList: #836e8c,
+    taskList: #836e8c80,
+    count: #27083480,
   ),
   border: (
     search: #a8a8a8,
@@ -62,12 +64,16 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
   }
   .tab:first-child {
     margin-left: 70px;
+  }
+
+  .active {
     color: $white;
     border-bottom: 2px solid $white;
   }
 
   button {
     border: none;
+    border-bottom: 2px solid transparent;
     background-color: transparent;
     outline: none;
     font-size: 25px;
@@ -112,6 +118,7 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
 
   .right-actions {
     display: flex;
+    align-items: center;
     gap: 20px;
 
     .search-bar {
@@ -155,13 +162,17 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
   }
 }
 
-.plus-icon {
+.plus-icon,
+.more-icon,
+.add-task-icon {
   width: 24px;
 }
 
 .plus-icon,
 .search-icon,
-.filter-icon {
+.filter-icon,
+.more-icon,
+.add-task-icon {
   filter: invert(100%);
 }
 
@@ -177,4 +188,76 @@ $gradation-black: map.get(map.get($colors, background), endBlack);
 .statusListItem {
   width: 378px;
   height: 100%;
+}
+
+.task-list {
+  width: 378px;
+  margin-top: 20px;
+  padding: 19px 12px;
+  border-radius: 20px;
+  background-color: map.get(map.get($colors, background), taskList);
+}
+
+.high {
+  background-color: map.get(map.get($colors, card), high);
+  margin-top: 20px;
+  padding: 18px 18px 32px;
+  border-radius: 20px;
+}
+
+.status-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  color: map.get($colors, $font-white);
+
+  .status-info {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    .task-count {
+      padding: 4px 9px;
+      border-radius: 10px;
+      background-color: map.get(map.get($colors, background), count);
+    }
+  }
+
+  .status-btns {
+    button {
+      padding: 0;
+      border: none;
+      outline: none;
+      color: $font-white;
+      background-color: transparent;
+      cursor: pointer;
+    }
+  }
+}
+
+.task-card {
+  display: flex;
+  flex-direction: column;
+
+  .task-card-header {
+    display: flex;
+    justify-content: space-between;
+
+    .date-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  .task-contents {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-top: 30px;
+
+    p {
+      color: map.get(map.get($colors, font), taskDescription);
+    }
+  }
 }
