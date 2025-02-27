@@ -1,7 +1,8 @@
+import '../common/button/IconButton';
+import { createIconButton } from '@/utils/domButton';
 import { TStatusList } from 'types/types';
 import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
-import '../common/button/IconButton';
 
 export default class StatusHeader extends HTMLElement {
   status: TStatusList = '';
@@ -27,10 +28,6 @@ export default class StatusHeader extends HTMLElement {
     this.render();
   }
 
-  private createIconButton(buttonClass: string, imgSrc: string, imgClass: string) {
-    return `<icon-text-button button-class=${buttonClass} img-src="${imgSrc}" img-class=${imgClass}></icon-text-button>`;
-  }
-
   render() {
     this.innerHTML = `
       <div class="status-header">
@@ -39,8 +36,8 @@ export default class StatusHeader extends HTMLElement {
               <span class="task-count">${this.count}</span>
           </div>  
           <div class="status-btns">
-              ${this.createIconButton('more-button', moreIcon, 'more-icon')}
-              ${this.createIconButton('add-task-button', plusIcon, 'add-task-icon')}
+              ${createIconButton('more-button', moreIcon, 'more-icon')}
+              ${createIconButton('add-task-button', plusIcon, 'add-task-icon')}
           </div>
       </div>
     `;

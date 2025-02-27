@@ -42,6 +42,7 @@ $priorities: (
   medium: map.get(map.get($colors, card), medium),
   low: map.get(map.get($colors, card), low),
 );
+$task-list-bg: map.get(map.get($colors, background), taskList);
 
 @mixin card($color) {
   background-color: $color;
@@ -203,17 +204,16 @@ $priorities: (
   background-color: map.get($colors, mainBlue);
 }
 
-.statusListItem {
+.status-list-item {
   width: 378px;
   height: 100%;
 }
 
 .task-list {
   width: 378px;
-  margin-top: 20px;
   padding: 19px 12px;
   border-radius: 20px;
-  background-color: map.get(map.get($colors, background), taskList);
+  background-color: $task-list-bg;
 }
 
 .status-header {
@@ -270,5 +270,23 @@ $priorities: (
     p {
       color: map.get(map.get($colors, font), taskDescription);
     }
+  }
+}
+
+.status-list {
+  display: flex;
+  gap: 22px;
+  margin-top: 20px;
+
+  .add-status-list {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 120px;
+    padding: 19px 12px;
+    border-radius: 20px;
+    background-color: $task-list-bg;
+    border: none;
+    cursor: pointer;
   }
 }

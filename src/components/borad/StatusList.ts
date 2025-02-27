@@ -1,6 +1,8 @@
-import { ICard, TStatusList } from '../../../types/types';
 import './StatusHeader';
 import './TaskList';
+import { createIconButton } from '@/utils/domButton';
+import { ICard, TStatusList } from '../../../types/types';
+import plusIcon from '@/assets/plus.svg';
 
 export default class StatusList extends HTMLElement {
   totalCount: number;
@@ -55,10 +57,13 @@ export default class StatusList extends HTMLElement {
 
   render() {
     this.innerHTML = `
-        <ul class="task-list">
-            <status-header></status-header>
-            <task-list></task-list>
-        </ul>      
+        <section class="status-list">
+            <ul class="task-list">
+                <status-header></status-header>
+                <task-list></task-list>
+            </ul>     
+            ${createIconButton('add-status-list', plusIcon, 'plus-icon')} 
+        </section>
     `;
   }
 }
