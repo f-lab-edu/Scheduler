@@ -3,19 +3,22 @@ import './TaskList';
 import './AddStatusList';
 import StatusHeader from './StatusHeader';
 import TaskList from './TaskList';
-import { ICard } from '../../../types/types';
+import { ICard, TStatusList } from '../../../types/types';
 import AddStatusList from './AddStatusList';
 
 export default class StatusList extends HTMLElement {
-  totalCount: number;
-  taskList: ICard[];
-  _isClickedAddStatus: boolean;
+  private totalCount: number;
+  private taskList: ICard[];
+  private _isClickedAddStatus: boolean;
+  private _statusTitles: TStatusList[] = [];
+  private _newStatusTitle: TStatusList;
 
   // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
     this.totalCount = 0;
     this._isClickedAddStatus = false;
+    this._newStatusTitle = '';
 
     this.taskList = [
       {
@@ -40,6 +43,7 @@ export default class StatusList extends HTMLElement {
     this.setTaskListState();
     this.setStatusHeader();
     this.setEventListener();
+    this.updateStatusList();
   }
 
   get isClickedAddStatus() {
@@ -83,10 +87,28 @@ export default class StatusList extends HTMLElement {
     });
   }
 
+  private updateStatusList() {
+    this.addEventListener('status-title-saved', (event: Event) => {
+      const customEvent = event as CustomEvent<{ title: string }>;
+      this._newStatusTitle = customEvent.detail.title;
+
+      const $newStatus = document.createElement('ul');
+      $newStatus.classList.add('task-list');
+      $newStatus.innerHTML = `
+          <status-header></status-header>
+          <task-list></task-list>  
+      `;
+
+      const $addStatusList = this.querySelector('add-status-list');
+      if ($addStatusList) {
+        $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
+      }
+    });
+  }
+
   private handleClickAddButton() {}
 
   render() {
-    // TODO: +버튼이었다가 input 나오는 컴포넌트 만들기, 인자로 여부 받기(Add New도 받아야함)
     this.innerHTML = `
         <section class="status-list">
             <ul class="task-list">

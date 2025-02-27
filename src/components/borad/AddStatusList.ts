@@ -1,10 +1,14 @@
 import { createTextButton } from '@/utils/domButton';
 import plusIcon from '@/assets/plus.svg';
+import { TStatusList } from 'types/types';
 
 export default class AddStatusList extends HTMLElement {
   private _isClickedAddStatus: boolean = false;
+  private _newStatusTitle: TStatusList = '';
+
   connectedCallback() {
     this.render();
+    this.setEventListeners();
   }
 
   get isClickedAddStatus() {
@@ -16,22 +20,38 @@ export default class AddStatusList extends HTMLElement {
     this.render();
   }
 
-  setEventListeners() {
-    const $addButton = this.querySelector('.add-status');
-    if ($addButton) {
-      $addButton.addEventListener('click', () => {
-        this._isClickedAddStatus = true;
-        this.render();
-      });
-    }
+  private setEventListeners() {
+    this.addEventListener('click', (event) => {
+      const $target = event.target as HTMLElement;
 
-    const $cancelButton = this.querySelector('.cancel-button');
-    if ($cancelButton) {
-      $cancelButton.addEventListener('click', () => {
+      if ($target.closest('.add-status')) {
+        this._isClickedAddStatus = true;
+        this._newStatusTitle = '';
+        this.render();
+      }
+
+      if ($target.closest('.cancel-button')) {
         this._isClickedAddStatus = false;
         this.render();
-      });
-    }
+      }
+
+      if ($target.closest('.save-button')) {
+        this._isClickedAddStatus = false;
+
+        this.dispatchEvent(
+          new CustomEvent('status-title-saved', { detail: { title: this._newStatusTitle }, bubbles: true }),
+        );
+
+        this.render();
+      }
+    });
+
+    this.addEventListener('input', (event) => {
+      const $inputTarget = event.target as HTMLInputElement;
+      if ($inputTarget.classList.contains('status-input')) {
+        this._newStatusTitle = $inputTarget.value;
+      }
+    });
   }
 
   render() {
@@ -41,7 +61,7 @@ export default class AddStatusList extends HTMLElement {
           this._isClickedAddStatus
             ? `
               <div class="input-button-group">
-                <input class="status-input" value=""/>
+                <input class="status-input" value="${this._newStatusTitle}" />
                 <div class="submit-button-group">
                   ${createTextButton('cancel-button', 'Cancel')}
                   ${createTextButton('save-button', 'Save')}
@@ -56,8 +76,6 @@ export default class AddStatusList extends HTMLElement {
         }
       </div>
     `;
-
-    this.setEventListeners();
   }
 }
 
