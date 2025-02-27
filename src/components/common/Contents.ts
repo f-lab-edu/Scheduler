@@ -1,10 +1,27 @@
 import './ActionGroup';
 import '../borad/StatusList';
+import StatusList from '../borad/StatusList';
 export default class Contents extends HTMLElement {
   selectedTab: string = 'Board';
+  private isClickedAddStatus: boolean = false;
 
   connectedCallback() {
     this.render();
+    this.setEventListener();
+  }
+
+  setEventListener() {
+    this.addEventListener('add-new-clicked', () => {
+      this.isClickedAddStatus = true;
+      this.updateStatusList();
+    });
+  }
+
+  updateStatusList() {
+    const $statusList = this.querySelector('status-list') as StatusList;
+    if ($statusList) {
+      $statusList.isClickedAddStatus = this.isClickedAddStatus;
+    }
   }
 
   static get observedAttributes() {
@@ -26,6 +43,7 @@ export default class Contents extends HTMLElement {
         </section>
         
         `;
+    this.updateStatusList();
   }
 }
 

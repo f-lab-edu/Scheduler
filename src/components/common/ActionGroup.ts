@@ -11,6 +11,16 @@ export default class ActionGroup extends HTMLElement {
     }
 
     this.render();
+    this.setEventListener();
+  }
+
+  setEventListener() {
+    const $addNewButton = this.querySelector('.add-new-button');
+    if ($addNewButton) {
+      $addNewButton.addEventListener('click', () => {
+        this.dispatchEvent(new CustomEvent('add-new-clicked', { bubbles: true }));
+      });
+    }
   }
 
   render() {
