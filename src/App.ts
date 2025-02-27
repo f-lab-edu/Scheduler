@@ -10,10 +10,10 @@ export class App extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.addEventListeners();
+    this.setAddEventListeners();
   }
 
-  private addEventListeners() {
+  private setAddEventListeners() {
     const $tabs = this.querySelector('tabs-element') as Tabs;
     const $contents = this.querySelector('contents-element') as Contents;
 
