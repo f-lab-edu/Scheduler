@@ -35,7 +35,7 @@ export class App extends HTMLElement {
   private render() {
     this.innerHTML = `
         <header-element></header-element>
-        <tabs-element data-tabs="Board,Calendar"></tabs-element>
+        <tabs-element></tabs-element>
         <contents-element selected-tab="${this.selectedTab}"></contents-element>
     `;
   }
