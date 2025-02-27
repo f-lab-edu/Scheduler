@@ -1,20 +1,21 @@
 import './StatusHeader';
 import './TaskList';
-import { createIconButton } from '@/utils/domButton';
-import { ICard, TStatusList } from '../../../types/types';
-import plusIcon from '@/assets/plus.svg';
 import './AddStatusList';
+import StatusHeader from './StatusHeader';
+import TaskList from './TaskList';
+import { ICard } from '../../../types/types';
+import AddStatusList from './AddStatusList';
 
 export default class StatusList extends HTMLElement {
   totalCount: number;
   taskList: ICard[];
-  isClickedAddButton: boolean;
+  _isClickedAddStatus: boolean;
 
   // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
     this.totalCount = 0;
-    this.isClickedAddButton = false;
+    this._isClickedAddStatus = false;
 
     this.taskList = [
       {
@@ -38,11 +39,28 @@ export default class StatusList extends HTMLElement {
     this.render();
     this.setTaskListState();
     this.setStatusHeader();
-    this.setAddEventListener();
+    this.setEventListener();
+  }
+
+  get isClickedAddStatus() {
+    return this._isClickedAddStatus;
+  }
+
+  set isClickedAddStatus(isClicked: boolean) {
+    this._isClickedAddStatus = isClicked;
+    this.updateAddStatusList();
+  }
+
+  private updateAddStatusList() {
+    const $addStatusList = this.querySelector('add-status-list') as AddStatusList;
+    if ($addStatusList) {
+      $addStatusList.isClickedAddStatus = this._isClickedAddStatus;
+    }
   }
 
   private setTaskListState() {
-    const $taskList = this.querySelector('task-list') as HTMLElement & { taskList?: ICard[]; count?: number };
+    const $taskList = this.querySelector('task-list') as TaskList;
+
     if ($taskList) {
       $taskList.taskList = this.taskList;
       this.totalCount = this.taskList.length;
@@ -50,26 +68,22 @@ export default class StatusList extends HTMLElement {
   }
 
   private setStatusHeader() {
-    const $statusHeader = this.querySelector('status-header') as HTMLElement & {
-      columStatus: TStatusList;
-      count: number;
-    };
+    const $statusHeader = this.querySelector('status-header') as StatusHeader;
+
     if ($statusHeader) {
       $statusHeader.columStatus = 'To do';
       $statusHeader.count = this.totalCount;
     }
   }
 
-  private setAddEventListener() {
+  private setEventListener() {
     this.addEventListener('button-click', () => {
-      this.isClickedAddButton = true;
+      this._isClickedAddStatus = true;
       this.handleClickAddButton();
     });
   }
 
-  private handleClickAddButton() {
-    console.log('🟢', this.isClickedAddButton);
-  }
+  private handleClickAddButton() {}
 
   render() {
     // TODO: +버튼이었다가 input 나오는 컴포넌트 만들기, 인자로 여부 받기(Add New도 받아야함)

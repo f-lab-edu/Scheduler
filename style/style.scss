@@ -329,5 +329,14 @@ $main-blue: map.get($colors, mainBlue);
       box-shadow: none;
       background-color: map.get(map.get($colors, background), input);
     }
+
+    .add-status {
+      padding: 0;
+      border: none;
+      outline: none;
+      color: $font-white;
+      background-color: transparent;
+      cursor: pointer;
+    }
   }
 }
