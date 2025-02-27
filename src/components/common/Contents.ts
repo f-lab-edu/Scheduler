@@ -1,13 +1,16 @@
 import './ActionGroup';
 import '../borad/StatusList';
 import StatusList from '../borad/StatusList';
+import ActionGroup from './ActionGroup';
 export default class Contents extends HTMLElement {
   selectedTab: string = 'Board';
   private isClickedAddStatus: boolean = false;
+  private totalCount: number = 0;
 
   connectedCallback() {
     this.render();
     this.setEventListener();
+    this.updateTotalTaskCount();
   }
 
   setEventListener() {
@@ -31,6 +34,19 @@ export default class Contents extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === 'selected-tab' && oldValue !== newValue) {
       this.render();
+    }
+  }
+
+  private updateTotalTaskCount() {
+    let total = 0;
+    const $statusLists = this.querySelectorAll('status-list') as NodeListOf<StatusList>;
+    $statusLists.forEach((list) => {
+      total += list.totalTaskCount;
+    });
+
+    const actionGroup = this.querySelector('action-group') as ActionGroup;
+    if (actionGroup) {
+      actionGroup.totalCount = total;
     }
   }
 
