@@ -213,6 +213,7 @@ $main-blue: map.get($colors, mainBlue);
 
 .task-list {
   width: 378px;
+  height: 100%;
   padding: 19px 12px;
   border-radius: 20px;
   background-color: $task-list-bg;
