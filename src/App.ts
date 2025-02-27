@@ -1,9 +1,9 @@
 import '@/components/common/Header';
 import '@/components/Tabs';
 import '@/components/Contents';
-import Tabs from '@/components/Tabs';
+import Tabs from './components/Tabs';
 import Contents from './components/Contents';
-import { TTab } from 'types/types';
+import { TTab } from '../types/types';
 
 export class App extends HTMLElement {
   private selectedTab: TTab = 'Board';
@@ -14,22 +14,22 @@ export class App extends HTMLElement {
   }
 
   private addEventListeners() {
-    const $tabsEl = this.querySelector('tabs-element') as Tabs;
-    const $contentsEl = this.querySelector('contents-element') as Contents;
+    const $tabs = this.querySelector('tabs-element') as Tabs;
+    const $contents = this.querySelector('contents-element') as Contents;
 
-    if ($tabsEl && $contentsEl) {
-      $tabsEl.selectedTab = this.selectedTab;
+    if ($tabs && $contents) {
+      $tabs.selectedTab = this.selectedTab;
 
-      $tabsEl.addEventListener('tab-change', (event: Event) => {
+      $tabs.addEventListener('tab-change', (event: Event) => {
         const newTab = (event as CustomEvent).detail;
-        this.handleTabChange(newTab, $contentsEl);
+        this.handleTabChange(newTab, $contents);
       });
     }
   }
 
-  private handleTabChange(newTab: TTab, $contentsEl: Contents) {
+  private handleTabChange(newTab: TTab, $contents: Contents) {
     this.selectedTab = newTab;
-    $contentsEl.setAttribute('selected-tab', newTab);
+    $contents.setAttribute('selected-tab', newTab);
   }
 
   private render() {

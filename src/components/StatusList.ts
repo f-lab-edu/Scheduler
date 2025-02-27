@@ -1,4 +1,4 @@
-import { ICard } from 'types/types';
+import { ICard } from '../../types/types';
 import './StatusHeader';
 import './TaskList';
 
@@ -27,18 +27,18 @@ export default class StatusList extends HTMLElement {
   }
 
   private setTaskListState() {
-    const $taskListEl = this.querySelector('task-list') as HTMLElement & { taskList?: ICard[]; count?: number };
-    if ($taskListEl) {
-      $taskListEl.taskList = this.taskList;
+    const $taskList = this.querySelector('task-list') as HTMLElement & { taskList?: ICard[]; count?: number };
+    if ($taskList) {
+      $taskList.taskList = this.taskList;
       this.totalCount = this.taskList.length;
     }
   }
 
   // TODO: statusHeader 속성으로 보내는 값 프로퍼티로 처리
   private setStatusHeader() {
-    const $statusHeaderEl = this.querySelector('status-header') as HTMLElement;
-    if ($statusHeaderEl) {
-      // $statusHeaderEl.status = 'To do';
+    const $statusHeader = this.querySelector('status-header') as HTMLElement;
+    if ($statusHeader) {
+      // $statusHeader.status = 'To do';
     }
   }
 
