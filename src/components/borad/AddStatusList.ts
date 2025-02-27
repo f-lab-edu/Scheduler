@@ -36,6 +36,11 @@ export default class AddStatusList extends HTMLElement {
       }
 
       if ($target.closest('.save-button')) {
+        if (this._newStatusTitle === '') {
+          // TODO: 공통 alert 생성
+          alert('빈 값으로 저장 불가');
+          return;
+        }
         this._isClickedAddStatus = false;
 
         this.dispatchEvent(

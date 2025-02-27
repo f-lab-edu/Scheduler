@@ -10,7 +10,6 @@ export default class StatusList extends HTMLElement {
   private totalCount: number;
   private taskList: ICard[];
   private _isClickedAddStatus: boolean;
-  private _statusTitles: TStatusList[] = [];
   private _newStatusTitle: TStatusList;
 
   // TODO: 데이터 입력 모달 생성 후 삭제
@@ -83,7 +82,6 @@ export default class StatusList extends HTMLElement {
   private setEventListener() {
     this.addEventListener('button-click', () => {
       this._isClickedAddStatus = true;
-      this.handleClickAddButton();
     });
   }
 
@@ -105,8 +103,6 @@ export default class StatusList extends HTMLElement {
       }
     });
   }
-
-  private handleClickAddButton() {}
 
   render() {
     this.innerHTML = `

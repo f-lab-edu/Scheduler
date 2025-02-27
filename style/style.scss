@@ -32,6 +32,10 @@ $colors: (
     add: #1c63fe,
     filter: #403c6d,
   ),
+  scrollbar: (
+    track: #fff6,
+    thumb: #00000026,
+  ),
 );
 
 // 중복 사용으로 변수화
@@ -105,7 +109,7 @@ $main-blue: map.get($colors, mainBlue);
 }
 
 .contents {
-  height: 100vh;
+  min-height: 100vh;
   padding: 19px 70px;
   background: linear-gradient(
     to bottom right,
@@ -213,6 +217,7 @@ $main-blue: map.get($colors, mainBlue);
 
 .task-list {
   width: 378px;
+  min-width: 378px;
   height: 100%;
   padding: 19px 12px;
   border-radius: 20px;
@@ -280,6 +285,9 @@ $main-blue: map.get($colors, mainBlue);
   display: flex;
   gap: 22px;
   margin-top: 20px;
+  padding-bottom: 100px;
+  overflow-x: auto;
+  scrollbar-color: map.get(map.get($colors, scrollbar), thumb) map.get(map.get($colors, scrollbar), track);
 
   .add-status-list {
     display: flex;
