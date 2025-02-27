@@ -5,25 +5,26 @@ import './common/button/IconButton';
 
 export default class StatusHeader extends HTMLElement {
   status: TStatusList = '';
-  count: string = '0';
+  taskCount: number = 0;
+
   connectedCallback() {
-    const status = this.getAttribute('status');
-    const count = this.getAttribute('count');
-    if (status && count) {
-      this.status = status;
-      this.count = count;
-    }
     this.render();
   }
 
-  static get observedAttributes() {
-    return ['status', 'count'];
+  get columStatus() {
+    return this.status;
+  }
+  set columStatus(status: TStatusList) {
+    this.status = status;
+    this.render();
   }
 
-  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
-    if (name === 'selected-tab' && oldValue !== newValue) {
-      this.render();
-    }
+  get count() {
+    return this.taskCount;
+  }
+  set count(taskLenth) {
+    this.taskCount = taskLenth;
+    this.render();
   }
 
   private createIconButton(buttonClass: string, imgSrc: string, imgClass: string) {
@@ -31,13 +32,11 @@ export default class StatusHeader extends HTMLElement {
   }
 
   render() {
-    const status = this.getAttribute('status');
-    const count = this.getAttribute('count');
     this.innerHTML = `
       <div class="status-header">
           <div class="status-info">
-              <h2 class="status">${status}</h2>
-              <span class="task-count">${count}</span>
+              <h2 class="status">${this.columStatus}</h2>
+              <span class="task-count">${this.count}</span>
           </div>  
           <div class="status-btns">
               ${this.createIconButton('more-button', moreIcon, 'more-icon')}

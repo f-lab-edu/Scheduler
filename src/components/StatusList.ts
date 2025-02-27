@@ -1,4 +1,4 @@
-import { ICard } from '../../types/types';
+import { ICard, TStatusList } from '../../types/types';
 import './StatusHeader';
 import './TaskList';
 
@@ -18,12 +18,20 @@ export default class StatusList extends HTMLElement {
         priority: 'High',
         description: '기본내용',
       },
+      {
+        title: '프론트엔드공부',
+        startDate: 'Today',
+        endDate: '',
+        priority: 'High',
+        description: '기본내용',
+      },
     ];
   }
 
   connectedCallback() {
     this.render();
     this.setTaskListState();
+    this.setStatusHeader();
   }
 
   private setTaskListState() {
@@ -34,19 +42,22 @@ export default class StatusList extends HTMLElement {
     }
   }
 
-  // TODO: statusHeader 속성으로 보내는 값 프로퍼티로 처리
   private setStatusHeader() {
-    const $statusHeader = this.querySelector('status-header') as HTMLElement;
+    const $statusHeader = this.querySelector('status-header') as HTMLElement & {
+      columStatus: TStatusList;
+      count: number;
+    };
     if ($statusHeader) {
-      // $statusHeader.status = 'To do';
+      $statusHeader.columStatus = 'To do';
+      $statusHeader.count = this.totalCount;
     }
   }
 
   render() {
     this.innerHTML = `
         <ul class="task-list">
-            <status-header status="To do" count="${this.taskList.length}"></status-header>
-            <task-list ></task-list>
+            <status-header></status-header>
+            <task-list></task-list>
         </ul>      
     `;
   }
