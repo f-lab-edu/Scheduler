@@ -1,7 +1,7 @@
 import { TStatusList } from 'types/types';
 import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
-import './common/button/IconButton';
+import '../common/button/IconButton';
 
 export default class StatusHeader extends HTMLElement {
   status: TStatusList = '';

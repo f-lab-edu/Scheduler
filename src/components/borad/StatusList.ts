@@ -1,4 +1,4 @@
-import { ICard, TStatusList } from '../../types/types';
+import { ICard, TStatusList } from '../../../types/types';
 import './StatusHeader';
 import './TaskList';
 

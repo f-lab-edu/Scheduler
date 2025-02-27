@@ -1,5 +1,5 @@
 import './ActionGroup';
-import './StatusList';
+import '../borad/StatusList';
 export default class Contents extends HTMLElement {
   selectedTab: string = 'Board';
 
