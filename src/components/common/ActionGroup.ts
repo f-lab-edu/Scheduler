@@ -1,7 +1,6 @@
 import plus from '@/assets/plus.svg';
 import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
-import '@/components/common/button/IconTextButton';
 import { createIconTextButton } from '@/utils/domButton';
 export default class ActionGroup extends HTMLElement {
   private count: string = '';
