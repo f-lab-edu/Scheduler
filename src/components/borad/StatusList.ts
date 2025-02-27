@@ -40,7 +40,7 @@ export default class StatusList extends HTMLElement {
   connectedCallback() {
     this.render();
     this.setTaskListState();
-    this.setStatusHeader();
+    this.setStatusHeader(this, 'To do', this.totalCount);
     this.setEventListener();
     this.updateStatusList();
   }
@@ -70,12 +70,12 @@ export default class StatusList extends HTMLElement {
     }
   }
 
-  private setStatusHeader() {
-    const $statusHeader = this.querySelector('status-header') as StatusHeader;
+  private setStatusHeader($container: HTMLElement, statusTitle: TStatusList, count: number) {
+    const $statusHeader = $container.querySelector('status-header') as StatusHeader;
 
     if ($statusHeader) {
-      $statusHeader.columStatus = 'To do';
-      $statusHeader.count = this.totalCount;
+      $statusHeader.columStatus = statusTitle;
+      $statusHeader.count = count;
     }
   }
 
@@ -100,6 +100,9 @@ export default class StatusList extends HTMLElement {
       const $addStatusList = this.querySelector('add-status-list');
       if ($addStatusList) {
         $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
+        this.setStatusHeader($newStatus, this._newStatusTitle, 0);
+
+        // this._newStatusTitle = '';
       }
     });
   }
