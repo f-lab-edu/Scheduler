@@ -1,4 +1,3 @@
-import '../common/button/IconButton';
 import { createIconButton } from '@/utils/domButton';
 import { TStatusList } from 'types/types';
 import moreIcon from '@/assets/three-dots.svg';

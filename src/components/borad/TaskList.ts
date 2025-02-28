@@ -4,13 +4,12 @@ import date from '@/assets/calendar-check.svg';
 export default class TaskList extends HTMLElement {
   private _list: ICard[] = [];
 
+  get taskList() {
+    return this._list;
+  }
   set taskList(value: ICard[]) {
     this._list = value;
     this.render();
-  }
-
-  get taskList() {
-    return this._list;
   }
 
   connectedCallback() {

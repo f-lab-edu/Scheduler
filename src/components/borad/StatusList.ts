@@ -1,17 +1,24 @@
 import './StatusHeader';
 import './TaskList';
-import { createIconButton } from '@/utils/domButton';
+import './AddStatusList';
+import StatusHeader from './StatusHeader';
+import TaskList from './TaskList';
 import { ICard, TStatusList } from '../../../types/types';
-import plusIcon from '@/assets/plus.svg';
+import AddStatusList from './AddStatusList';
 
 export default class StatusList extends HTMLElement {
-  totalCount: number;
-  taskList: ICard[];
-  // TODO: 데이터 입력 모달 생성 후 삭제
+  private totalCount: number;
+  private taskList: ICard[];
+  private _isClickedAddStatus: boolean;
+  private _newStatusTitle: TStatusList;
 
+  // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
     this.totalCount = 0;
+    this._isClickedAddStatus = false;
+    this._newStatusTitle = '';
+
     this.taskList = [
       {
         title: '프론트엔드공부',
@@ -33,26 +40,71 @@ export default class StatusList extends HTMLElement {
   connectedCallback() {
     this.render();
     this.setTaskListState();
-    this.setStatusHeader();
+    this.setStatusHeader(this, 'To do', this.totalCount);
+    this.setEventListener();
+    this.updateStatusList();
+  }
+
+  get isClickedAddStatus() {
+    return this._isClickedAddStatus;
+  }
+
+  set isClickedAddStatus(isClicked: boolean) {
+    this._isClickedAddStatus = isClicked;
+    this.updateAddStatusList();
+  }
+
+  private updateAddStatusList() {
+    const $addStatusList = this.querySelector('add-status-list') as AddStatusList;
+    if ($addStatusList) {
+      $addStatusList.isClickedAddStatus = this._isClickedAddStatus;
+    }
   }
 
   private setTaskListState() {
-    const $taskList = this.querySelector('task-list') as HTMLElement & { taskList?: ICard[]; count?: number };
+    const $taskList = this.querySelector('task-list') as TaskList;
+
     if ($taskList) {
       $taskList.taskList = this.taskList;
       this.totalCount = this.taskList.length;
     }
   }
 
-  private setStatusHeader() {
-    const $statusHeader = this.querySelector('status-header') as HTMLElement & {
-      columStatus: TStatusList;
-      count: number;
-    };
+  private setStatusHeader($container: HTMLElement, statusTitle: TStatusList, count: number) {
+    const $statusHeader = $container.querySelector('status-header') as StatusHeader;
+
     if ($statusHeader) {
-      $statusHeader.columStatus = 'To do';
-      $statusHeader.count = this.totalCount;
+      $statusHeader.columStatus = statusTitle;
+      $statusHeader.count = count;
     }
+  }
+
+  private setEventListener() {
+    this.addEventListener('button-click', () => {
+      this._isClickedAddStatus = true;
+    });
+  }
+
+  private updateStatusList() {
+    this.addEventListener('status-title-saved', (event: Event) => {
+      const customEvent = event as CustomEvent<{ title: string }>;
+      this._newStatusTitle = customEvent.detail.title;
+
+      const $newStatus = document.createElement('ul');
+      $newStatus.classList.add('task-list');
+      $newStatus.innerHTML = `
+          <status-header></status-header>
+          <task-list></task-list>  
+      `;
+
+      const $addStatusList = this.querySelector('add-status-list');
+      if ($addStatusList) {
+        $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
+        this.setStatusHeader($newStatus, this._newStatusTitle, 0);
+
+        // this._newStatusTitle = '';
+      }
+    });
   }
 
   render() {
@@ -62,9 +114,9 @@ export default class StatusList extends HTMLElement {
                 <status-header></status-header>
                 <task-list></task-list>
             </ul>     
-            ${createIconButton('add-status-list', plusIcon, 'plus-icon')} 
+            <add-status-list></add-status-list>
         </section>
-    `;
+            `;
   }
 }
 
