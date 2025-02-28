@@ -31,11 +31,13 @@ $colors: (
   hover: (
     add: #1c63fe,
     filter: #403c6d,
+    dropdown: #e5e4ee,
   ),
   scrollbar: (
     track: #fff6,
     thumb: #00000026,
   ),
+  shadow: #545454,
 );
 
 // 중복 사용으로 변수화
@@ -216,6 +218,7 @@ $main-blue: map.get($colors, mainBlue);
 }
 
 .task-list {
+  position: relative;
   width: 378px;
   min-width: 378px;
   height: 100%;
@@ -348,4 +351,20 @@ $main-blue: map.get($colors, mainBlue);
       cursor: pointer;
     }
   }
+}
+
+.dropdown-menu {
+  position: absolute;
+  right: -35px;
+  top: 40px;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-size: 14px;
+  background-color: $white;
+  box-shadow: 4px 4px 10px 0px map.get($colors, shadow);
+  z-index: 1;
+  cursor: pointer;
+}
+.dropdown-menu:hover {
+  background-color: map.get(map.get($colors, hover), dropdown);
 }
