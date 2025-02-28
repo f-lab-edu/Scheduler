@@ -39,7 +39,6 @@ export default class ConfirmDialog extends HTMLElement {
     }
   }
 
-  // TODO: 메세지, 버튼명, 버튼 개수 받아서(1 or 2) 처리
   render() {
     this.innerHTML = `
     <div class="backdrop">
