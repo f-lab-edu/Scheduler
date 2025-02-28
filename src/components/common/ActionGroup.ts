@@ -16,7 +16,14 @@ export default class ActionGroup extends HTMLElement {
 
   set totalCount(count: number) {
     this._totalCount = count;
-    this.render();
+    this.updateTotalCount();
+  }
+
+  private updateTotalCount() {
+    const $totalCount = this.querySelector('.total-tasks');
+    if ($totalCount) {
+      $totalCount.textContent = `${this._totalCount} tasks`;
+    }
   }
 
   setEventListener() {
@@ -32,7 +39,7 @@ export default class ActionGroup extends HTMLElement {
     this.innerHTML = `
         <section class="action-group">
             <div class="left-actions">
-                <div class="total-tasks">${this._totalCount} tasks</div>
+                <div class="total-tasks"></div>
                 ${createIconTextButton('add-new-button', plus, 'plus-icon', 'Add New')}
             </div>
             <div class="right-actions">

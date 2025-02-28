@@ -59,7 +59,6 @@ export default class Contents extends HTMLElement {
         </section>
         
         `;
-    this.updateStatusList();
   }
 }
 
