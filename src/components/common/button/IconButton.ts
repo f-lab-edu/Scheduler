@@ -18,8 +18,8 @@ export default class IconButton extends HTMLElement {
         </button>
     `;
 
-    this.querySelector('button')?.addEventListener('click', () => {
-      this.dispatchEvent(new Event('button-click'));
+    this.querySelector(`.${this.buttonClass}`)?.addEventListener('click', () => {
+      this.dispatchEvent(new Event('button-click', { bubbles: true }));
     });
   }
 }
