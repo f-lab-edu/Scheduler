@@ -22,7 +22,7 @@ export default class IconTextButton extends IconButton {
     `;
 
     this.querySelector(`.${this.buttonClass}`)?.addEventListener('click', () => {
-      this.dispatchEvent(new Event('button-click'));
+      this.dispatchEvent(new Event('button-click', { bubbles: true }));
     });
   }
 }
