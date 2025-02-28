@@ -1,13 +1,10 @@
+import { TTab } from 'types/types';
+
 export default class Tabs extends HTMLElement {
-  private tabs: string[] = [];
+  private tabs: TTab[] = ['Board', 'Calendar'];
   _selectedTab: string = '';
 
   connectedCallback() {
-    const attr = this.getAttribute('data-tabs');
-    if (attr) {
-      this.tabs = attr.split(',');
-    }
-
     this.render();
   }
 
@@ -19,21 +16,8 @@ export default class Tabs extends HTMLElement {
     this._selectedTab = value;
     this.render();
   }
-  render() {
-    this.innerHTML = `
-    <section class="tabs">
-        ${this.tabs
-          .map(
-            (tabName) => `
-                <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
-                    <tab-element selected="${tabName}">${tabName}</tab-element>
-                </button>
-            `,
-          )
-          .join('')}
-    </section>
-  `;
 
+  private addEventListeners() {
     this.querySelectorAll('.tab').forEach(($tabButton) => {
       $tabButton.addEventListener('click', () => {
         const tabName = $tabButton.textContent?.trim() || '';
@@ -42,9 +26,27 @@ export default class Tabs extends HTMLElement {
     });
   }
 
-  setActiveTab(tabName: string) {
+  private setActiveTab(tabName: string) {
     this.selectedTab = tabName;
     this.dispatchEvent(new CustomEvent('tab-change', { detail: tabName, bubbles: true }));
+  }
+
+  render() {
+    this.innerHTML = `
+    <section class="tabs">
+        ${this.tabs
+          .map(
+            (tabName) => `
+                <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
+                    <tab-element>${tabName}</tab-element>
+                </button>
+            `,
+          )
+          .join('')}
+    </section>
+  `;
+
+    this.addEventListeners();
   }
 }
 
