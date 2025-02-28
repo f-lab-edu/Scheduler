@@ -1,4 +1,5 @@
 import '@/components/common/dropdown/TextSelector';
+import '@/components/common/modal/ConfirmDialog';
 import { createIconButton } from '@/utils/domButton';
 import { TStatusList } from 'types/types';
 import moreIcon from '@/assets/three-dots.svg';
@@ -8,11 +9,13 @@ export default class StatusHeader extends HTMLElement {
   private status: TStatusList = '';
   private taskCount: number = 0;
   private isShowMoreList: boolean = false;
+  private isShowConfirmDialog: boolean = false;
 
   connectedCallback() {
     this.render();
     this.setEventLitener();
     window.addEventListener('click', this.handleOutsideClick);
+    // this.handleModalShow();
   }
 
   disconnectedCallback() {
@@ -68,6 +71,15 @@ export default class StatusHeader extends HTMLElement {
     });
   }
 
+  // private handleModalShow() {
+  //   this.addEventListener('remove-click', () => {
+  //     this.isShowMoreList = false;
+  //     this.isShowConfirmDialog = true;
+  //     console.log('🤮', this.isShowConfirmDialog);
+  //     this.render();
+  //   });
+  // }
+
   render() {
     this.innerHTML = `
       <div class="status-header">
@@ -81,6 +93,7 @@ export default class StatusHeader extends HTMLElement {
           </div>
       </div>
       ${this.isShowMoreList ? `<text-selector></text-selector>` : ''}
+      ${this.isShowConfirmDialog ? '<confirm-dialog></confirm-dialog>' : ''}
     `;
   }
 }

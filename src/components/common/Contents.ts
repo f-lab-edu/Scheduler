@@ -2,6 +2,7 @@ import './ActionGroup';
 import '../borad/StatusList';
 import StatusList from '../borad/StatusList';
 import ActionGroup from './ActionGroup';
+import ConfirmDialog from './modal/ConfirmDialog';
 export default class Contents extends HTMLElement {
   selectedTab: string = 'Board';
   private isClickedAddStatus: boolean = false;
@@ -11,6 +12,7 @@ export default class Contents extends HTMLElement {
     this.render();
     this.setEventListener();
     this.updateTotalTaskCount();
+    this.handleModalShow();
   }
 
   setEventListener() {
@@ -48,6 +50,25 @@ export default class Contents extends HTMLElement {
     if (actionGroup) {
       actionGroup.totalCount = total;
     }
+  }
+
+  private handleModalShow() {
+    this.addEventListener('remove-click', () => {
+      const $dialog = document.createElement('confirm-dialog') as ConfirmDialog;
+
+      $dialog.dialogMessage = '모든 하위 일정이 삭제 됩니다. </br> 삭제하시겠습니까?';
+      $dialog.cancelHandler = () => {
+        document.body.removeChild($dialog);
+      };
+      $dialog.confirmHandler = () => {
+        document.body.removeChild($dialog);
+        // TODO: 삭제 동작 (statusList에서 선택된 타겟 제거)
+        const $statusList = this.querySelector('status-list');
+        console.log('❌', $statusList);
+      };
+
+      document.body.appendChild($dialog);
+    });
   }
 
   render() {
