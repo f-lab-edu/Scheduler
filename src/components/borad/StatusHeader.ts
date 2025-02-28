@@ -15,7 +15,6 @@ export default class StatusHeader extends HTMLElement {
     this.render();
     this.setEventLitener();
     window.addEventListener('click', this.handleOutsideClick);
-    // this.handleModalShow();
   }
 
   disconnectedCallback() {
@@ -39,15 +38,6 @@ export default class StatusHeader extends HTMLElement {
     this.render();
   }
 
-  // private handleMoreButtonClick() {
-  //   this.addEventListener('click', () => {
-  //     const $moreButton = this.querySelector('more-button');
-  //     if ($moreButton) {
-  //       $moreButton.dispatchEvent(new CustomEvent('status-more-click', { bubbles: true }));
-  //     }
-  //   });
-  // }
-
   private handleOutsideClick = (event: Event) => {
     const $target = event.target as HTMLElement;
     if (!this.isShowMoreList) {
@@ -70,15 +60,6 @@ export default class StatusHeader extends HTMLElement {
       }
     });
   }
-
-  // private handleModalShow() {
-  //   this.addEventListener('remove-click', () => {
-  //     this.isShowMoreList = false;
-  //     this.isShowConfirmDialog = true;
-  //     console.log('🤮', this.isShowConfirmDialog);
-  //     this.render();
-  //   });
-  // }
 
   render() {
     this.innerHTML = `

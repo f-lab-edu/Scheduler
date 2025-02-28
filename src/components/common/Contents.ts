@@ -6,7 +6,6 @@ import ConfirmDialog from './modal/ConfirmDialog';
 export default class Contents extends HTMLElement {
   selectedTab: string = 'Board';
   private isClickedAddStatus: boolean = false;
-  private totalCount: number = 0;
 
   connectedCallback() {
     this.render();
@@ -46,14 +45,14 @@ export default class Contents extends HTMLElement {
       total += list.totalTaskCount;
     });
 
-    const actionGroup = this.querySelector('action-group') as ActionGroup;
-    if (actionGroup) {
-      actionGroup.totalCount = total;
+    const $actionGroup = this.querySelector('action-group') as ActionGroup;
+    if ($actionGroup) {
+      $actionGroup.totalCount = total;
     }
   }
 
   private handleModalShow() {
-    this.addEventListener('remove-click', () => {
+    this.addEventListener('remove-click', (event: Event) => {
       const $dialog = document.createElement('confirm-dialog') as ConfirmDialog;
 
       $dialog.dialogMessage = '모든 하위 일정이 삭제 됩니다. </br> 삭제하시겠습니까?';
@@ -62,9 +61,16 @@ export default class Contents extends HTMLElement {
       };
       $dialog.confirmHandler = () => {
         document.body.removeChild($dialog);
-        // TODO: 삭제 동작 (statusList에서 선택된 타겟 제거)
-        const $statusList = this.querySelector('status-list');
-        console.log('❌', $statusList);
+        const $statusList = this.querySelector('status-list') as HTMLElement;
+
+        if ($statusList) {
+          const $targetButton = event.target as HTMLElement;
+          const $taskList = $targetButton.closest('ul.task-list');
+
+          if ($taskList) {
+            $taskList.remove();
+          }
+        }
       };
 
       document.body.appendChild($dialog);
@@ -78,8 +84,7 @@ export default class Contents extends HTMLElement {
             <action-group></action-group>
             ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
         </section>
-        
-        `;
+    `;
   }
 }
 

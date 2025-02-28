@@ -6,7 +6,6 @@ export default class EiditorModal extends HTMLElement {
   }
 
   render() {
-    // TODO: back drop
     this.innerHTML = `
       <div>
         제작 예정
