@@ -1,11 +1,17 @@
-import './ActionGroup';
-import '../borad/StatusList';
-import StatusList from '../borad/StatusList';
-import ActionGroup from './ActionGroup';
-import ConfirmDialog from './modal/ConfirmDialog';
+import '@/components/common/ActionGroup';
+import '@/components/borad/StatusList';
+import StatusList from '@/components/borad/StatusList';
+import ActionGroup from '@/components/common/ActionGroup';
+import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
 export default class Contents extends HTMLElement {
-  selectedTab: string = 'Board';
-  private isClickedAddStatus: boolean = false;
+  private selectedTab: string;
+  private isClickedAddStatus: boolean;
+
+  constructor() {
+    super();
+    this.selectedTab = 'Board';
+    this.isClickedAddStatus = false;
+  }
 
   connectedCallback() {
     this.render();

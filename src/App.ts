@@ -2,11 +2,16 @@ import '@/components/common/Header';
 import '@/components/common/Tabs';
 import '@/components/common/Contents';
 import Tabs from '@/components/common/Tabs';
-import Contents from './components/common/Contents';
+import Contents from '@/components/common/Contents';
 import { TTab } from '../types/types';
 
 export class App extends HTMLElement {
-  private selectedTab: TTab = 'Board';
+  private selectedTab: TTab;
+
+  constructor() {
+    super();
+    this.selectedTab = 'Board';
+  }
 
   connectedCallback() {
     this.render();
