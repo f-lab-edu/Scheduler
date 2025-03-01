@@ -1,9 +1,14 @@
-import { createTextButton } from '@/utils/domButton';
+import { createTextButton } from '@/components/common/button/buttonTemplates';
 
 export default class ConfirmDialog extends HTMLElement {
-  private message: string = '';
+  private message: string;
   private onConfirm?: () => void;
   private onCancel?: () => void;
+
+  constructor() {
+    super();
+    this.message = '';
+  }
 
   connectedCallback() {
     this.render();

@@ -1,7 +1,13 @@
 export default class IconButton extends HTMLElement {
-  buttonClass: string = '';
-  imgSrc: string = '';
-  imgClass: string = '';
+  buttonClass: string;
+  imgSrc: string;
+  imgClass: string;
+  constructor() {
+    super();
+    this.buttonClass = '';
+    this.imgSrc = '';
+    this.imgClass = '';
+  }
 
   connectedCallback() {
     this.buttonClass = this.getAttribute('button-class') || '';

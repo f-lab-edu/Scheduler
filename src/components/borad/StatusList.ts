@@ -1,10 +1,10 @@
-import './StatusHeader';
-import './TaskList';
-import './AddStatusList';
-import StatusHeader from './StatusHeader';
-import TaskList from './TaskList';
+import '@/components/borad/StatusHeader';
+import '@/components/borad/TaskList';
+import '@/components/borad/AddStatusList';
+import StatusHeader from '@/components/borad/StatusHeader';
+import AddStatusList from '@/components/borad/AddStatusList';
+import TaskList from '@/components/borad/TaskList';
 import { ICard } from '../../../types/types';
-import AddStatusList from './AddStatusList';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;

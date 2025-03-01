@@ -1,4 +1,4 @@
-import { createTextButton } from '@/utils/domButton';
+import { createTextButton } from '@/components/common/button/buttonTemplates';
 import plusIcon from '@/assets/plus.svg';
 
 export default class AddStatusList extends HTMLElement {

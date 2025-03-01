@@ -1,9 +1,14 @@
 import { TTab } from 'types/types';
 
 export default class Tabs extends HTMLElement {
-  private tabs: TTab[] = ['Board', 'Calendar'];
-  _selectedTab: string = '';
+  private tabs: TTab[];
+  private _selectedTab: string;
 
+  constructor() {
+    super();
+    this.tabs = ['Board', 'Calendar'];
+    this._selectedTab = '';
+  }
   connectedCallback() {
     this.render();
   }

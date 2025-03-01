@@ -1,10 +1,11 @@
-import IconButton from './IconButton';
+import IconButton from '@/components/common/button/IconButton';
 
 export default class IconTextButton extends IconButton {
-  private text: string = '';
+  private text: string;
 
   constructor() {
     super();
+    this.text = '';
   }
 
   connectedCallback() {

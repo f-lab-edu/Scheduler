@@ -1,6 +1,12 @@
 export default class TextButton extends HTMLElement {
-  buttonClass: string = '';
-  private text: string = '';
+  private buttonClass: string;
+  private text: string;
+
+  constructor() {
+    super();
+    this.buttonClass = '';
+    this.text = '';
+  }
 
   connectedCallback() {
     this.buttonClass = this.getAttribute('button-class') || '';

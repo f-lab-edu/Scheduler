@@ -1,4 +1,4 @@
-import { createTextButton } from '@/utils/domButton';
+import { createTextButton } from '@/components/common/button/buttonTemplates';
 
 export default class EiditorModal extends HTMLElement {
   connectedCallback() {
