@@ -1,7 +1,7 @@
 import '@/components/common/Header';
 import '@/components/common/Tabs';
 import '@/components/common/Contents';
-import Tabs from './components/common/Tabs';
+import Tabs from '@/components/common/Tabs';
 import Contents from './components/common/Contents';
 import { TTab } from '../types/types';
 

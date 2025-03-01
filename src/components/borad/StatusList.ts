@@ -3,14 +3,14 @@ import './TaskList';
 import './AddStatusList';
 import StatusHeader from './StatusHeader';
 import TaskList from './TaskList';
-import { ICard, TStatusList } from '../../../types/types';
+import { ICard } from '../../../types/types';
 import AddStatusList from './AddStatusList';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
   private taskList: ICard[];
   private _isClickedAddStatus: boolean;
-  private _newStatusTitle: TStatusList;
+  private _newStatusTitle: string;
   private _isShowConfirmDialog: boolean = false;
 
   // TODO: 데이터 입력 모달 생성 후 삭제
@@ -84,7 +84,7 @@ export default class StatusList extends HTMLElement {
     }
   }
 
-  private setStatusHeader($container: HTMLElement, statusTitle: TStatusList, count: number) {
+  private setStatusHeader($container: HTMLElement, statusTitle: string, count: number) {
     const $statusHeader = $container.querySelector('status-header') as StatusHeader;
 
     if ($statusHeader) {

@@ -1,7 +1,6 @@
 export type TPriorities = 'High' | 'Medium' | 'Low';
 export type TTab = 'Board' | 'Calendar';
 export type TDefaultList = 'To do' | 'In Progress' | 'Done';
-export type TStatusList = TDefaultList | string;
 
 export interface ITabTaskInfo {
   totalTaskCount: number;
@@ -19,12 +18,12 @@ export interface ICard extends IDefaultInfo {
 }
 
 export interface IStatusList {
-  listType: TStatusList;
+  listType: string;
   taskCount: number;
 }
 
 export interface IFilter {
-  listType: TStatusList[];
+  listType: string[];
   priorities: TPriorities[];
 }
 
