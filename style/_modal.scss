@@ -1,0 +1,92 @@
+@use 'sass:map';
+@use './colors' as colors;
+
+.close-button {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.editor-title {
+  width: 600px;
+  height: 40px;
+  padding: 0 10px;
+  border: none;
+  outline: none;
+  border-bottom: 1px solid map.get(map.get(colors.$colors, border), inputBottom);
+  margin-top: 30px;
+  font-size: 24px;
+}
+.editor-title::placeholder {
+  color: map.get(map.get(colors.$colors, font), placeholder);
+}
+
+.cancel-icon {
+  width: 24px;
+  height: 24px;
+}
+
+.modal-contents {
+}
+
+.task-info-group {
+  display: flex;
+  justify-content: space-between;
+  margin: 32px 0 20px;
+}
+
+.description {
+  width: 600px;
+  height: 300px;
+  padding: 10px;
+  margin-bottom: 26px;
+  border: 1px solid map.get(map.get(colors.$colors, border), editor);
+  border-radius: 5px;
+  resize: none;
+  outline: none;
+}
+
+.task-info-group {
+  .calendar-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    .calendar-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .date-input {
+      width: 120px;
+      height: 20px;
+      border-radius: 5px;
+      padding: 5px;
+      border: 1px solid map.get(map.get(colors.$colors, border), editor);
+    }
+  }
+  .priority-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-right: 110px;
+    .select-box {
+      width: 78px;
+      height: 30px;
+      border-radius: 5px;
+    }
+    .priority-color {
+      width: 30px;
+      height: 30px;
+      border-radius: 5px;
+      background-color: black; //수정필
+    }
+  }
+}
+
+.submit-button-group {
+  display: flex;
+  justify-content: flex-end;
+}

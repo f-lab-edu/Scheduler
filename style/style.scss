@@ -5,6 +5,7 @@
 @use './layout';
 @use './icon';
 @use './boardContents';
+@use './modal';
 
 @each $priority, $color in colors.$priorities {
   .#{$priority} {
