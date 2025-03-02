@@ -5,32 +5,32 @@ import ActionGroup from '@/components/common/ActionGroup';
 import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
 export default class Contents extends HTMLElement {
   private selectedTab: string;
-  private isClickedAddStatus: boolean;
+  private clickedAddStatus: boolean;
 
   constructor() {
     super();
     this.selectedTab = 'Board';
-    this.isClickedAddStatus = false;
+    this.clickedAddStatus = false;
   }
 
   connectedCallback() {
     this.render();
-    this.setEventListener();
+    this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
     this.handleModalShow();
   }
 
-  setEventListener() {
+  handleAddNewButtonClick() {
     this.addEventListener('add-new-clicked', () => {
-      this.isClickedAddStatus = true;
-      this.updateStatusList();
+      this.clickedAddStatus = true;
+      this.createNewStatus();
     });
   }
 
-  updateStatusList() {
+  createNewStatus() {
     const $statusList = this.querySelector('status-list') as StatusList;
     if ($statusList) {
-      $statusList.isClickedAddStatus = this.isClickedAddStatus;
+      $statusList.clickedAddStatus = this.clickedAddStatus;
     }
   }
 
