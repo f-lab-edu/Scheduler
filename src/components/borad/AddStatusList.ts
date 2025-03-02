@@ -7,7 +7,7 @@ export default class AddStatusList extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.setEventListeners();
+    this.setupStatusEventListeners();
   }
 
   get clickedAddStatus() {
@@ -19,7 +19,7 @@ export default class AddStatusList extends HTMLElement {
     this.render();
   }
 
-  private setEventListeners() {
+  private setupStatusEventListeners() {
     this.addEventListener('click', (event) => {
       const $target = event.target as HTMLElement;
 
