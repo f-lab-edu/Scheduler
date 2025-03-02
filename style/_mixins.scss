@@ -1,0 +1,10 @@
+@mixin card($color) {
+  background-color: $color;
+}
+
+@mixin task-card($color) {
+  background-color: $color;
+  margin-top: 20px;
+  padding: 18px 18px 32px;
+  border-radius: 20px;
+}
