@@ -17,7 +17,7 @@ export default class Tabs extends HTMLElement {
     this.render();
   }
 
-  private addEventListeners() {
+  private setEventListeners() {
     this.querySelectorAll('.tab').forEach(($tabButton) => {
       $tabButton.addEventListener('click', () => {
         const tabName = $tabButton.textContent?.trim() || '';
@@ -46,7 +46,7 @@ export default class Tabs extends HTMLElement {
     </section>
   `;
 
-    this.addEventListeners();
+    this.setEventListeners();
   }
 }
 
