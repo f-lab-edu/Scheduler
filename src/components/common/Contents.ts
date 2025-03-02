@@ -3,6 +3,7 @@ import '../borad/StatusList';
 import StatusList from '../borad/StatusList';
 import ActionGroup from './ActionGroup';
 import ConfirmDialog from './modal/ConfirmDialog';
+
 export default class Contents extends HTMLElement {
   selectedTab: string = 'Board';
   private isClickedAddStatus: boolean = false;
@@ -85,6 +86,7 @@ export default class Contents extends HTMLElement {
             ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
         </section>
     `;
+
   }
 }
 
