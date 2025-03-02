@@ -43,7 +43,7 @@ export default class StatusList extends HTMLElement {
     this.setTaskListState();
     this.setStatusHeader(this, 'To do', this.totalCount);
     this.setEventListener();
-    this.createNewStatus();
+    this.setupStatusCreationHandler();
   }
 
   get totalTaskCount(): number {
@@ -99,7 +99,7 @@ export default class StatusList extends HTMLElement {
     });
   }
 
-  private createNewStatus() {
+  private setupStatusCreationHandler() {
     this.addEventListener('status-title-saved', (event: Event) => {
       const customEvent = event as CustomEvent<{ title: string }>;
       this._newStatusTitle = customEvent.detail.title;

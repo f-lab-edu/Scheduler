@@ -13,7 +13,7 @@ export default class StatusHeader extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.handleButtonClick();
+    this.setupButtonClickListeners();
     window.addEventListener('click', this.handleOutsideClick);
   }
 
@@ -50,7 +50,7 @@ export default class StatusHeader extends HTMLElement {
     }
   };
 
-  private handleButtonClick() {
+  private setupButtonClickListeners() {
     this.addEventListener('click', (event: Event) => {
       const $target = event.target as HTMLElement;
       const $editorModal = document.createElement('editor-modal') as EiditorModal;

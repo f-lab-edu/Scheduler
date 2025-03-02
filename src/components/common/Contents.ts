@@ -17,7 +17,7 @@ export default class Contents extends HTMLElement {
     this.render();
     this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
-    this.handleModalShow();
+    this.setupRemoveConfirmationHandler();
   }
 
   handleAddNewButtonClick() {
@@ -57,7 +57,7 @@ export default class Contents extends HTMLElement {
     }
   }
 
-  private handleModalShow() {
+  private setupRemoveConfirmationHandler() {
     this.addEventListener('remove-click', (event: Event) => {
       const $dialog = document.createElement('confirm-dialog') as ConfirmDialog;
 

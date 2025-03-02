@@ -12,7 +12,7 @@ export default class ActionGroup extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.handleAddButtonClick();
+    this.setupAddButtonListener();
   }
 
   get totalCount() {
@@ -31,7 +31,7 @@ export default class ActionGroup extends HTMLElement {
     }
   }
 
-  private handleAddButtonClick() {
+  private setupAddButtonListener() {
     const $addNewButton = this.querySelector('.add-new-button');
     if ($addNewButton) {
       $addNewButton.addEventListener('click', () => {
