@@ -9,15 +9,15 @@ import { ICard } from '../../../types/types';
 export default class StatusList extends HTMLElement {
   private totalCount: number;
   private taskList: ICard[];
-  private _isClickedAddStatus: boolean;
+  private _clickedAddStatus: boolean;
   private _newStatusTitle: string;
-  private _isShowConfirmDialog: boolean = false;
+  private _showConfirmDialog: boolean = false;
 
   // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
     this.totalCount = 0;
-    this._isClickedAddStatus = false;
+    this._clickedAddStatus = false;
     this._newStatusTitle = '';
 
     this.taskList = [
@@ -43,35 +43,35 @@ export default class StatusList extends HTMLElement {
     this.setTaskListState();
     this.setStatusHeader(this, 'To do', this.totalCount);
     this.setEventListener();
-    this.updateStatusList();
+    this.createNewStatus();
   }
 
   get totalTaskCount(): number {
     return this.totalCount;
   }
 
-  get isClickedAddStatus() {
-    return this._isClickedAddStatus;
+  get clickedAddStatus() {
+    return this._clickedAddStatus;
   }
 
-  set isClickedAddStatus(isClicked: boolean) {
-    this._isClickedAddStatus = isClicked;
-    this.updateAddStatusList();
+  set clickedAddStatus(isClicked: boolean) {
+    this._clickedAddStatus = isClicked;
+    this.handleAddNewStatusClick();
   }
 
-  get isShowConfirmDialog() {
-    return this._isShowConfirmDialog;
+  get showConfirmDialog() {
+    return this._showConfirmDialog;
   }
 
-  set isShowConfirmDialog(isShow: boolean) {
-    this._isShowConfirmDialog = isShow;
+  set showConfirmDialog(isShow: boolean) {
+    this._showConfirmDialog = isShow;
     this.render();
   }
 
-  private updateAddStatusList() {
+  private handleAddNewStatusClick() {
     const $addStatusList = this.querySelector('add-status-list') as AddStatusList;
     if ($addStatusList) {
-      $addStatusList.isClickedAddStatus = this._isClickedAddStatus;
+      $addStatusList.clickedAddStatus = this._clickedAddStatus;
     }
   }
 
@@ -95,11 +95,11 @@ export default class StatusList extends HTMLElement {
 
   private setEventListener() {
     this.addEventListener('button-click', () => {
-      this._isClickedAddStatus = true;
+      this._clickedAddStatus = true;
     });
   }
 
-  private updateStatusList() {
+  private createNewStatus() {
     this.addEventListener('status-title-saved', (event: Event) => {
       const customEvent = event as CustomEvent<{ title: string }>;
       this._newStatusTitle = customEvent.detail.title;

@@ -3,10 +3,10 @@ import { createTextButton } from '@/components/common/button/buttonTemplates';
 export default class EiditorModal extends HTMLElement {
   connectedCallback() {
     this.render();
-    this.setEventListener();
+    this.handleModalButtonClick();
   }
 
-  private setEventListener() {
+  private handleModalButtonClick() {
     this.addEventListener('click', (event: Event) => {
       const $targetButton = event.target as HTMLElement;
       if ($targetButton) {

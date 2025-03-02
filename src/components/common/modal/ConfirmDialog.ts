@@ -12,7 +12,7 @@ export default class ConfirmDialog extends HTMLElement {
 
   connectedCallback() {
     this.render();
-    this.setEventLiteners();
+    this.handleModalButtonClick();
   }
 
   set dialogMessage(message: string) {
@@ -28,7 +28,7 @@ export default class ConfirmDialog extends HTMLElement {
     this.onCancel = handler;
   }
 
-  private setEventLiteners() {
+  private handleModalButtonClick() {
     const $confirmButton = this.querySelector('.confirm-button');
     const $cancelButton = this.querySelector('.cancel-button');
 

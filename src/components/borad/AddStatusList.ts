@@ -2,7 +2,7 @@ import { createTextButton } from '@/components/common/button/buttonTemplates';
 import plusIcon from '@/assets/plus.svg';
 
 export default class AddStatusList extends HTMLElement {
-  private _isAddClicked: boolean = false;
+  private _addClicked: boolean = false;
   private _newStatusTitle: string = '';
 
   connectedCallback() {
@@ -10,12 +10,12 @@ export default class AddStatusList extends HTMLElement {
     this.setEventListeners();
   }
 
-  get isClickedAddStatus() {
-    return this._isAddClicked;
+  get clickedAddStatus() {
+    return this._addClicked;
   }
 
-  set isClickedAddStatus(isClicked: boolean) {
-    this._isAddClicked = isClicked;
+  set clickedAddStatus(isClicked: boolean) {
+    this._addClicked = isClicked;
     this.render();
   }
 
@@ -24,13 +24,13 @@ export default class AddStatusList extends HTMLElement {
       const $target = event.target as HTMLElement;
 
       if ($target.closest('.add-status')) {
-        this._isAddClicked = true;
+        this._addClicked = true;
         this._newStatusTitle = '';
         this.render();
       }
 
       if ($target.closest('.cancel-button')) {
-        this._isAddClicked = false;
+        this._addClicked = false;
         this.render();
       }
 
@@ -40,7 +40,7 @@ export default class AddStatusList extends HTMLElement {
           alert('빈 값으로 저장 불가');
           return;
         }
-        this._isAddClicked = false;
+        this._addClicked = false;
 
         this.dispatchEvent(
           new CustomEvent('status-title-saved', { detail: { title: this._newStatusTitle }, bubbles: true }),
@@ -62,7 +62,7 @@ export default class AddStatusList extends HTMLElement {
     this.innerHTML = `
       <div class="add-status-list">
         ${
-          this._isAddClicked
+          this._addClicked
             ? `
               <div class="input-button-group">
                 <input class="status-input" value="${this._newStatusTitle}" />
