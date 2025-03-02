@@ -1,0 +1,54 @@
+@use 'sass:map';
+@use './colors' as colors;
+
+.header {
+  height: 125px;
+  background-color: colors.$main-blue;
+  font-size: 40px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  padding-left: 45px;
+}
+
+.tabs {
+  display: flex;
+  width: 100%;
+  height: 105px;
+  color: map.get(map.get(colors.$colors, font), tabInactive);
+  background-color: map.get(colors.$colors, brightPurple);
+
+  .tab {
+    padding-top: 55px;
+  }
+  .tab:first-child {
+    margin-left: 70px;
+  }
+
+  .active {
+    color: colors.$white;
+    border-bottom: 2px solid colors.$white;
+  }
+
+  button {
+    border: none;
+    border-bottom: 2px solid transparent;
+    background-color: transparent;
+    outline: none;
+    font-size: 25px;
+    color: map.get(map.get(colors.$colors, font), tabInactive);
+    padding: 0 20px;
+    cursor: pointer;
+  }
+}
+
+.contents {
+  min-height: 100vh;
+  padding: 19px 70px;
+  background: linear-gradient(
+    to bottom right,
+    map.get(map.get(colors.$colors, background), startPurple),
+    colors.$gradation-black,
+    colors.$gradation-black
+  );
+}
