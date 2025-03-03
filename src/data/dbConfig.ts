@@ -3,8 +3,13 @@ export const DB_VERSION = 1;
 export const STATUS_STORE = 'status';
 export const TASK_STORE = 'tasks';
 
+let dbInstance: IDBDatabase | null = null; //싱글톤 인스턴스 추가로 매 입력마다 openDatabase() 방지
+
 // db열기, 업그레이드 이벤트 ~> 객체 저장소 생성
 export function openDatabase(): Promise<IDBDatabase> {
+  if (dbInstance) {
+    return Promise.resolve(dbInstance); // 이미 열려 있으면 바로 반환
+  }
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DB_NAME, DB_VERSION);
 
@@ -38,8 +43,8 @@ export function openDatabase(): Promise<IDBDatabase> {
 
     request.onsuccess = (event) => {
       const $target = event.target as IDBRequest<IDBDatabase>;
+      dbInstance = $target.result;
       resolve($target.result);
-      console.log('✅', $target);
     };
   });
 }

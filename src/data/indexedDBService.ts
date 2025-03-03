@@ -10,7 +10,17 @@ export async function createStatus(title: string): Promise<number> {
 
   return new Promise((resolve, reject) => {
     request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result as number);
+    request.onsuccess = () => {
+      const newId = request.result as number;
+
+      transaction.oncomplete = () => {
+        resolve(newId);
+      };
+
+      transaction.onerror = () => {
+        reject(new Error('트랜잭션 실패'));
+      };
+    };
   });
 }
 
@@ -22,6 +32,18 @@ export async function getStatus(statusId: number): Promise<IStatusList | undefin
   return new Promise((resolve, reject) => {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result);
+  });
+}
+
+export async function getAllStatuses(): Promise<IStatusList[]> {
+  const db = await openDatabase();
+  const transaction = db.transaction([STATUS_STORE], 'readonly');
+  const store = transaction.objectStore(STATUS_STORE);
+  const request = store.getAll();
+
+  return new Promise((resolve, reject) => {
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result as IStatusList[]);
   });
 }
 
@@ -61,8 +83,8 @@ export async function deleteStatus(statusId: number): Promise<void> {
 // task
 export async function createTask(task: Omit<ITask, 'id'>): Promise<number> {
   const db = await openDatabase();
-  const tx = db.transaction([TASK_STORE], 'readwrite');
-  const store = tx.objectStore(TASK_STORE);
+  const transaction = db.transaction([TASK_STORE], 'readwrite');
+  const store = transaction.objectStore(TASK_STORE);
   const request = store.add(task);
 
   return new Promise((resolve, reject) => {
@@ -73,8 +95,8 @@ export async function createTask(task: Omit<ITask, 'id'>): Promise<number> {
 
 export async function getTasksByStatus(statusId: number): Promise<ITask[]> {
   const db = await openDatabase();
-  const tx = db.transaction([TASK_STORE], 'readonly');
-  const store = tx.objectStore(TASK_STORE);
+  const transaction = db.transaction([TASK_STORE], 'readonly');
+  const store = transaction.objectStore(TASK_STORE);
   // statusId 인덱스로 검색
   const index = store.index('statusId');
   const request = index.getAll(statusId);
@@ -87,22 +109,10 @@ export async function getTasksByStatus(statusId: number): Promise<ITask[]> {
   });
 }
 
-export async function getAllStatuses(): Promise<IStatusList[]> {
-  const db = await openDatabase();
-  const transaction = db.transaction([STATUS_STORE], 'readonly');
-  const store = transaction.objectStore(STATUS_STORE);
-  const request = store.getAll();
-
-  return new Promise((resolve, reject) => {
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve(request.result as IStatusList[]);
-  });
-}
-
 export async function updateTask(taskId: number, updatedFields: Partial<ITask>): Promise<void> {
   const db = await openDatabase();
-  const tx = db.transaction([TASK_STORE], 'readwrite');
-  const store = tx.objectStore(TASK_STORE);
+  const transaction = db.transaction([TASK_STORE], 'readwrite');
+  const store = transaction.objectStore(TASK_STORE);
 
   const getReq = store.get(taskId);
   return new Promise((resolve, reject) => {
@@ -122,8 +132,8 @@ export async function updateTask(taskId: number, updatedFields: Partial<ITask>):
 
 export async function deleteTask(taskId: number): Promise<void> {
   const db = await openDatabase();
-  const tx = db.transaction([TASK_STORE], 'readwrite');
-  const store = tx.objectStore(TASK_STORE);
+  const transaction = db.transaction([TASK_STORE], 'readwrite');
+  const store = transaction.objectStore(TASK_STORE);
 
   const request = store.delete(taskId);
   return new Promise((resolve, reject) => {

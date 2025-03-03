@@ -22,11 +22,11 @@ export default class StatusHeader extends HTMLElement {
     window.removeEventListener('click', this.handleOutsideClick);
   }
 
-  get columStatus() {
+  get statusTitle() {
     return this.status;
   }
-  set columStatus(status: string) {
-    this.status = status;
+  set statusTitle(newTitle: string) {
+    this.status = newTitle;
     this.render();
   }
 
@@ -73,7 +73,7 @@ export default class StatusHeader extends HTMLElement {
     this.innerHTML = `
       <div class="status-header">
           <div class="status-info">
-              <h2 class="status">${this.columStatus}</h2>
+              <h2 class="status">${this.statusTitle}</h2>
               <span class="task-count">${this.count}</span>
           </div>  
           <div class="status-btns">
