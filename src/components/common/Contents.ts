@@ -1,8 +1,10 @@
+
 import '@/components/common/ActionGroup';
 import '@/components/borad/StatusList';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
+
 export default class Contents extends HTMLElement {
   private selectedTab: string;
   private clickedAddStatus: boolean;

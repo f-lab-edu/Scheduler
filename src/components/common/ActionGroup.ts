@@ -31,6 +31,7 @@ export default class ActionGroup extends HTMLElement {
     }
   }
 
+
   private setupAddButtonListener() {
     const $addNewButton = this.querySelector('.add-new-button');
     if ($addNewButton) {
