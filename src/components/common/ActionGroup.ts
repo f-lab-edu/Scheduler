@@ -3,6 +3,7 @@ import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
 import { createIconTextButton } from '@/components/common/button/buttonTemplates';
 export default class ActionGroup extends HTMLElement {
+
   private _totalCount: number;
 
   constructor() {
