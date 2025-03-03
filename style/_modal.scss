@@ -78,10 +78,20 @@
       border-radius: 5px;
     }
     .priority-color {
-      width: 30px;
+      width: 30px !important;
       height: 30px;
       border-radius: 5px;
-      background-color: black; //수정필
+      background-color: map.get(map.get(colors.$colors, card), high);
+    }
+    .high {
+      width: 30px;
+      background-color: map.get(map.get(colors.$colors, card), high);
+    }
+    .medium {
+      background-color: map.get(map.get(colors.$colors, card), medium);
+    }
+    .low {
+      background-color: map.get(map.get(colors.$colors, card), low);
     }
   }
 }
