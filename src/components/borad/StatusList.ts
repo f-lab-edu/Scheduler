@@ -4,11 +4,12 @@ import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
 import TaskList from '@/components/borad/TaskList';
-import { ICard } from '../../../types/types';
+import { ITask } from '../../../types/types';
+import { createStatus } from '@/data/indexedDBService';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
-  private taskList: ICard[];
+  private taskList: ITask[];
   private _clickedAddStatus: boolean;
   private _newStatusTitle: string;
   private _showConfirmDialog: boolean = false;
@@ -38,7 +39,7 @@ export default class StatusList extends HTMLElement {
     ];
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.render();
     this.setTaskListState();
     this.setStatusHeader(this, 'To do', this.totalCount);
@@ -100,21 +101,26 @@ export default class StatusList extends HTMLElement {
   }
 
   private setupStatusCreationHandler() {
-    this.addEventListener('status-title-saved', (event: Event) => {
+    this.addEventListener('status-title-saved', async (event: Event) => {
       const customEvent = event as CustomEvent<{ title: string }>;
       this._newStatusTitle = customEvent.detail.title;
 
-      const $newStatus = document.createElement('ul');
-      $newStatus.classList.add('task-list');
-      $newStatus.innerHTML = `
-          <status-header></status-header>
-          <task-list></task-list>  
-      `;
+      try {
+        const newStatusId = await createStatus(this._newStatusTitle);
+        const $newStatus = document.createElement('ul');
+        $newStatus.classList.add('task-list');
+        $newStatus.innerHTML = `
+              <status-header></status-header>
+              <task-list></task-list>  
+          `;
 
-      const $addStatusList = this.querySelector('add-status-list');
-      if ($addStatusList) {
-        $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
-        this.setStatusHeader($newStatus, this._newStatusTitle, 0);
+        const $addStatusList = this.querySelector('add-status-list');
+        if ($addStatusList) {
+          $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
+          this.setStatusHeader($newStatus, this._newStatusTitle, 0);
+        }
+      } catch (error: any) {
+        console.log(error);
       }
     });
   }
