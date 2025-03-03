@@ -3,15 +3,27 @@ import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
 import { createIconTextButton } from '@/utils/domButton';
 export default class ActionGroup extends HTMLElement {
-  private count: string = '';
-  connectedCallback() {
-    const totalCount = this.getAttribute('total-count');
-    if (totalCount) {
-      this.count = totalCount;
-    }
+  private _totalCount: number = 0;
 
+  connectedCallback() {
     this.render();
     this.setEventListener();
+  }
+
+  get totalCount() {
+    return this._totalCount;
+  }
+
+  set totalCount(count: number) {
+    this._totalCount = count;
+    this.updateTotalCount();
+  }
+
+  private updateTotalCount() {
+    const $totalCount = this.querySelector('.total-tasks');
+    if ($totalCount) {
+      $totalCount.textContent = `${this._totalCount} tasks`;
+    }
   }
 
   setEventListener() {
@@ -27,7 +39,7 @@ export default class ActionGroup extends HTMLElement {
     this.innerHTML = `
         <section class="action-group">
             <div class="left-actions">
-                <div class="total-tasks">8 tasks</div>
+                <div class="total-tasks"></div>
                 ${createIconTextButton('add-new-button', plus, 'plus-icon', 'Add New')}
             </div>
             <div class="right-actions">

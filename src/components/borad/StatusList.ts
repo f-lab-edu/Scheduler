@@ -11,6 +11,7 @@ export default class StatusList extends HTMLElement {
   private taskList: ICard[];
   private _isClickedAddStatus: boolean;
   private _newStatusTitle: TStatusList;
+  private _isShowConfirmDialog: boolean = false;
 
   // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
@@ -45,6 +46,10 @@ export default class StatusList extends HTMLElement {
     this.updateStatusList();
   }
 
+  get totalTaskCount(): number {
+    return this.totalCount;
+  }
+
   get isClickedAddStatus() {
     return this._isClickedAddStatus;
   }
@@ -52,6 +57,15 @@ export default class StatusList extends HTMLElement {
   set isClickedAddStatus(isClicked: boolean) {
     this._isClickedAddStatus = isClicked;
     this.updateAddStatusList();
+  }
+
+  get isShowConfirmDialog() {
+    return this._isShowConfirmDialog;
+  }
+
+  set isShowConfirmDialog(isShow: boolean) {
+    this._isShowConfirmDialog = isShow;
+    this.render();
   }
 
   private updateAddStatusList() {
@@ -101,8 +115,6 @@ export default class StatusList extends HTMLElement {
       if ($addStatusList) {
         $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
         this.setStatusHeader($newStatus, this._newStatusTitle, 0);
-
-        // this._newStatusTitle = '';
       }
     });
   }

@@ -35,7 +35,7 @@ export default class AddStatusList extends HTMLElement {
         this.render();
       }
 
-      if ($target.closest('.save-button')) {
+      if ($target.closest('.confirm-button')) {
         if (this._newStatusTitle === '') {
           // TODO: 공통 alert 생성
           alert('빈 값으로 저장 불가');
@@ -69,7 +69,7 @@ export default class AddStatusList extends HTMLElement {
                 <input class="status-input" value="${this._newStatusTitle}" />
                 <div class="submit-button-group">
                   ${createTextButton('cancel-button', 'Cancel')}
-                  ${createTextButton('save-button', 'Save')}
+                  ${createTextButton('confirm-button', 'Save')}
                 </div>
               </div>
             `
