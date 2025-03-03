@@ -3,8 +3,14 @@ import plusIcon from '@/assets/plus.svg';
 import { createStatus } from '@/data/indexedDBService';
 
 export default class AddStatusList extends HTMLElement {
-  private _addClicked: boolean = false;
-  private _newStatusTitle: string = '';
+  private _addClicked: boolean;
+  private _newStatusTitle: string;
+
+  constructor() {
+    super();
+    this._addClicked = false;
+    this._newStatusTitle = '';
+  }
 
   connectedCallback() {
     this.render();

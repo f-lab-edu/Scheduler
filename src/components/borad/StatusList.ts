@@ -26,14 +26,14 @@ export default class StatusList extends HTMLElement {
         title: '프론트엔드공부',
         startDate: 'Today',
         endDate: '',
-        priority: 'High',
+        priority: 'high',
         description: '기본내용',
       },
       {
         title: '프론트엔드공부',
         startDate: 'Today',
         endDate: '',
-        priority: 'Low',
+        priority: 'low',
         description: '기본내용',
       },
     ];
