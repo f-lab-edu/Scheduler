@@ -12,3 +12,9 @@
     @include mix.task-card($color);
   }
 }
+
+@each $priority, $color in colors.$priorities {
+  .priority-color.#{$priority} {
+    @include mix.priority-color($color);
+  }
+}

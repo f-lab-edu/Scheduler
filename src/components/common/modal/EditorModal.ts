@@ -1,11 +1,18 @@
 import { createIconButton, createTextButton } from '@/components/common/button/buttonTemplates';
 import closeIcon from '@/assets/x.svg';
 import calendarIcon from '@/assets/calendar-check.svg';
+import { TPriorities } from 'types/types';
 
 export default class EiditorModal extends HTMLElement {
+  selectedPriority: string;
+  constructor() {
+    super();
+    this.selectedPriority = 'high';
+  }
   connectedCallback() {
     this.render();
     this.setupModalCancelButtonListener();
+    this.setupSelectChangeListener();
   }
 
   private setupModalCancelButtonListener() {
@@ -24,6 +31,22 @@ export default class EiditorModal extends HTMLElement {
         }
       }
     });
+  }
+
+  private setupSelectChangeListener() {
+    const $select = this.querySelector('.select-box');
+    if ($select) {
+      $select.addEventListener('change', (event: Event) => {
+        const $target = event.target as HTMLSelectElement;
+        const priorityValue = $target.value;
+
+        const $priorityColor = this.querySelector('.priority-color');
+        if ($priorityColor) {
+          $priorityColor.classList.remove('high', 'medium', 'low');
+          $priorityColor.classList.add(priorityValue);
+        }
+      });
+    }
   }
 
   render() {
@@ -49,7 +72,7 @@ export default class EiditorModal extends HTMLElement {
                               <option value="medium">Medium</option>
                               <option value="low">Low</option>
                           </select>
-                          <div class="priority-color"></div>
+                          <div class="priority-color high"></div>
                       </div>
                   </div>
 
