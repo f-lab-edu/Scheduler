@@ -1,5 +1,6 @@
 import { createTextButton } from '@/components/common/button/buttonTemplates';
 import plusIcon from '@/assets/plus.svg';
+import { createStatus } from '@/data/indexedDBService';
 
 export default class AddStatusList extends HTMLElement {
   private _addClicked: boolean = false;
@@ -54,6 +55,7 @@ export default class AddStatusList extends HTMLElement {
       const $inputTarget = event.target as HTMLInputElement;
       if ($inputTarget.classList.contains('status-input')) {
         this._newStatusTitle = $inputTarget.value;
+        createStatus($inputTarget.value);
       }
     });
   }

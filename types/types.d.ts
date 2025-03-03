@@ -1,6 +1,5 @@
 export type TPriorities = 'High' | 'Medium' | 'Low';
 export type TTab = 'Board' | 'Calendar';
-export type TDefaultList = 'To do' | 'In Progress' | 'Done';
 
 export interface ITabTaskInfo {
   totalTaskCount: number;
@@ -13,17 +12,19 @@ export interface IDefaultInfo {
   priority: TPriorities;
 }
 
-export interface ICard extends IDefaultInfo {
+export interface ITask extends IDefaultInfo {
+  statusId?: number;
   description: string;
 }
 
 export interface IStatusList {
-  listType: string;
+  id: number; //keyPath (autoIncrement). indexedDB 사용 시 필요
+  title: string;
   taskCount: number;
 }
 
 export interface IFilter {
-  listType: string[];
+  title: string[];
   priorities: TPriorities[];
 }
 
