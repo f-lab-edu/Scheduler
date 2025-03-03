@@ -1,15 +1,16 @@
 import '@/components/common/dropdown/TextSelector';
 import '@/components/common/modal/ConfirmDialog';
+import '@/components/common/modal/EditorModal';
 import { createIconButton } from '@/utils/domButton';
 import { TStatusList } from 'types/types';
 import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
+import EiditorModal from '@/components/common/modal/EditorModal';
 
 export default class StatusHeader extends HTMLElement {
   private status: TStatusList = '';
   private taskCount: number = 0;
   private isShowMoreList: boolean = false;
-  private isShowConfirmDialog: boolean = false;
 
   connectedCallback() {
     this.render();
@@ -53,10 +54,17 @@ export default class StatusHeader extends HTMLElement {
   private setEventLitener() {
     this.addEventListener('click', (event: Event) => {
       const $target = event.target as HTMLElement;
+      const $editorModal = document.createElement('editor-modal') as EiditorModal;
+
       if ($target.closest('.more-button')) {
         this.isShowMoreList = !this.isShowMoreList;
         this.render();
         return;
+      }
+
+      if ($target.closest('.add-task-button')) {
+        document.body.appendChild($editorModal);
+        this.render();
       }
     });
   }
@@ -74,8 +82,7 @@ export default class StatusHeader extends HTMLElement {
           </div>
       </div>
       ${this.isShowMoreList ? `<text-selector></text-selector>` : ''}
-      ${this.isShowConfirmDialog ? '<confirm-dialog></confirm-dialog>' : ''}
-    `;
+      `;
   }
 }
 
