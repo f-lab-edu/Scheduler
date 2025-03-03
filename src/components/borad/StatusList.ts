@@ -118,18 +118,12 @@ export default class StatusList extends HTMLElement {
   private async loadStatus() {
     try {
       const statusList = await getAllStatuses();
-      this.clearStatusList();
       statusList.forEach((status) => {
         this.applyStatusUI(status.id, status.title);
       });
     } catch (error: any) {
       console.log(error);
     }
-  }
-
-  private clearStatusList() {
-    const $statusLists = this.querySelectorAll('.task-list');
-    $statusLists.forEach(($status) => $status.remove());
   }
 
   private applyStatusUI(id: number, title: string) {
