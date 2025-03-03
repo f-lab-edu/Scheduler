@@ -55,7 +55,6 @@ export default class AddStatusList extends HTMLElement {
       const $inputTarget = event.target as HTMLInputElement;
       if ($inputTarget.classList.contains('status-input')) {
         this._newStatusTitle = $inputTarget.value;
-        // createStatus($inputTarget.value);
       }
     });
   }
