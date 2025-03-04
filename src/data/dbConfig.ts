@@ -1,5 +1,5 @@
 export const DB_NAME = 'SchedulerDB';
-export const DB_VERSION = 3;
+export const DB_VERSION = 6;
 export const STATUS_STORE = 'status';
 export const TASK_STORE = 'tasks';
 
@@ -37,7 +37,7 @@ export function openDatabase(): Promise<IDBDatabase> {
           keyPath: 'id',
           autoIncrement: true,
         });
-        objectStore.createIndex('statusId', 'statusId', { unique: true });
+        objectStore.createIndex('statusId', 'statusId', { unique: false });
       }
     };
 
