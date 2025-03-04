@@ -1,27 +1,43 @@
-import { ICard } from 'types/types';
+import { ITask } from 'types/types';
 import date from '@/assets/calendar-check.svg';
+import { getTasksByStatus } from '@/data/indexedDBService';
 
 export default class TaskList extends HTMLElement {
-  private _list: ICard[] = [];
+  private _statusId: string | null;
+  private _list: ITask[];
 
-  get taskList() {
-    return this._list;
-  }
-  set taskList(value: ICard[]) {
-    this._list = value;
-    this.render();
+  constructor() {
+    super();
+    this._list = [];
+    this._statusId = null;
   }
 
   connectedCallback() {
     this.render();
   }
 
+  set taskList(value: ITask[]) {
+    this._list = value;
+    this.render();
+  }
+
+  set statusId(id: string) {
+    this._statusId = id;
+    this.loadTasksByStatus();
+  }
+
+  async loadTasksByStatus() {
+    if (!this._statusId) return;
+    const tasks = await getTasksByStatus(this._statusId);
+    this.taskList = tasks;
+  }
+
   render() {
     this.innerHTML = `
       <ul>
-        ${this.taskList
+        ${this._list
           ?.map(
-            (task: ICard) => `
+            (task: ITask) => `
             <li>
               <article class="task-card ${task.priority.toLowerCase()}">
                 <header class="task-card-header">
