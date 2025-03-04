@@ -13,7 +13,6 @@ export default class StatusList extends HTMLElement {
   private _newStatusTitle: string;
   private _showConfirmDialog: boolean = false;
 
-
   // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
