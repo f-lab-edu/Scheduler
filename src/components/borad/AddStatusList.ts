@@ -2,19 +2,25 @@ import { createTextButton } from '@/components/common/button/buttonTemplates';
 import plusIcon from '@/assets/plus.svg';
 
 export default class AddStatusList extends HTMLElement {
-  private _addClicked: boolean = false;
-  private _newStatusTitle: string = '';
+  private _addClicked: boolean;
+  private _newStatusTitle: string;
+
+  constructor() {
+    super();
+    this._addClicked = false;
+    this._newStatusTitle = '';
+  }
 
   connectedCallback() {
     this.render();
     this.setupStatusEventListeners();
   }
 
-  get clickedAddStatus() {
+  get addClicked() {
     return this._addClicked;
   }
 
-  set clickedAddStatus(isClicked: boolean) {
+  set addClicked(isClicked: boolean) {
     this._addClicked = isClicked;
     this.render();
   }

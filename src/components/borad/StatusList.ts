@@ -3,45 +3,28 @@ import '@/components/borad/TaskList';
 import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
+import { ITask } from '../../../types/types';
+import { createStatus, getAllStatuses } from '@/data/indexedDBService';
 import TaskList from '@/components/borad/TaskList';
-import { ICard } from '../../../types/types';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
-  private taskList: ICard[];
   private _clickedAddStatus: boolean;
   private _newStatusTitle: string;
   private _showConfirmDialog: boolean = false;
+  private _statusId: string | null;
 
-  // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
     this.totalCount = 0;
     this._clickedAddStatus = false;
     this._newStatusTitle = '';
-
-    this.taskList = [
-      {
-        title: '프론트엔드공부',
-        startDate: 'Today',
-        endDate: '',
-        priority: 'High',
-        description: '기본내용',
-      },
-      {
-        title: '프론트엔드공부',
-        startDate: 'Today',
-        endDate: '',
-        priority: 'Low',
-        description: '기본내용',
-      },
-    ];
+    this._statusId = null;
   }
 
   connectedCallback() {
     this.render();
-    this.setTaskListState();
-    this.setStatusHeader(this, 'To do', this.totalCount);
+    this.loadStatus();
     this.setEventListener();
     this.setupStatusCreationHandler();
   }
@@ -50,11 +33,11 @@ export default class StatusList extends HTMLElement {
     return this.totalCount;
   }
 
-  get clickedAddStatus() {
+  get addClicked() {
     return this._clickedAddStatus;
   }
 
-  set clickedAddStatus(isClicked: boolean) {
+  set addClicked(isClicked: boolean) {
     this._clickedAddStatus = isClicked;
     this.handleAddNewStatusClick();
   }
@@ -68,19 +51,18 @@ export default class StatusList extends HTMLElement {
     this.render();
   }
 
+  set statusId(id: string) {
+    this._statusId = id;
+  }
+
+  get statusId(): string | null {
+    return this._statusId;
+  }
+
   private handleAddNewStatusClick() {
     const $addStatusList = this.querySelector('add-status-list') as AddStatusList;
     if ($addStatusList) {
-      $addStatusList.clickedAddStatus = this._clickedAddStatus;
-    }
-  }
-
-  private setTaskListState() {
-    const $taskList = this.querySelector('task-list') as TaskList;
-
-    if ($taskList) {
-      $taskList.taskList = this.taskList;
-      this.totalCount = this.taskList.length;
+      $addStatusList.addClicked = this._clickedAddStatus;
     }
   }
 
@@ -88,7 +70,7 @@ export default class StatusList extends HTMLElement {
     const $statusHeader = $container.querySelector('status-header') as StatusHeader;
 
     if ($statusHeader) {
-      $statusHeader.columStatus = statusTitle;
+      $statusHeader.statusTitle = statusTitle;
       $statusHeader.count = count;
     }
   }
@@ -100,32 +82,54 @@ export default class StatusList extends HTMLElement {
   }
 
   private setupStatusCreationHandler() {
-    this.addEventListener('status-title-saved', (event: Event) => {
+    this.addEventListener('status-title-saved', async (event: Event) => {
       const customEvent = event as CustomEvent<{ title: string }>;
       this._newStatusTitle = customEvent.detail.title;
 
-      const $newStatus = document.createElement('ul');
-      $newStatus.classList.add('task-list');
-      $newStatus.innerHTML = `
-          <status-header></status-header>
-          <task-list></task-list>  
-      `;
-
-      const $addStatusList = this.querySelector('add-status-list');
-      if ($addStatusList) {
-        $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
-        this.setStatusHeader($newStatus, this._newStatusTitle, 0);
+      try {
+        const newStatusId = await createStatus(this._newStatusTitle);
+        this.applyStatusUI(newStatusId, this._newStatusTitle);
+      } catch (error: any) {
+        console.log(error);
       }
     });
+  }
+
+  private async loadStatus() {
+    try {
+      const statusList = await getAllStatuses();
+      statusList.forEach((status) => {
+        console.log('');
+        this.applyStatusUI(status.id, status.statusTitle);
+      });
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
+  private applyStatusUI(id: number, title: string) {
+    const $newStatus = document.createElement('ul');
+    $newStatus.classList.add('task-list');
+    $newStatus.setAttribute('data-id', id.toString());
+
+    $newStatus.innerHTML = `
+        <status-header></status-header>
+        <task-list></task-list>  
+  `;
+
+    const $addStatusList = this.querySelector('add-status-list');
+    if ($addStatusList) {
+      $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
+      this.setStatusHeader($newStatus, title, 0);
+    }
+
+    const $taskList = $newStatus.querySelector('task-list') as TaskList;
+    $taskList.statusId = id.toString();
   }
 
   render() {
     this.innerHTML = `
         <section class="status-list">
-            <ul class="task-list">
-                <status-header></status-header>
-                <task-list></task-list>
-            </ul>     
             <add-status-list></add-status-list>
         </section>
             `;
