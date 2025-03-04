@@ -59,6 +59,14 @@ export default class StatusList extends HTMLElement {
     this.handleAddNewStatusClick();
   }
 
+  get showConfirmDialog() {
+    return this._showConfirmDialog;
+  }
+
+  set showConfirmDialog(isShow: boolean) {
+    this._showConfirmDialog = isShow;
+    this.render();
+  }
 
   private handleAddNewStatusClick() {
     const $addStatusList = this.querySelector('add-status-list') as AddStatusList;

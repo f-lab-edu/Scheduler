@@ -6,8 +6,8 @@ import { createIconButton } from '@/components/common/button/buttonTemplates';
 import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
 
-
 export default class StatusHeader extends HTMLElement {
+
   private status: string = '';
   private taskCount: number = 0;
   private isShowMoreList: boolean = false;

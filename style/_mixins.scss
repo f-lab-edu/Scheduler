@@ -8,3 +8,9 @@
   padding: 18px 18px 32px;
   border-radius: 20px;
 }
+
+@mixin priority-color($color) {
+  background-color: $color;
+  padding: 0;
+  margin-top: 0;
+}
