@@ -6,12 +6,12 @@ import { deleteStatus } from '@/data/indexedDBService';
 import { createConfirmDialog } from './modal/ModalTemplates';
 export default class Contents extends HTMLElement {
   private selectedTab: string;
-  private clickedAddStatus: boolean;
+  private addClicked: boolean;
 
   constructor() {
     super();
     this.selectedTab = 'Board';
-    this.clickedAddStatus = false;
+    this.addClicked = false;
   }
 
   async connectedCallback() {
@@ -23,7 +23,7 @@ export default class Contents extends HTMLElement {
 
   handleAddNewButtonClick() {
     this.addEventListener('add-new-clicked', () => {
-      this.clickedAddStatus = true;
+      this.addClicked = true;
       this.createNewStatus();
     });
   }
@@ -31,7 +31,7 @@ export default class Contents extends HTMLElement {
   createNewStatus() {
     const $statusList = this.querySelector('status-list') as StatusList;
     if ($statusList) {
-      $statusList.clickedAddStatus = this.clickedAddStatus;
+      $statusList.addClicked = this.addClicked;
     }
   }
 
