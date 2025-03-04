@@ -4,12 +4,13 @@ import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
 import TaskList from '@/components/borad/TaskList';
+
 import { ITask } from '../../../types/types';
 import { createStatus, getAllStatuses } from '@/data/indexedDBService';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
-  private taskList: ITask[];
+  private taskList: ICard[];
   private _clickedAddStatus: boolean;
   private _newStatusTitle: string;
   private _showConfirmDialog: boolean = false;

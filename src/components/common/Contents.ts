@@ -4,6 +4,7 @@ import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
 import { deleteStatus } from '@/data/indexedDBService';
+
 export default class Contents extends HTMLElement {
   private selectedTab: string;
   private clickedAddStatus: boolean;
