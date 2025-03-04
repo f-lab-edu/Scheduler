@@ -1,13 +1,18 @@
 import plus from '@/assets/plus.svg';
 import search from '@/assets/search.svg';
 import filter from '@/assets/funnel.svg';
-import { createIconTextButton } from '@/utils/domButton';
+import { createIconTextButton } from '@/components/common/button/buttonTemplates';
 export default class ActionGroup extends HTMLElement {
-  private _totalCount: number = 0;
+  private _totalCount: number;
+
+  constructor() {
+    super();
+    this._totalCount = 0;
+  }
 
   connectedCallback() {
     this.render();
-    this.setEventListener();
+    this.setupAddButtonListener();
   }
 
   get totalCount() {
@@ -26,7 +31,8 @@ export default class ActionGroup extends HTMLElement {
     }
   }
 
-  setEventListener() {
+
+  private setupAddButtonListener() {
     const $addNewButton = this.querySelector('.add-new-button');
     if ($addNewButton) {
       $addNewButton.addEventListener('click', () => {

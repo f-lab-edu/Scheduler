@@ -1,12 +1,12 @@
-import { createTextButton } from '@/utils/domButton';
+import { createTextButton } from '@/components/common/button/buttonTemplates';
 
 export default class EiditorModal extends HTMLElement {
   connectedCallback() {
     this.render();
-    this.setEventListener();
+    this.setupModalCancelButtonListener();
   }
 
-  private setEventListener() {
+  private setupModalCancelButtonListener() {
     this.addEventListener('click', (event: Event) => {
       const $targetButton = event.target as HTMLElement;
       if ($targetButton) {

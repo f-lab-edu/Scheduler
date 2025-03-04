@@ -1,13 +1,18 @@
-import { createTextButton } from '@/utils/domButton';
+import { createTextButton } from '@/components/common/button/buttonTemplates';
 
 export default class ConfirmDialog extends HTMLElement {
-  private message: string = '';
+  private message: string;
   private onConfirm?: () => void;
   private onCancel?: () => void;
 
+  constructor() {
+    super();
+    this.message = '';
+  }
+
   connectedCallback() {
     this.render();
-    this.setEventLiteners();
+    this.setupModalButtonListeners();
   }
 
   set dialogMessage(message: string) {
@@ -23,7 +28,7 @@ export default class ConfirmDialog extends HTMLElement {
     this.onCancel = handler;
   }
 
-  private setEventLiteners() {
+  private setupModalButtonListeners() {
     const $confirmButton = this.querySelector('.confirm-button');
     const $cancelButton = this.querySelector('.cancel-button');
 

@@ -1,0 +1,53 @@
+@use 'sass:map';
+
+$colors: (
+  mainBlue: #0851ee,
+  brightPurple: #600598,
+  white: #ffffff,
+  card: (
+    high: #5feef8,
+    medium: #c4a8ff,
+    low: #ffd277,
+  ),
+  font: (
+    primary: #ffffff,
+    tabInactive: #9b87a4,
+    taskDescription: #4f4f4f,
+  ),
+  background: (
+    startPurple: #430279,
+    endBlack: #001b41,
+    searchBar: #011c41,
+    taskList: #836e8c80,
+    count: #27083480,
+    input: #6a6c93,
+  ),
+  border: (
+    search: #a8a8a8,
+  ),
+  button: (
+    filter: #2d2a4f,
+  ),
+  hover: (
+    add: #1c63fe,
+    filter: #403c6d,
+    dropdown: #e5e4ee,
+  ),
+  scrollbar: (
+    track: #fff6,
+    thumb: #00000026,
+  ),
+  shadow: #545454,
+  backdrop: #00000080,
+);
+
+$font-white: map.get(map.get($colors, font), primary);
+$white: map.get($colors, white);
+$gradation-black: map.get(map.get($colors, background), endBlack);
+$priorities: (
+  high: map.get(map.get($colors, card), high),
+  medium: map.get(map.get($colors, card), medium),
+  low: map.get(map.get($colors, card), low),
+);
+$task-list-bg: map.get(map.get($colors, background), taskList);
+$main-blue: map.get($colors, mainBlue);

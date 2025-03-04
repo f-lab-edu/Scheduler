@@ -1,11 +1,17 @@
 import { TTab } from 'types/types';
 
 export default class Tabs extends HTMLElement {
-  private tabs: TTab[] = ['Board', 'Calendar'];
-  _selectedTab: string = '';
+  private tabs: TTab[];
+  private _selectedTab: string;
 
+  constructor() {
+    super();
+    this.tabs = ['Board', 'Calendar'];
+    this._selectedTab = '';
+  }
   connectedCallback() {
     this.render();
+    this.addEventListener('click', this.handleTabClick);
   }
 
   get selectedTab(): string {
@@ -17,14 +23,14 @@ export default class Tabs extends HTMLElement {
     this.render();
   }
 
-  private setEventListeners() {
-    this.querySelectorAll('.tab').forEach(($tabButton) => {
-      $tabButton.addEventListener('click', () => {
-        const tabName = $tabButton.textContent?.trim() || '';
-        this.setActiveTab(tabName);
-      });
-    });
-  }
+  private handleTabClick = (event: MouseEvent) => {
+    const $target = event.target as HTMLElement;
+    const $tabButton = $target.closest('.tab');
+    if ($tabButton) {
+      const tabName = $tabButton.textContent?.trim() || '';
+      this.setActiveTab(tabName);
+    }
+  };
 
   private setActiveTab(tabName: string) {
     this.selectedTab = tabName;
@@ -33,20 +39,18 @@ export default class Tabs extends HTMLElement {
 
   render() {
     this.innerHTML = `
-    <section class="tabs">
-        ${this.tabs
-          .map(
-            (tabName) => `
-                <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
-                    <tab-element>${tabName}</tab-element>
-                </button>
-            `,
-          )
-          .join('')}
-    </section>
+        <section class="tabs">
+            ${this.tabs
+              .map(
+                (tabName) => `
+                    <button class="tab ${this.selectedTab === tabName ? 'active' : ''}">
+                        <tab-element>${tabName}</tab-element>
+                    </button>
+                `,
+              )
+              .join('')}
+        </section>
   `;
-
-    this.setEventListeners();
   }
 }
 

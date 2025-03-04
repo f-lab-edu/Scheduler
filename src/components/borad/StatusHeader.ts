@@ -1,20 +1,20 @@
 import '@/components/common/dropdown/TextSelector';
 import '@/components/common/modal/ConfirmDialog';
 import '@/components/common/modal/EditorModal';
-import { createIconButton } from '@/utils/domButton';
-import { TStatusList } from 'types/types';
+import EiditorModal from '@/components/common/modal/EditorModal';
+import { createIconButton } from '@/components/common/button/buttonTemplates';
 import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
-import EiditorModal from '@/components/common/modal/EditorModal';
+
 
 export default class StatusHeader extends HTMLElement {
-  private status: TStatusList = '';
+  private status: string = '';
   private taskCount: number = 0;
   private isShowMoreList: boolean = false;
 
   connectedCallback() {
     this.render();
-    this.setEventLitener();
+    this.setupButtonClickListeners();
     window.addEventListener('click', this.handleOutsideClick);
   }
 
@@ -25,7 +25,7 @@ export default class StatusHeader extends HTMLElement {
   get columStatus() {
     return this.status;
   }
-  set columStatus(status: TStatusList) {
+  set columStatus(status: string) {
     this.status = status;
     this.render();
   }
@@ -51,7 +51,7 @@ export default class StatusHeader extends HTMLElement {
     }
   };
 
-  private setEventLitener() {
+  private setupButtonClickListeners() {
     this.addEventListener('click', (event: Event) => {
       const $target = event.target as HTMLElement;
       const $editorModal = document.createElement('editor-modal') as EiditorModal;

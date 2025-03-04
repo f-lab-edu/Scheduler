@@ -1,31 +1,38 @@
-import './ActionGroup';
-import '../borad/StatusList';
-import StatusList from '../borad/StatusList';
-import ActionGroup from './ActionGroup';
-import ConfirmDialog from './modal/ConfirmDialog';
+
+import '@/components/common/ActionGroup';
+import '@/components/borad/StatusList';
+import StatusList from '@/components/borad/StatusList';
+import ActionGroup from '@/components/common/ActionGroup';
+import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
 
 export default class Contents extends HTMLElement {
-  selectedTab: string = 'Board';
-  private isClickedAddStatus: boolean = false;
+  private selectedTab: string;
+  private clickedAddStatus: boolean;
+
+  constructor() {
+    super();
+    this.selectedTab = 'Board';
+    this.clickedAddStatus = false;
+  }
 
   connectedCallback() {
     this.render();
-    this.setEventListener();
+    this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
-    this.handleModalShow();
+    this.setupRemoveConfirmationHandler();
   }
 
-  setEventListener() {
+  handleAddNewButtonClick() {
     this.addEventListener('add-new-clicked', () => {
-      this.isClickedAddStatus = true;
-      this.updateStatusList();
+      this.clickedAddStatus = true;
+      this.createNewStatus();
     });
   }
 
-  updateStatusList() {
+  createNewStatus() {
     const $statusList = this.querySelector('status-list') as StatusList;
     if ($statusList) {
-      $statusList.isClickedAddStatus = this.isClickedAddStatus;
+      $statusList.clickedAddStatus = this.clickedAddStatus;
     }
   }
 
@@ -52,7 +59,7 @@ export default class Contents extends HTMLElement {
     }
   }
 
-  private handleModalShow() {
+  private setupRemoveConfirmationHandler() {
     this.addEventListener('remove-click', (event: Event) => {
       const $dialog = document.createElement('confirm-dialog') as ConfirmDialog;
 
@@ -86,7 +93,6 @@ export default class Contents extends HTMLElement {
             ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
         </section>
     `;
-
   }
 }
 
