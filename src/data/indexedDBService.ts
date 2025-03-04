@@ -1,25 +1,34 @@
+import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
 import { openDatabase, STATUS_STORE, TASK_STORE } from '@/data/dbConfig';
 import { IStatusList, ITask } from 'types/types';
 
 // status
-export async function createStatus(title: string): Promise<number> {
+export async function createStatus(statusTitle: string): Promise<number> {
   const db = await openDatabase();
   const transaction = db.transaction([STATUS_STORE], 'readwrite');
   const store = transaction.objectStore(STATUS_STORE);
-  const request = store.add({ title, taskCount: 0 });
+  const index = store.index('statusTitle');
 
   return new Promise((resolve, reject) => {
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      const newId = request.result as number;
+    const checkRequest = index.get(statusTitle);
 
-      transaction.oncomplete = () => {
-        resolve(newId);
-      };
+    checkRequest.onerror = () => reject(checkRequest.error);
+    checkRequest.onsuccess = () => {
+      if (checkRequest.result) {
+        const message = '동일한 리스트명이 존재합니다.';
+        const confirmButtonText = '확인';
+        const confirmHandler = () => {
+          document.body.removeChild($confirmDialog);
+          reject(new Error('제목 중복'));
+        };
 
-      transaction.onerror = () => {
-        reject(new Error('트랜잭션 실패'));
-      };
+        const $confirmDialog = createConfirmDialog(message, confirmButtonText, confirmHandler);
+        document.body.appendChild($confirmDialog);
+        return;
+      }
+      const addRequest = store.add({ statusTitle, taskCount: 0 });
+      addRequest.onerror = () => reject(addRequest.error);
+      addRequest.onsuccess = () => resolve(addRequest.result as number);
     };
   });
 }
@@ -60,7 +69,7 @@ export async function updateStatus(statusId: number, newTitle: string): Promise<
       if (!statusList) {
         return reject(new Error('Status를 찾을 수 없음'));
       }
-      statusList.title = newTitle;
+      statusList.statusTitle = newTitle;
       const updateRequest = store.put(statusList);
       updateRequest.onerror = () => reject(updateRequest.error);
       updateRequest.onsuccess = () => resolve();

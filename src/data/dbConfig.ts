@@ -29,7 +29,7 @@ export function openDatabase(): Promise<IDBDatabase> {
           keyPath: 'id',
           autoIncrement: true,
         });
-        objectStore.createIndex('title', 'title', { unique: true });
+        objectStore.createIndex('statusTitle', 'statusTitle', { unique: true });
       }
       //task 스토어 생성
       if (!db.objectStoreNames.contains(TASK_STORE)) {

@@ -99,7 +99,8 @@ export default class StatusList extends HTMLElement {
     try {
       const statusList = await getAllStatuses();
       statusList.forEach((status) => {
-        this.applyStatusUI(status.id, status.title);
+        console.log('');
+        this.applyStatusUI(status.id, status.statusTitle);
       });
     } catch (error: any) {
       console.log(error);

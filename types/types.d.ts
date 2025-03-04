@@ -19,7 +19,7 @@ export interface ITask extends IDefaultInfo {
 
 export interface IStatusList {
   id: number; //keyPath (autoIncrement). indexedDB 사용 시 필요
-  title: string;
+  statusTitle: string;
   taskCount: number;
 }
 
