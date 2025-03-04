@@ -2,7 +2,7 @@
 import { createIconButton, createTextButton } from '@/components/common/button/buttonTemplates';
 import closeIcon from '@/assets/x.svg';
 import calendarIcon from '@/assets/calendar-check.svg';
-import { createTextButton } from '@/components/common/button/buttonTemplates';
+import { TPriorities } from 'types/types';
 
 export default class EiditorModal extends HTMLElement {
   selectedPriority: string;

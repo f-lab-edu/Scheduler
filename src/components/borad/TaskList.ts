@@ -1,13 +1,13 @@
-import { ICard } from 'types/types';
+import { ITask } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 
 export default class TaskList extends HTMLElement {
-  private _list: ICard[] = [];
+  private _list: ITask[] = [];
 
   get taskList() {
     return this._list;
   }
-  set taskList(value: ICard[]) {
+  set taskList(value: ITask[]) {
     this._list = value;
     this.render();
   }
@@ -21,7 +21,7 @@ export default class TaskList extends HTMLElement {
       <ul>
         ${this.taskList
           ?.map(
-            (task: ICard) => `
+            (task: ITask) => `
             <li>
               <article class="task-card ${task.priority.toLowerCase()}">
                 <header class="task-card-header">

@@ -4,7 +4,9 @@ import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
 import TaskList from '@/components/borad/TaskList';
-import { ICard } from '../../../types/types';
+
+import { ITask } from '../../../types/types';
+import { createStatus, getAllStatuses } from '@/data/indexedDBService';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
@@ -38,8 +40,9 @@ export default class StatusList extends HTMLElement {
     ];
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.render();
+    await this.loadStatus();
     this.setTaskListState();
     this.setStatusHeader(this, 'To do', this.totalCount);
     this.setEventListener();
@@ -88,7 +91,7 @@ export default class StatusList extends HTMLElement {
     const $statusHeader = $container.querySelector('status-header') as StatusHeader;
 
     if ($statusHeader) {
-      $statusHeader.columStatus = statusTitle;
+      $statusHeader.statusTitle = statusTitle;
       $statusHeader.count = count;
     }
   }
@@ -100,23 +103,45 @@ export default class StatusList extends HTMLElement {
   }
 
   private setupStatusCreationHandler() {
-    this.addEventListener('status-title-saved', (event: Event) => {
+    this.addEventListener('status-title-saved', async (event: Event) => {
       const customEvent = event as CustomEvent<{ title: string }>;
       this._newStatusTitle = customEvent.detail.title;
 
-      const $newStatus = document.createElement('ul');
-      $newStatus.classList.add('task-list');
-      $newStatus.innerHTML = `
-          <status-header></status-header>
-          <task-list></task-list>  
-      `;
-
-      const $addStatusList = this.querySelector('add-status-list');
-      if ($addStatusList) {
-        $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
-        this.setStatusHeader($newStatus, this._newStatusTitle, 0);
+      try {
+        const newStatusId = await createStatus(this._newStatusTitle);
+        this.applyStatusUI(newStatusId, this._newStatusTitle);
+      } catch (error: any) {
+        console.log(error);
       }
     });
+  }
+
+  private async loadStatus() {
+    try {
+      const statusList = await getAllStatuses();
+      statusList.forEach((status) => {
+        this.applyStatusUI(status.id, status.title);
+      });
+    } catch (error: any) {
+      console.log(error);
+    }
+  }
+
+  private applyStatusUI(id: number, title: string) {
+    const $newStatus = document.createElement('ul');
+    $newStatus.classList.add('task-list');
+    $newStatus.setAttribute('data-id', id.toString());
+
+    $newStatus.innerHTML = `
+    <status-header></status-header>
+    <task-list></task-list>  
+  `;
+
+    const $addStatusList = this.querySelector('add-status-list');
+    if ($addStatusList) {
+      $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
+      this.setStatusHeader($newStatus, title, 0);
+    }
   }
 
   render() {
