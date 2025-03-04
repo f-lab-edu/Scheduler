@@ -22,9 +22,9 @@ export default class StatusList extends HTMLElement {
     this._statusId = null;
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     this.render();
-    await this.loadStatus();
+    this.loadStatus();
     this.setEventListener();
     this.setupStatusCreationHandler();
   }

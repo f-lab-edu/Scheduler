@@ -81,7 +81,7 @@ export async function deleteStatus(statusId: number): Promise<void> {
 }
 
 // task
-export async function createTask(task: Omit<ITask, 'id'>): Promise<number> {
+export async function createTask(task: ITask): Promise<number> {
   const db = await openDatabase();
   const transaction = db.transaction([TASK_STORE], 'readwrite');
   const store = transaction.objectStore(TASK_STORE);

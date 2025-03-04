@@ -1,5 +1,5 @@
 export const DB_NAME = 'SchedulerDB';
-export const DB_VERSION = 1;
+export const DB_VERSION = 3;
 export const STATUS_STORE = 'status';
 export const TASK_STORE = 'tasks';
 
@@ -29,7 +29,7 @@ export function openDatabase(): Promise<IDBDatabase> {
           keyPath: 'id',
           autoIncrement: true,
         });
-        objectStore.createIndex('title', 'title', { unique: false });
+        objectStore.createIndex('title', 'title', { unique: true });
       }
       //task 스토어 생성
       if (!db.objectStoreNames.contains(TASK_STORE)) {
@@ -37,7 +37,7 @@ export function openDatabase(): Promise<IDBDatabase> {
           keyPath: 'id',
           autoIncrement: true,
         });
-        objectStore.createIndex('statusId', 'statusId', { unique: false });
+        objectStore.createIndex('statusId', 'statusId', { unique: true });
       }
     };
 
