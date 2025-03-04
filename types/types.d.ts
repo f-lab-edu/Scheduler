@@ -13,7 +13,7 @@ export interface IDefaultInfo {
 }
 
 export interface ITask extends IDefaultInfo {
-  statusId?: number;
+  statusId: string | null;
   description: string;
 }
 

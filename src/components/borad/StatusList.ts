@@ -3,47 +3,28 @@ import '@/components/borad/TaskList';
 import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
-import TaskList from '@/components/borad/TaskList';
 import { ITask } from '../../../types/types';
 import { createStatus, getAllStatuses } from '@/data/indexedDBService';
+import TaskList from '@/components/borad/TaskList';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
-  private taskList: ITask[];
   private _clickedAddStatus: boolean;
   private _newStatusTitle: string;
   private _showConfirmDialog: boolean = false;
+  private _statusId: string | null;
 
-  // TODO: 데이터 입력 모달 생성 후 삭제
   constructor() {
     super();
     this.totalCount = 0;
     this._clickedAddStatus = false;
     this._newStatusTitle = '';
-
-    this.taskList = [
-      {
-        title: '프론트엔드공부',
-        startDate: 'Today',
-        endDate: '',
-        priority: 'high',
-        description: '기본내용',
-      },
-      {
-        title: '프론트엔드공부',
-        startDate: 'Today',
-        endDate: '',
-        priority: 'low',
-        description: '기본내용',
-      },
-    ];
+    this._statusId = null;
   }
 
   async connectedCallback() {
     this.render();
     await this.loadStatus();
-    this.setTaskListState();
-    this.setStatusHeader(this, 'To do', this.totalCount);
     this.setEventListener();
     this.setupStatusCreationHandler();
   }
@@ -70,19 +51,18 @@ export default class StatusList extends HTMLElement {
     this.render();
   }
 
+  set statusId(id: string) {
+    this._statusId = id;
+  }
+
+  get statusId(): string | null {
+    return this._statusId;
+  }
+
   private handleAddNewStatusClick() {
     const $addStatusList = this.querySelector('add-status-list') as AddStatusList;
     if ($addStatusList) {
       $addStatusList.clickedAddStatus = this._clickedAddStatus;
-    }
-  }
-
-  private setTaskListState() {
-    const $taskList = this.querySelector('task-list') as TaskList;
-
-    if ($taskList) {
-      $taskList.taskList = this.taskList;
-      this.totalCount = this.taskList.length;
     }
   }
 
@@ -132,8 +112,8 @@ export default class StatusList extends HTMLElement {
     $newStatus.setAttribute('data-id', id.toString());
 
     $newStatus.innerHTML = `
-    <status-header></status-header>
-    <task-list></task-list>  
+        <status-header></status-header>
+        <task-list></task-list>  
   `;
 
     const $addStatusList = this.querySelector('add-status-list');
@@ -141,15 +121,14 @@ export default class StatusList extends HTMLElement {
       $addStatusList.insertAdjacentElement('beforebegin', $newStatus);
       this.setStatusHeader($newStatus, title, 0);
     }
+
+    const $taskList = $newStatus.querySelector('task-list') as TaskList;
+    $taskList.statusId = id.toString();
   }
 
   render() {
     this.innerHTML = `
         <section class="status-list">
-            <ul class="task-list">
-                <status-header></status-header>
-                <task-list></task-list>
-            </ul>     
             <add-status-list></add-status-list>
         </section>
             `;

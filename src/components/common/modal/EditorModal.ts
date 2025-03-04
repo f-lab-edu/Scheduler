@@ -3,8 +3,8 @@ import closeIcon from '@/assets/x.svg';
 import calendarIcon from '@/assets/calendar-check.svg';
 import { TPriorities } from 'types/types';
 import { createTask } from '@/data/indexedDBService';
-import ConfirmDialog from './ConfirmDialog';
 import { createConfirmDialog } from './ModalTemplates';
+import TaskList from '@/components/borad/TaskList';
 
 export default class EiditorModal extends HTMLElement {
   selectedPriority: TPriorities;
@@ -13,6 +13,7 @@ export default class EiditorModal extends HTMLElement {
   _endDate: string;
   _description: string;
   _showSaveButton: boolean;
+  _statusId: string | null;
 
   constructor() {
     super();
@@ -22,12 +23,21 @@ export default class EiditorModal extends HTMLElement {
     this._endDate = '';
     this._description = '';
     this._showSaveButton = false;
+    this._statusId = null;
   }
   connectedCallback() {
     this.render();
     this.setupModalButtonListener();
     this.setupSelectChangeListener();
     this.setupDescriptionListener();
+  }
+
+  set statusId(id: string) {
+    this._statusId = id;
+  }
+
+  get statusId(): string | null {
+    return this._statusId;
   }
 
   private setupModalButtonListener() {
@@ -48,6 +58,7 @@ export default class EiditorModal extends HTMLElement {
             endDate: this._endDate,
             description: this._description,
             priority: this.selectedPriority,
+            statusId: this._statusId,
           };
 
           if (!this._title || !this._startDate || !this._endDate) {
@@ -62,10 +73,16 @@ export default class EiditorModal extends HTMLElement {
             document.body.appendChild($alertDialog);
           } else {
             const message = '저장 하시겠습니까?';
-            const confirmButtonText = '취소';
-            const cancelButtonText = '저장';
+            const confirmButtonText = '저장';
+            const cancelButtonText = '취소';
             const confirmHandler = () => {
               createTask(taskData);
+
+              const $taskList = document.querySelector(
+                `ul.task-list[data-id="${taskData.statusId}"] task-list`,
+              ) as TaskList;
+              $taskList?.loadTasksByStatus();
+
               document.body.removeChild($confirmDialog);
               document.body.removeChild(this);
               return;
@@ -127,7 +144,6 @@ export default class EiditorModal extends HTMLElement {
           $priorityColor.classList.remove('high', 'medium', 'low');
           $priorityColor.classList.add(priorityValue);
           this.selectedPriority = priorityValue as TPriorities;
-          console.log('🐽', this.selectedPriority);
         }
       });
     }
