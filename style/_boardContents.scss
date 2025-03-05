@@ -127,6 +127,7 @@
 .task-card {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 
   .task-card-header {
     display: flex;

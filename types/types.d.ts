@@ -13,8 +13,10 @@ export interface IDefaultInfo {
 }
 
 export interface ITask extends IDefaultInfo {
-  statusId: string | null;
+  id?: string;
   description: string;
+  statusId: string | null;
+  taskId?: string; //수정 시에만 필요
 }
 
 export interface IStatusList {

@@ -2,6 +2,7 @@ import { ITask } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
 import { formatDate } from '@/util/helpers';
+import EiditorModal from '../common/modal/EditorModal';
 
 export default class TaskList extends HTMLElement {
   private _statusId: string | null;
@@ -15,6 +16,7 @@ export default class TaskList extends HTMLElement {
 
   connectedCallback() {
     this.render();
+    this.setupTaskCardListener();
   }
 
   set taskList(value: ITask[]) {
@@ -33,13 +35,34 @@ export default class TaskList extends HTMLElement {
     this.taskList = tasks;
   }
 
+  private setupTaskCardListener() {
+    this.addEventListener('click', (event: Event) => {
+      const $target = event.target as HTMLElement;
+      if ($target.closest('li')) {
+        const taskId = $target.closest('li')?.getAttribute('data-task-id');
+
+        const $editorModal = document.createElement('editor-modal') as EiditorModal;
+        const $statusList = this.closest('ul.task-list');
+
+        if (taskId) {
+          $editorModal.taskId = taskId;
+        }
+        if ($statusList) {
+          const statusId = $statusList.getAttribute('data-id');
+          $editorModal.statusId = statusId!;
+        }
+        document.body.appendChild($editorModal);
+      }
+    });
+  }
+
   render() {
     this.innerHTML = `
       <ul>
         ${this._list
           ?.map((task: ITask) => {
             return `
-                  <li>
+                  <li data-task-id="${task.id}">
                     <article class="task-card ${task.priority.toLowerCase()}">
                       <header class="task-card-header">
                         <span class="date-wrapper">
