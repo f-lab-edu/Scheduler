@@ -131,11 +131,17 @@
   .task-card-header {
     display: flex;
     justify-content: space-between;
+    align-items: flex-end;
+    font-size: 14px;
 
     .date-wrapper {
       display: flex;
       align-items: center;
       gap: 6px;
+    }
+
+    .priority {
+      color: map.get(map.get(colors.$colors, font), taskDescription);
     }
   }
 
