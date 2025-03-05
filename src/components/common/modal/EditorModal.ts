@@ -161,7 +161,6 @@ export default class EiditorModal extends HTMLElement {
         const $textareaTarget = event.target as HTMLElement;
         if ($textareaTarget.tagName.toLowerCase() === 'textarea' && $textareaTarget.classList.contains('description')) {
           this._description = ($textareaTarget as HTMLTextAreaElement).value || '';
-          console.log('Description updated:', this._description);
         }
       }
     });
