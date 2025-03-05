@@ -7,11 +7,13 @@ import { createConfirmDialog } from './modal/ModalTemplates';
 export default class Contents extends HTMLElement {
   private selectedTab: string;
   private addClicked: boolean;
+  private _totalCount: number;
 
   constructor() {
     super();
     this.selectedTab = 'Board';
     this.addClicked = false;
+    this._totalCount = 0;
   }
 
   async connectedCallback() {
@@ -46,16 +48,19 @@ export default class Contents extends HTMLElement {
   }
 
   private updateTotalTaskCount() {
-    let total = 0;
-    const $statusLists = this.querySelectorAll('status-list') as NodeListOf<StatusList>;
-    $statusLists.forEach((list) => {
-      total += list.totalTaskCount;
-    });
+    this.addEventListener('task-count-update', (event: Event) => {
+      this._totalCount = 0;
 
-    const $actionGroup = this.querySelector('action-group') as ActionGroup;
-    if ($actionGroup) {
-      $actionGroup.totalCount = total;
-    }
+      const $taskList = this.querySelectorAll('task-list') as NodeListOf<any>;
+      $taskList.forEach((task) => {
+        this._totalCount += task.taskCount;
+      });
+
+      const $actionGroup = this.querySelector('action-group') as ActionGroup;
+      if ($actionGroup) {
+        $actionGroup.totalCount = this._totalCount;
+      }
+    });
   }
 
   private setupRemoveConfirmationHandler() {

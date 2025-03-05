@@ -3,15 +3,18 @@ import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
 import { formatDate } from '@/util/helpers';
 import EiditorModal from '../common/modal/EditorModal';
+import StatusHeader from './StatusHeader';
 
 export default class TaskList extends HTMLElement {
   private _statusId: string | null;
   private _list: ITask[];
+  private _taskCount: number;
 
   constructor() {
     super();
     this._list = [];
     this._statusId = null;
+    this._taskCount = 0;
   }
 
   connectedCallback() {
@@ -29,9 +32,30 @@ export default class TaskList extends HTMLElement {
     this.loadTasksByStatus();
   }
 
+  get taskCount() {
+    return this._taskCount;
+  }
+
   async loadTasksByStatus() {
     if (!this._statusId) return;
     const tasks = await getTasksByStatus(this._statusId);
+    this._taskCount = tasks.length;
+
+    const $taskList = this.closest('ul.task-list');
+    if ($taskList) {
+      const $statusHeader = $taskList.querySelector('status-header') as StatusHeader;
+      if ($statusHeader) {
+        $statusHeader.count = this._taskCount;
+      }
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('task-count-update', {
+        detail: { count: this._taskCount },
+        bubbles: true,
+      }),
+    );
+
     this.taskList = tasks;
   }
 

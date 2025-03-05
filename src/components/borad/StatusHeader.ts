@@ -7,9 +7,16 @@ import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
 
 export default class StatusHeader extends HTMLElement {
-  private status: string = '';
-  private taskCount: number = 0;
-  private isShowMoreList: boolean = false;
+  private status: string;
+  private taskCount: number;
+  private isShowMoreList: boolean;
+
+  constructor() {
+    super();
+    this.status = '';
+    this.taskCount = 0;
+    this.isShowMoreList = false;
+  }
 
   connectedCallback() {
     this.render();
@@ -33,8 +40,8 @@ export default class StatusHeader extends HTMLElement {
     return this.taskCount;
   }
 
-  set count(taskLenth) {
-    this.taskCount = taskLenth;
+  set count(count: number) {
+    this.taskCount = count;
     this.render();
   }
 
@@ -84,7 +91,7 @@ export default class StatusHeader extends HTMLElement {
       <div class="status-header">
           <div class="status-info">
               <h2 class="status">${this.statusTitle}</h2>
-              <span class="task-count">${this.count}</span>
+              <span class="task-count">${this.taskCount}</span>
           </div>  
           <div class="status-btns">
               ${createIconButton('more-button', moreIcon, 'more-icon')}

@@ -44,7 +44,7 @@ export default class ActionGroup extends HTMLElement {
     this.innerHTML = `
         <section class="action-group">
             <div class="left-actions">
-                <div class="total-tasks"></div>
+                <div class="total-tasks">${this._totalCount}</div>
                 ${createIconTextButton('add-new-button', plus, 'plus-icon', 'Add New')}
             </div>
             <div class="right-actions">
