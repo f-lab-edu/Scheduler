@@ -16,11 +16,12 @@ export default class EiditorModal extends HTMLElement {
   _statusId: string | null;
 
   constructor() {
+    const today = new Date().toISOString().split('T')[0];
     super();
     this.selectedPriority = 'high';
     this._title = '';
-    this._startDate = '';
-    this._endDate = '';
+    this._startDate = today;
+    this._endDate = today;
     this._description = '';
     this._showSaveButton = false;
     this._statusId = null;
@@ -128,7 +129,6 @@ export default class EiditorModal extends HTMLElement {
       if ($description) {
         const $textareaTarget = event.target as HTMLInputElement;
         this._description = $textareaTarget.value;
-        console.log('🐹', $textareaTarget.value);
       }
     });
   }
@@ -163,8 +163,8 @@ export default class EiditorModal extends HTMLElement {
                   <div class="task-info-group">
                       <div class="calendar-wrapper">
                           <img class="calendar-icon" src="${calendarIcon}" alt="calendar icon"/>
-                          <input class="date-input start-date" type="date" placeholder="start"/>
-                          <input class="date-input end-date" type="date" placeholder="end"/>
+                          <input class="date-input start-date" type="date" value="${this._startDate}" placeholder="start"/>
+                          <input class="date-input end-date" type="date" value="${this._startDate}" placeholder="end"/>
                       </div>
                       <div class="priority-wrapper">
                           <span>priority</span>

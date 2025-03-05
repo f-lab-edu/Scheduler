@@ -8,7 +8,7 @@ export interface ITabTaskInfo {
 export interface IDefaultInfo {
   title: string;
   startDate: string;
-  endDate?: string;
+  endDate: string;
   priority: TPriorities;
 }
 

@@ -147,6 +147,10 @@
 
     p {
       color: map.get(map.get(colors.$colors, font), taskDescription);
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      word-break: break-all;
     }
   }
 }

@@ -1,6 +1,7 @@
 import { ITask } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
+import { formatDate } from '@/util/helpers';
 
 export default class TaskList extends HTMLElement {
   private _statusId: string | null;
@@ -36,26 +37,31 @@ export default class TaskList extends HTMLElement {
     this.innerHTML = `
       <ul>
         ${this._list
-          ?.map(
-            (task: ITask) => `
-            <li>
-              <article class="task-card ${task.priority.toLowerCase()}">
-                <header class="task-card-header">
-                  <span class="date-wrapper">
-                    <img src="${date}" alt="date">
-                    <time>${task.startDate}</time>
-                    ${task.endDate ? `<span>${task.endDate}</span>` : ''}
-                  </span>
-                  <span class="priority">${task.priority} priority</span>
-                </header>
-                <div class="task-contents">
-                  <h3>${task.title}</h3>
-                  <p>${task.description}</p>
-                </div>
-              </article>
-            </li>
-          `,
-          )
+          ?.map((task: ITask) => {
+            return `
+                  <li>
+                    <article class="task-card ${task.priority.toLowerCase()}">
+                      <header class="task-card-header">
+                        <span class="date-wrapper">
+                          <img src="${date}" alt="date">
+                          ${
+                            task.startDate === task.endDate && task.startDate === new Date().toISOString().split('T')[0]
+                              ? 'Today'
+                              : task.startDate === task.endDate
+                                ? `<time>${formatDate(task.startDate)}</time>`
+                                : `<time>${formatDate(task.startDate)}</time> ~ <time>${formatDate(task.endDate)}</time>`
+                          }
+                        </span>
+                        <span class="priority">${task.priority} priority</span>
+                      </header>
+                      <div class="task-contents">
+                        <h3>${task.title}</h3>
+                        <p>${task.description}</p>
+                      </div>
+                    </article>
+                  </li>
+            `;
+          })
           .join('')}
       </ul>
 `;
