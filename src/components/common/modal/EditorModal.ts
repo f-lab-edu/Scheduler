@@ -2,7 +2,7 @@ import { createIconButton, createTextButton } from '@/components/common/button/b
 import closeIcon from '@/assets/x.svg';
 import calendarIcon from '@/assets/calendar-check.svg';
 import { TPriorities } from 'types/types';
-import { createTask, getTasks } from '@/data/indexedDBService';
+import { createTask, getTasks, updateTask } from '@/data/indexedDBService';
 import { createConfirmDialog } from './ModalTemplates';
 import TaskList from '@/components/borad/TaskList';
 
@@ -100,16 +100,24 @@ export default class EiditorModal extends HTMLElement {
             const confirmButtonText = '저장';
             const cancelButtonText = '취소';
             const confirmHandler = async () => {
-              await createTask(taskData);
+              try {
+                if (this._taskId) {
+                  await updateTask(Number(this._taskId), taskData);
+                } else {
+                  await createTask(taskData);
+                }
 
-              const $taskList = document.querySelector(
-                `ul.task-list[data-id="${taskData.statusId}"] task-list`,
-              ) as TaskList;
-              $taskList?.loadTasksByStatus();
+                const $taskList = document.querySelector(
+                  `ul.task-list[data-id="${taskData.statusId}"] task-list`,
+                ) as TaskList;
+                $taskList?.loadTasksByStatus();
 
-              document.body.removeChild($confirmDialog);
-              document.body.removeChild(this);
-              return;
+                document.body.removeChild($confirmDialog);
+                document.body.removeChild(this);
+                return;
+              } catch (error: any) {
+                console.log(error);
+              }
             };
             const cancelHandler = () => {
               document.body.removeChild($confirmDialog);
@@ -150,17 +158,19 @@ export default class EiditorModal extends HTMLElement {
     this.addEventListener('input', (event: Event) => {
       const $description = this.querySelector('.description');
       if ($description) {
-        const $textareaTarget = event.target as HTMLInputElement;
-        this._description = $textareaTarget.value || '';
+        const $textareaTarget = event.target as HTMLElement;
+        if ($textareaTarget.tagName.toLowerCase() === 'textarea' && $textareaTarget.classList.contains('description')) {
+          this._description = ($textareaTarget as HTMLTextAreaElement).value || '';
+          console.log('Description updated:', this._description);
+        }
       }
     });
   }
 
   private setupSelectChangeListener() {
-    const $select = this.querySelector('.select-box');
-    if ($select) {
-      $select.addEventListener('change', (event: Event) => {
-        const $target = event.target as HTMLSelectElement;
+    this.addEventListener('change', (event: Event) => {
+      const $target = event.target as HTMLSelectElement;
+      if ($target.matches('.select-box')) {
         const priorityValue = $target.value;
 
         const $priorityColor = this.querySelector('.priority-color');
@@ -169,8 +179,8 @@ export default class EiditorModal extends HTMLElement {
           $priorityColor.classList.add(priorityValue);
           this.selectedPriority = priorityValue as TPriorities;
         }
-      });
-    }
+      }
+    });
   }
 
   render() {
