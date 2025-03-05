@@ -3,7 +3,7 @@ import '@/components/borad/TaskList';
 import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
-import { ITask } from '../../../types/types';
+import { ITask } from 'types/types';
 import { createStatus, getAllStatuses } from '@/data/indexedDBService';
 import TaskList from '@/components/borad/TaskList';
 

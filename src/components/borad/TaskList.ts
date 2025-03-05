@@ -2,9 +2,8 @@ import { ITask } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
 import { formatDate } from '@/util/helpers';
-import EiditorModal from '../common/modal/EditorModal';
-import StatusHeader from './StatusHeader';
-
+import EiditorModal from '@/components/common/modal/EditorModal';
+import StatusHeader from '@/components/borad/StatusHeader';
 export default class TaskList extends HTMLElement {
   private _statusId: string | null;
   private _list: ITask[];

@@ -3,7 +3,7 @@ import closeIcon from '@/assets/x.svg';
 import calendarIcon from '@/assets/calendar-check.svg';
 import { TPriorities } from 'types/types';
 import { createTask, getTasks, updateTask } from '@/data/indexedDBService';
-import { createConfirmDialog } from './ModalTemplates';
+import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
 import TaskList from '@/components/borad/TaskList';
 
 export default class EiditorModal extends HTMLElement {
