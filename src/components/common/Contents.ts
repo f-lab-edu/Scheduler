@@ -1,5 +1,6 @@
 import '@/components/common/ActionGroup';
 import '@/components/borad/StatusList';
+import '@/components/calendar/CalendarContenst';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import { deleteStatus } from '@/data/indexedDBService';
@@ -102,7 +103,7 @@ export default class Contents extends HTMLElement {
     this.innerHTML = `
         <section class="contents">
             <action-group></action-group>
-            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
+            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents>캘린더</calendar-contents>'}
         </section>
     `;
   }

@@ -1,5 +1,5 @@
 export const DB_NAME = 'SchedulerDB';
-export const DB_VERSION = 6;
+export const DB_VERSION = 7;
 export const STATUS_STORE = 'status';
 export const TASK_STORE = 'tasks';
 
@@ -38,6 +38,13 @@ export function openDatabase(): Promise<IDBDatabase> {
           autoIncrement: true,
         });
         objectStore.createIndex('statusId', 'statusId', { unique: false });
+        objectStore.createIndex('months', 'months', { multiEntry: true });
+      } else {
+        const transaction = request.transaction;
+        const store = transaction?.objectStore(TASK_STORE);
+        if (store && !store.indexNames.contains('months')) {
+          store.createIndex('months', 'months', { multiEntry: true });
+        }
       }
     };
 

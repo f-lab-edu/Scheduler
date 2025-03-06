@@ -1,0 +1,89 @@
+@use 'sass:map';
+@use './colors' as colors;
+@use './mixins' as mix;
+
+.calendar-contents {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar {
+  width: 700px;
+  margin-right: 52px;
+  background-color: colors.$white;
+}
+
+.calendar-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-align: start;
+  margin: 30px 0 16px;
+  color: colors.$font-white;
+
+  .prev-button,
+  .next-button {
+    border: none;
+    background-color: transparent;
+
+    img {
+      width: 24px;
+    }
+    cursor: pointer;
+  }
+}
+.week-days,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 700px;
+  margin: 0 auto;
+}
+.week-days {
+  div {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid colors.$light-gray;
+    border-right: 1px solid colors.$light-gray;
+  }
+}
+.calendar-grid div {
+  position: relative;
+  min-height: 80px;
+  padding: 4px;
+  border-bottom: 1px solid colors.$light-gray;
+  border-right: 1px solid colors.$light-gray;
+}
+.day-num {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+
+.prev-month-day,
+.next-month-day {
+  color: map.get(map.get(colors.$colors, font), placeholder);
+}
+
+.agendar {
+  background-color: colors.$white;
+}
+.day-cell span {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+}
+.day-cell {
+  .event {
+  }
+}
+
+agenda-element {
+  .agendar {
+    background-color: map.get(map.get(colors.$colors, background), agenda);
+    width: 350px;
+    min-height: 488px;
+    margin-top: 75px;
+    padding: 50px;
+  }
+}

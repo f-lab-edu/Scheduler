@@ -128,6 +128,21 @@ export async function getTasksByStatus(statusId: string): Promise<ITask[]> {
     };
   });
 }
+export async function getTasksByMonth(month: string): Promise<ITask[]> {
+  const db = await openDatabase();
+  const transaction = db.transaction([TASK_STORE], 'readonly');
+  const store = transaction.objectStore(TASK_STORE);
+  // statusId 인덱스로 검색
+  const index = store.index('months');
+  const request = index.getAll(month);
+
+  return new Promise((resolve, reject) => {
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => {
+      resolve(request.result as ITask[]);
+    };
+  });
+}
 
 export async function updateTask(taskId: number, updatedFields: Partial<ITask>): Promise<void> {
   const db = await openDatabase();
