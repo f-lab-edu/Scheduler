@@ -2,6 +2,7 @@ import { createIconButton } from '../common/button/buttonTemplates';
 import leftIcon from '@/assets/caret-left-fill.svg';
 import rightIcon from '@/assets/caret-right-fill.svg';
 import { getTasksByMonth } from '@/data/indexedDBService';
+import Agenda from '@/components/calendar/Agenda';
 
 export default class Calendar extends HTMLElement {
   MONTH_NAMES: string[];
@@ -39,14 +40,14 @@ export default class Calendar extends HTMLElement {
     for (let i = 0; i < startDay; i++) {
       const prevMonthday = prevLastDate - startDay + (i + 1);
       cells += `
-          <div >
+          <div class="day-cell">
               <span class="day-num prev-month-day">${prevMonthday}</span>
           </div>`;
     }
 
     for (let thisMonthday = 1; thisMonthday <= thisLastDate; thisMonthday++) {
       cells += `
-          <div>
+          <div class="day-cell">
               <span class="day-num">${thisMonthday}</span>
           </div>
       `;
@@ -57,7 +58,7 @@ export default class Calendar extends HTMLElement {
     const nextDays = totalCellCount - totalCellUsed;
     for (let nextMonthDay = 1; nextMonthDay <= nextDays; nextMonthDay++) {
       cells += `
-          <div>
+          <div class="day-cell">
               <span class="day-num next-month-day">${nextMonthDay}</span>
           </div>
       `;
@@ -92,9 +93,15 @@ export default class Calendar extends HTMLElement {
   private async loadStatus() {
     try {
       const monthStr = this.month < 10 ? '0' + (this.month + 1) : this.month + 1;
-      const monthData = await getTasksByMonth(`${this.year}-${monthStr}`);
-      // TODO: monthData를 기반으로 agenda 그리기
-      console.log('🐽', monthData);
+      const monthlyData = await getTasksByMonth(`${this.year}-${monthStr}`);
+      // TODO: monthlyData를 기반으로 calendar에 task 라벨 표시
+      const $calendarContents = this.closest('calendar-contents');
+      if (!$calendarContents) {
+        return;
+      }
+      const $agenda = $calendarContents.querySelector('agenda-element') as Agenda;
+
+      $agenda.monthlyTasks = monthlyData;
     } catch (error: any) {
       console.log(error);
     }

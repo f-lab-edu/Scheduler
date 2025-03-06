@@ -10,10 +10,10 @@ export default class CalendarContents extends HTMLElement {
   private loadStatus() {}
   render() {
     this.innerHTML = `
-      <div class="calendar-contents">
-        <calendar-element></calendar-element>
-        <agenda-element></agenda-element>
-      </div>
+        <div class="calendar-contents">
+            <calendar-element></calendar-element>
+            <agenda-element></agenda-element>
+        </div>
     `;
   }
 }

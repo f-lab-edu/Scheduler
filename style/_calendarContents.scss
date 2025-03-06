@@ -65,11 +65,25 @@
   color: map.get(map.get(colors.$colors, font), placeholder);
 }
 
-.agendar {
+.agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: colors.$white;
   background-color: colors.$white;
+  .priority-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+  .task-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
 }
 .day-cell span {
-  position: absolute;
+  position: relative;
   top: 4px;
   right: 4px;
 }
@@ -79,7 +93,7 @@
 }
 
 agenda-element {
-  .agendar {
+  .agenda {
     background-color: map.get(map.get(colors.$colors, background), agenda);
     width: 350px;
     min-height: 488px;
