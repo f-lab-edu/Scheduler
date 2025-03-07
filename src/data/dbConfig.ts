@@ -15,7 +15,7 @@ export function openDatabase(): Promise<IDBDatabase> {
 
     request.onerror = (event: Event) => {
       const $target = event.target as IDBRequest;
-      reject($target.error);
+      reject(new Error($target.error?.message || 'IndexedDB error'));
       console.error('Database error:', $target.error);
     };
 

@@ -4,10 +4,8 @@ import '@/components/calendar/Agenda';
 export default class CalendarContents extends HTMLElement {
   connectedCallback() {
     this.render();
-    this.loadStatus();
   }
 
-  private loadStatus() {}
   render() {
     this.innerHTML = `
         <div class="calendar-contents">

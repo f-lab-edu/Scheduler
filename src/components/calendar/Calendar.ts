@@ -81,7 +81,7 @@ export default class Calendar extends HTMLElement {
       this.year -= 1;
     } else if (this.month > 11) {
       this.month = 0;
-      this.year + 1;
+      this.year += 1;
     }
     this.render();
     this.loadStatus();
