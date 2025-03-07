@@ -48,18 +48,37 @@
   }
 }
 .calendar-grid div {
-  position: relative;
-  min-height: 80px;
-  padding: 4px;
+  min-height: 100px;
+
   border-bottom: 1px solid colors.$light-gray;
   border-right: 1px solid colors.$light-gray;
+}
+
+.day-cell span {
+  top: 4px;
+  right: 4px;
+}
+.day-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+  .task-bar {
+    margin-top: 4px;
+    min-height: 20px;
+    padding: 2px 2px 2px 5px;
+    color: map.get(map.get(colors.$colors, font), taskDescription);
+    font-size: 14px;
+    background-color: pink;
+    display: inline-block;
+    cursor: pointer;
+  }
 }
 .day-num {
   position: absolute;
   top: 12px;
   right: 12px;
 }
-
 .prev-month-day,
 .next-month-day {
   color: map.get(map.get(colors.$colors, font), placeholder);
@@ -80,15 +99,6 @@
     display: flex;
     gap: 10px;
     align-items: center;
-  }
-}
-.day-cell span {
-  position: relative;
-  top: 4px;
-  right: 4px;
-}
-.day-cell {
-  .event {
   }
 }
 

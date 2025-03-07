@@ -3,6 +3,9 @@ import leftIcon from '@/assets/caret-left-fill.svg';
 import rightIcon from '@/assets/caret-right-fill.svg';
 import { getTasksByMonth } from '@/data/indexedDBService';
 import Agenda from '@/components/calendar/Agenda';
+import { ITask } from 'types/types';
+import { formatDashDate } from '@/util/helpers';
+import EiditorModal from '../common/modal/EditorModal';
 
 export default class Calendar extends HTMLElement {
   MONTH_NAMES: string[];
@@ -27,6 +30,7 @@ export default class Calendar extends HTMLElement {
     this.generateCalendarCell();
     this.setupButtonClickListeners();
     this.loadStatus();
+    this.setupTaskClickListener();
   }
 
   private generateCalendarCell() {
@@ -46,8 +50,12 @@ export default class Calendar extends HTMLElement {
     }
 
     for (let thisMonthday = 1; thisMonthday <= thisLastDate; thisMonthday++) {
+      const dayStr = String(thisMonthday).padStart(2, '0');
+      const monthStr = String(this.month + 1).padStart(2, '0');
+      const dateStr = `${this.year}-${monthStr}-${dayStr}`;
+
       cells += `
-          <div class="day-cell">
+          <div class="day-cell" data-date="${dateStr}">
               <span class="day-num">${thisMonthday}</span>
           </div>
       `;
@@ -90,11 +98,28 @@ export default class Calendar extends HTMLElement {
     });
   }
 
+  private setupTaskClickListener() {
+    this.addEventListener('click', (event: Event) => {
+      const $target = event.target as HTMLElement;
+      if ($target.closest('.task-bar')) {
+        const taskId = $target.closest('.task-bar')?.getAttribute('data-task-id');
+        const $editorModal = document.createElement('editor-modal') as EiditorModal;
+
+        if (taskId) {
+          $editorModal.taskId = taskId;
+          document.body.appendChild($editorModal);
+        }
+      }
+    });
+  }
+
   private async loadStatus() {
     try {
-      const monthStr = this.month < 10 ? '0' + (this.month + 1) : this.month + 1;
+      const monthStr = this.month < 10 ? String(this.month + 1).padStart(2, '0') : this.month + 1;
       const monthlyData = await getTasksByMonth(`${this.year}-${monthStr}`);
-      // TODO: monthlyData를 기반으로 calendar에 task 라벨 표시
+
+      this.applyStatusUI(monthlyData);
+
       const $calendarContents = this.closest('calendar-contents');
       if (!$calendarContents) {
         return;
@@ -107,20 +132,44 @@ export default class Calendar extends HTMLElement {
     }
   }
 
+  private applyStatusUI(data: ITask[]) {
+    data.forEach((task) => {
+      const start = new Date(task.startDate);
+      const end = new Date(task.endDate);
+
+      // start ~ end 라벨부착
+      let current = new Date(start);
+
+      while (current <= end) {
+        const dateStr = formatDashDate(current);
+        const $cell = this.querySelector<HTMLDivElement>(`.day-cell[data-date="${dateStr}"]`);
+        if ($cell) {
+          const $taskBar = document.createElement('div');
+          $taskBar.classList.add('task-bar');
+          $taskBar.textContent = task.title;
+          $taskBar.dataset.taskId = String(task.id);
+          $cell.appendChild($taskBar);
+        }
+
+        current.setDate(current.getDate() + 1);
+      }
+    });
+  }
+
   render() {
     this.innerHTML = `
-    <div class="calendar-header">
-        ${createIconButton('prev-button', leftIcon, 'left-icon')}
-        <h2>${this.MONTH_NAMES[this.month]}</h2>
-        ${createIconButton('next-button', rightIcon, 'next-icon')}
-    </div>
-    <div class="calendar">
-        <div class="week-days">
-            ${this.WEEK.map((day) => `<div>${day}</div>`).join('')}
+        <div class="calendar-header">
+            ${createIconButton('prev-button', leftIcon, 'left-icon')}
+            <h2>${this.MONTH_NAMES[this.month]}</h2>
+            ${createIconButton('next-button', rightIcon, 'next-icon')}
         </div>
-        <div class="calendar-grid">${this.generateCalendarCell()}
+        <div class="calendar">
+            <div class="week-days">
+                ${this.WEEK.map((day) => `<div>${day}</div>`).join('')}
+            </div>
+            <div class="calendar-grid">${this.generateCalendarCell()}
+            </div>
         </div>
-    </div>
     `;
   }
 }
