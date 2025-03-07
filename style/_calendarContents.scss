@@ -44,14 +44,11 @@
     text-align: center;
     padding: 20px;
     border-bottom: 1px solid colors.$light-gray;
-    border-right: 1px solid colors.$light-gray;
   }
 }
 .calendar-grid div {
   min-height: 100px;
-
   border-bottom: 1px solid colors.$light-gray;
-  border-right: 1px solid colors.$light-gray;
 }
 
 .day-cell span {
@@ -63,13 +60,18 @@
   display: flex;
   flex-direction: column;
   padding-top: 20px;
+
+  width: 100px;
+
   .task-bar {
+    height: 20px;
+    background-color: pink;
+
     margin-top: 4px;
     min-height: 20px;
     padding: 2px 2px 2px 5px;
     color: map.get(map.get(colors.$colors, font), taskDescription);
     font-size: 14px;
-    background-color: pink;
     display: inline-block;
     cursor: pointer;
   }

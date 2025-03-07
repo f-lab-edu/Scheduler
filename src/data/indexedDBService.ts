@@ -79,13 +79,31 @@ export async function updateStatus(statusId: number, newTitle: string): Promise<
 
 export async function deleteStatus(statusId: number): Promise<void> {
   const db = await openDatabase();
-  const transaction = db.transaction([STATUS_STORE], 'readwrite');
-  const store = transaction.objectStore(STATUS_STORE);
+  const transaction = db.transaction([STATUS_STORE, TASK_STORE], 'readwrite');
+  const statusStore = transaction.objectStore(STATUS_STORE);
+  const taskStore = transaction.objectStore(TASK_STORE); //status 삭제되면 종속 task 삭제 위해
 
-  const request = store.delete(statusId);
   return new Promise((resolve, reject) => {
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => resolve();
+    const deleteStatusReq = statusStore.delete(statusId);
+
+    deleteStatusReq.onerror = () => reject(deleteStatusReq.error);
+    deleteStatusReq.onsuccess = () => {
+      // statusId에 종속된 Task 모두 삭제
+      const index = taskStore.index('statusId');
+      const cursorReq = index.openCursor(String(statusId));
+
+      cursorReq.onerror = () => reject(cursorReq.error);
+      cursorReq.onsuccess = (e) => {
+        const cursor = (e.target as IDBRequest<IDBCursorWithValue>).result;
+        if (cursor) {
+          const deleteTaskReq = cursor.delete();
+          deleteTaskReq.onerror = () => reject(deleteTaskReq.error);
+          deleteTaskReq.onsuccess = () => cursor.continue();
+        } else {
+          resolve();
+        }
+      };
+    };
   });
 }
 
@@ -132,7 +150,7 @@ export async function getTasksByMonth(month: string): Promise<ITask[]> {
   const db = await openDatabase();
   const transaction = db.transaction([TASK_STORE], 'readonly');
   const store = transaction.objectStore(TASK_STORE);
-  // statusId 인덱스로 검색
+
   const index = store.index('months');
   const request = index.getAll(month);
 

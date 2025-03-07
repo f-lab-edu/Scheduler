@@ -133,11 +133,19 @@ export default class Calendar extends HTMLElement {
   }
 
   private applyStatusUI(data: ITask[]) {
+    const taskRowIndexMap = new Map<number, number>();
+    let nextAvailableRowIndex = 0;
+
     data.forEach((task) => {
+      // rowIndex 있는지 쳌
+      if (!taskRowIndexMap.has(Number(task.id))) {
+        taskRowIndexMap.set(Number(task.id), nextAvailableRowIndex);
+        nextAvailableRowIndex++;
+      }
+      const rowIndex = taskRowIndexMap.get(Number(task.id))!;
+
       const start = new Date(task.startDate);
       const end = new Date(task.endDate);
-
-      // start ~ end 라벨부착
       let current = new Date(start);
 
       while (current <= end) {
@@ -145,12 +153,16 @@ export default class Calendar extends HTMLElement {
         const $cell = this.querySelector<HTMLDivElement>(`.day-cell[data-date="${dateStr}"]`);
         if ($cell) {
           const $taskBar = document.createElement('div');
-          $taskBar.classList.add('task-bar');
-          $taskBar.textContent = task.title;
-          $taskBar.dataset.taskId = String(task.id);
+          $taskBar.classList.add('task-bar', 'priority-color', `${task.priority}`);
+          $taskBar.style.top = `${rowIndex * 30 + 20}px`;
+          $taskBar.style.borderRadius = '0';
+
+          if (dateStr === formatDashDate(start) || current.getDay() === 0) {
+            $taskBar.textContent = task.title;
+          }
+
           $cell.appendChild($taskBar);
         }
-
         current.setDate(current.getDate() + 1);
       }
     });
