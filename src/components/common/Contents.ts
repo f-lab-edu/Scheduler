@@ -3,6 +3,7 @@ import '@/components/borad/StatusList';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
+import { deleteStatus } from '@/data/indexedDBService';
 
 export default class Contents extends HTMLElement {
   private selectedTab: string;
@@ -14,7 +15,7 @@ export default class Contents extends HTMLElement {
     this.clickedAddStatus = false;
   }
 
-  connectedCallback() {
+  async connectedCallback() {
     this.render();
     this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
@@ -72,10 +73,12 @@ export default class Contents extends HTMLElement {
 
         if ($statusList) {
           const $targetButton = event.target as HTMLElement;
-          const $taskList = $targetButton.closest('ul.task-list');
+          const $taskList = $targetButton.closest('ul.task-list') as HTMLUListElement | null;
 
           if ($taskList) {
+            deleteStatus(Number($taskList.dataset.id));
             $taskList.remove();
+            this.updateTotalTaskCount();
           }
         }
       };
