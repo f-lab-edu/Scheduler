@@ -107,6 +107,12 @@ export default class Calendar extends HTMLElement {
 
         if (taskId) {
           $editorModal.taskId = taskId;
+
+          $editorModal.addEventListener('update-complete', () => {
+            this.render();
+            this.loadStatus();
+          });
+
           document.body.appendChild($editorModal);
         }
       }
@@ -156,6 +162,8 @@ export default class Calendar extends HTMLElement {
           $taskBar.classList.add('task-bar', 'priority-color', `${task.priority}`);
           $taskBar.style.top = `${rowIndex * 30 + 20}px`;
           $taskBar.style.borderRadius = '0';
+
+          $taskBar.dataset.taskId = String(task.id);
 
           if (dateStr === formatDashDate(start) || current.getDay() === 0) {
             $taskBar.textContent = task.title;

@@ -113,6 +113,9 @@ export default class EiditorModal extends HTMLElement {
                   await createTask(taskData);
                 }
 
+                const event = new CustomEvent('update-complete', { bubbles: true });
+                this.dispatchEvent(event);
+
                 const $taskList = document.querySelector(
                   `ul.task-list[data-id="${taskData.statusId}"] task-list`,
                 ) as TaskList;
