@@ -1,4 +1,4 @@
-import ConfirmDialog from './ConfirmDialog';
+import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
 
 export function createConfirmDialog(
   message: string,

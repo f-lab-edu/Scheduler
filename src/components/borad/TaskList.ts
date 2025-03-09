@@ -1,19 +1,24 @@
 import { ITask } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
-
+import { formatDate } from '@/util/helpers';
+import EiditorModal from '@/components/common/modal/EditorModal';
+import StatusHeader from '@/components/borad/StatusHeader';
 export default class TaskList extends HTMLElement {
   private _statusId: string | null;
   private _list: ITask[];
+  private _taskCount: number;
 
   constructor() {
     super();
     this._list = [];
     this._statusId = null;
+    this._taskCount = 0;
   }
 
   connectedCallback() {
     this.render();
+    this.setupTaskCardListener();
   }
 
   set taskList(value: ITask[]) {
@@ -26,36 +31,83 @@ export default class TaskList extends HTMLElement {
     this.loadTasksByStatus();
   }
 
+  get taskCount() {
+    return this._taskCount;
+  }
+
   async loadTasksByStatus() {
     if (!this._statusId) return;
     const tasks = await getTasksByStatus(this._statusId);
+    this._taskCount = tasks.length;
+
+    const $taskList = this.closest('ul.task-list');
+    if ($taskList) {
+      const $statusHeader = $taskList.querySelector('status-header') as StatusHeader;
+      if ($statusHeader) {
+        $statusHeader.count = this._taskCount;
+      }
+    }
+
+    this.dispatchEvent(
+      new CustomEvent('task-count-update', {
+        detail: { count: this._taskCount },
+        bubbles: true,
+      }),
+    );
+
     this.taskList = tasks;
+  }
+
+  private setupTaskCardListener() {
+    this.addEventListener('click', (event: Event) => {
+      const $target = event.target as HTMLElement;
+      if ($target.closest('li')) {
+        const taskId = $target.closest('li')?.getAttribute('data-task-id');
+
+        const $editorModal = document.createElement('editor-modal') as EiditorModal;
+        const $statusList = this.closest('ul.task-list');
+
+        if (taskId) {
+          $editorModal.taskId = taskId;
+        }
+        if ($statusList) {
+          const statusId = $statusList.getAttribute('data-id');
+          $editorModal.statusId = statusId!;
+        }
+        document.body.appendChild($editorModal);
+      }
+    });
   }
 
   render() {
     this.innerHTML = `
       <ul>
         ${this._list
-          ?.map(
-            (task: ITask) => `
-            <li>
-              <article class="task-card ${task.priority.toLowerCase()}">
-                <header class="task-card-header">
-                  <span class="date-wrapper">
-                    <img src="${date}" alt="date">
-                    <time>${task.startDate}</time>
-                    ${task.endDate ? `<span>${task.endDate}</span>` : ''}
-                  </span>
-                  <span class="priority">${task.priority} priority</span>
-                </header>
-                <div class="task-contents">
-                  <h3>${task.title}</h3>
-                  <p>${task.description}</p>
-                </div>
-              </article>
-            </li>
-          `,
-          )
+          ?.map((task: ITask) => {
+            return `
+                  <li data-task-id="${task.id}">
+                    <article class="task-card ${task.priority.toLowerCase()}">
+                      <header class="task-card-header">
+                        <span class="date-wrapper">
+                          <img src="${date}" alt="date">
+                          ${
+                            task.startDate === task.endDate && task.startDate === new Date().toISOString().split('T')[0]
+                              ? 'Today'
+                              : task.startDate === task.endDate
+                                ? `<time>${formatDate(task.startDate)}</time>`
+                                : `<time>${formatDate(task.startDate)}</time> ~ <time>${formatDate(task.endDate)}</time>`
+                          }
+                        </span>
+                        <span class="priority">${task.priority} priority</span>
+                      </header>
+                      <div class="task-contents">
+                        <h3>${task.title}</h3>
+                        <p>${task.description}</p>
+                      </div>
+                    </article>
+                  </li>
+            `;
+          })
           .join('')}
       </ul>
 `;

@@ -2,8 +2,8 @@ import { createIconButton, createTextButton } from '@/components/common/button/b
 import closeIcon from '@/assets/x.svg';
 import calendarIcon from '@/assets/calendar-check.svg';
 import { TPriorities } from 'types/types';
-import { createTask } from '@/data/indexedDBService';
-import { createConfirmDialog } from './ModalTemplates';
+import { createTask, getTasks, updateTask } from '@/data/indexedDBService';
+import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
 import TaskList from '@/components/borad/TaskList';
 
 export default class EiditorModal extends HTMLElement {
@@ -14,19 +14,23 @@ export default class EiditorModal extends HTMLElement {
   _description: string;
   _showSaveButton: boolean;
   _statusId: string | null;
+  _taskId: string | null;
 
   constructor() {
+    const today = new Date().toISOString().split('T')[0];
     super();
     this.selectedPriority = 'high';
     this._title = '';
-    this._startDate = '';
-    this._endDate = '';
+    this._startDate = today;
+    this._endDate = today;
     this._description = '';
     this._showSaveButton = false;
     this._statusId = null;
+    this._taskId = null;
   }
   connectedCallback() {
     this.render();
+    this.loadTask();
     this.setupModalButtonListener();
     this.setupSelectChangeListener();
     this.setupDescriptionListener();
@@ -38,6 +42,26 @@ export default class EiditorModal extends HTMLElement {
 
   get statusId(): string | null {
     return this._statusId;
+  }
+
+  set taskId(id: string) {
+    this._taskId = id;
+  }
+
+  private async loadTask() {
+    if (this._taskId) {
+      const taskData = await getTasks(Number(this._taskId));
+      if (taskData) {
+        this.selectedPriority = taskData.priority;
+        this._title = taskData.title;
+        this._startDate = taskData.startDate;
+        this._endDate = taskData.endDate;
+        this._description = taskData.description;
+        this._statusId = taskData.statusId;
+        this._taskId = taskData.id!;
+      }
+      this.render();
+    }
   }
 
   private setupModalButtonListener() {
@@ -56,7 +80,7 @@ export default class EiditorModal extends HTMLElement {
             title: this._title,
             startDate: this._startDate,
             endDate: this._endDate,
-            description: this._description,
+            description: this._description || '',
             priority: this.selectedPriority,
             statusId: this._statusId,
           };
@@ -75,17 +99,25 @@ export default class EiditorModal extends HTMLElement {
             const message = '저장 하시겠습니까?';
             const confirmButtonText = '저장';
             const cancelButtonText = '취소';
-            const confirmHandler = () => {
-              createTask(taskData);
+            const confirmHandler = async () => {
+              try {
+                if (this._taskId) {
+                  await updateTask(Number(this._taskId), taskData);
+                } else {
+                  await createTask(taskData);
+                }
 
-              const $taskList = document.querySelector(
-                `ul.task-list[data-id="${taskData.statusId}"] task-list`,
-              ) as TaskList;
-              $taskList?.loadTasksByStatus();
+                const $taskList = document.querySelector(
+                  `ul.task-list[data-id="${taskData.statusId}"] task-list`,
+                ) as TaskList;
+                $taskList?.loadTasksByStatus();
 
-              document.body.removeChild($confirmDialog);
-              document.body.removeChild(this);
-              return;
+                document.body.removeChild($confirmDialog);
+                document.body.removeChild(this);
+                return;
+              } catch (error: any) {
+                console.log(error);
+              }
             };
             const cancelHandler = () => {
               document.body.removeChild($confirmDialog);
@@ -126,18 +158,18 @@ export default class EiditorModal extends HTMLElement {
     this.addEventListener('input', (event: Event) => {
       const $description = this.querySelector('.description');
       if ($description) {
-        const $textareaTarget = event.target as HTMLInputElement;
-        this._description = $textareaTarget.value;
-        console.log('🐹', $textareaTarget.value);
+        const $textareaTarget = event.target as HTMLElement;
+        if ($textareaTarget.tagName.toLowerCase() === 'textarea' && $textareaTarget.classList.contains('description')) {
+          this._description = ($textareaTarget as HTMLTextAreaElement).value || '';
+        }
       }
     });
   }
 
   private setupSelectChangeListener() {
-    const $select = this.querySelector('.select-box');
-    if ($select) {
-      $select.addEventListener('change', (event: Event) => {
-        const $target = event.target as HTMLSelectElement;
+    this.addEventListener('change', (event: Event) => {
+      const $target = event.target as HTMLSelectElement;
+      if ($target.matches('.select-box')) {
         const priorityValue = $target.value;
 
         const $priorityColor = this.querySelector('.priority-color');
@@ -146,8 +178,8 @@ export default class EiditorModal extends HTMLElement {
           $priorityColor.classList.add(priorityValue);
           this.selectedPriority = priorityValue as TPriorities;
         }
-      });
-    }
+      }
+    });
   }
 
   render() {
@@ -158,26 +190,26 @@ export default class EiditorModal extends HTMLElement {
                   <header>
                       ${createIconButton('close-button', closeIcon, 'cancel-icon')}
                   </header>
-                  <input class="editor-title" value="" placeholder="New Title"/>
+                  <input class="editor-title" value="${this._title ?? ''}" placeholder="New Title"/>
 
                   <div class="task-info-group">
                       <div class="calendar-wrapper">
                           <img class="calendar-icon" src="${calendarIcon}" alt="calendar icon"/>
-                          <input class="date-input start-date" type="date" placeholder="start"/>
-                          <input class="date-input end-date" type="date" placeholder="end"/>
+                          <input class="date-input start-date" type="date" value="${this._startDate}" placeholder="start"/>
+                          <input class="date-input end-date" type="date" value="${this._endDate}" placeholder="end"/>
                       </div>
                       <div class="priority-wrapper">
                           <span>priority</span>
                           <select class="select-box">
-                              <option value="high">High</option>
-                              <option value="medium">Medium</option>
-                              <option value="low">Low</option>
+                              <option value="high" ${this.selectedPriority === 'high' ? 'selected' : ''}>High</option>
+                              <option value="medium" ${this.selectedPriority === 'medium' ? 'selected' : ''}>Medium</option>
+                              <option value="low" ${this.selectedPriority === 'low' ? 'selected' : ''}>Low</option>
                           </select>
-                          <div class="priority-color high"></div>
+                          <div class="priority-color ${this.selectedPriority}"></div>
                       </div>
                   </div>
 
-                  <textarea class="description"></textarea>
+                  <textarea class="description">${this._description ?? ''}</textarea>
 
                   <div class="submit-button-group">
                         ${createTextButton('cancel-button', 'Cancel')}

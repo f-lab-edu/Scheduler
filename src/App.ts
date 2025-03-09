@@ -3,7 +3,7 @@ import '@/components/common/Tabs';
 import '@/components/common/Contents';
 import Tabs from '@/components/common/Tabs';
 import Contents from '@/components/common/Contents';
-import { TTab } from '../types/types';
+import { TTab } from 'types/types';
 
 export class App extends HTMLElement {
   private selectedTab: TTab;

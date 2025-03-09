@@ -8,13 +8,15 @@ export interface ITabTaskInfo {
 export interface IDefaultInfo {
   title: string;
   startDate: string;
-  endDate?: string;
+  endDate: string;
   priority: TPriorities;
 }
 
 export interface ITask extends IDefaultInfo {
-  statusId: string;
+  id?: string;
   description: string;
+  statusId: string | null;
+  taskId?: string; //수정 시에만 필요
 }
 
 export interface IStatusList {
