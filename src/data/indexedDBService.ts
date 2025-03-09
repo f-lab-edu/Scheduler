@@ -6,7 +6,7 @@ export async function createStatus(title: string): Promise<number> {
   const db = await openDatabase();
   const transaction = db.transaction([STATUS_STORE], 'readwrite');
   const store = transaction.objectStore(STATUS_STORE);
-  const request = store.add({ title }); //사용자 입력
+  const request = store.add({ title, taskCount: 0 });
 
   return new Promise((resolve, reject) => {
     request.onerror = () => reject(request.error);
@@ -90,6 +90,18 @@ export async function createTask(task: Omit<ITask, 'id'>): Promise<number> {
   return new Promise((resolve, reject) => {
     request.onerror = () => reject(request.error);
     request.onsuccess = () => resolve(request.result as number);
+  });
+}
+
+
+export async function getTasks(taskId: number): Promise<ITask | undefined> {
+  const db = await openDatabase();
+  const transaction = db.transaction([TASK_STORE], 'readonly');
+  const store = transaction.objectStore(TASK_STORE);
+  const request = store.get(taskId);
+  return new Promise((resolve, reject) => {
+    request.onerror = () => reject(request.error);
+    request.onsuccess = () => resolve(request.result);
   });
 }
 

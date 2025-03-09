@@ -2,8 +2,8 @@ import '@/components/common/ActionGroup';
 import '@/components/borad/StatusList';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
-import ConfirmDialog from '@/components/common/modal/ConfirmDialog';
 import { deleteStatus } from '@/data/indexedDBService';
+import { createConfirmDialog } from './modal/ModalTemplates';
 
 export default class Contents extends HTMLElement {
   private selectedTab: string;
@@ -61,14 +61,14 @@ export default class Contents extends HTMLElement {
 
   private setupRemoveConfirmationHandler() {
     this.addEventListener('remove-click', (event: Event) => {
-      const $dialog = document.createElement('confirm-dialog') as ConfirmDialog;
-
-      $dialog.dialogMessage = '모든 하위 일정이 삭제 됩니다. </br> 삭제하시겠습니까?';
-      $dialog.cancelHandler = () => {
-        document.body.removeChild($dialog);
+      const message = '모든 하위 일정이 삭제 됩니다. </br> 삭제하시겠습니까?';
+      const confirmButtonText = '삭제';
+      const cancelButtonText = '취소';
+      const cancelHandler = () => {
+        document.body.removeChild($confirmDialog);
       };
-      $dialog.confirmHandler = () => {
-        document.body.removeChild($dialog);
+      const confirmHandler = () => {
+        document.body.removeChild($confirmDialog);
         const $statusList = this.querySelector('status-list') as HTMLElement;
 
         if ($statusList) {
@@ -82,8 +82,14 @@ export default class Contents extends HTMLElement {
           }
         }
       };
-
-      document.body.appendChild($dialog);
+      const $confirmDialog = createConfirmDialog(
+        message,
+        confirmButtonText,
+        confirmHandler,
+        cancelButtonText,
+        cancelHandler,
+      );
+      document.body.appendChild($confirmDialog);
     });
   }
 

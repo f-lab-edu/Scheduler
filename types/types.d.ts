@@ -1,4 +1,4 @@
-export type TPriorities = 'High' | 'Medium' | 'Low';
+export type TPriorities = 'high' | 'medium' | 'low';
 export type TTab = 'Board' | 'Calendar';
 
 export interface ITabTaskInfo {
@@ -13,7 +13,7 @@ export interface IDefaultInfo {
 }
 
 export interface ITask extends IDefaultInfo {
-  statusId?: number;
+  statusId: string;
   description: string;
 }
 

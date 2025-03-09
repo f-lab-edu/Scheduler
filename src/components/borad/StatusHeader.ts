@@ -63,6 +63,17 @@ export default class StatusHeader extends HTMLElement {
       }
 
       if ($target.closest('.add-task-button')) {
+        const $taskList = this.closest('ul.task-list');
+        if (!$taskList) {
+          return;
+        }
+
+        const statusId = $taskList.getAttribute('data-id');
+
+        if (statusId) {
+          $editorModal.statusId = statusId;
+        }
+
         document.body.appendChild($editorModal);
         this.render();
       }
