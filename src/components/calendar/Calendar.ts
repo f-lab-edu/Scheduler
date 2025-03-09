@@ -134,7 +134,7 @@ export default class Calendar extends HTMLElement {
 
       $agenda.monthlyTasks = monthlyData;
     } catch (error: any) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 

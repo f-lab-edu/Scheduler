@@ -90,7 +90,7 @@ export default class StatusList extends HTMLElement {
         const newStatusId = await createStatus(this._newStatusTitle);
         this.applyStatusUI(newStatusId, this._newStatusTitle);
       } catch (error: any) {
-        console.log(error);
+        console.log(error.message);
       }
     });
   }
@@ -102,7 +102,7 @@ export default class StatusList extends HTMLElement {
         this.applyStatusUI(status.id, status.statusTitle);
       });
     } catch (error: any) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 

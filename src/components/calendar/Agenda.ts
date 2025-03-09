@@ -9,15 +9,15 @@ export default class Agenda extends HTMLElement {
   }
   connectedCallback() {
     this.render();
-    this.loadStatus();
+    this.renderTasks();
   }
 
   set monthlyTasks(tasks: ITask[]) {
     this._monthlyTasks = tasks;
-    this.loadStatus();
+    this.renderTasks();
   }
 
-  private loadStatus() {
+  private renderTasks() {
     const $agenda = document.querySelector('.agenda');
     if ($agenda) {
       $agenda.innerHTML = `

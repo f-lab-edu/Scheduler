@@ -125,7 +125,7 @@ export default class EiditorModal extends HTMLElement {
                 document.body.removeChild(this);
                 return;
               } catch (error: any) {
-                console.log(error);
+                console.log(error.message);
               }
             };
             const cancelHandler = () => {
