@@ -22,9 +22,9 @@ export default class StatusList extends HTMLElement {
     this._statusId = null;
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     this.render();
-    await this.loadStatus();
+    this.loadStatus();
     this.setEventListener();
     this.setupStatusCreationHandler();
   }
@@ -33,11 +33,11 @@ export default class StatusList extends HTMLElement {
     return this.totalCount;
   }
 
-  get clickedAddStatus() {
+  get addClicked() {
     return this._clickedAddStatus;
   }
 
-  set clickedAddStatus(isClicked: boolean) {
+  set addClicked(isClicked: boolean) {
     this._clickedAddStatus = isClicked;
     this.handleAddNewStatusClick();
   }
@@ -62,7 +62,7 @@ export default class StatusList extends HTMLElement {
   private handleAddNewStatusClick() {
     const $addStatusList = this.querySelector('add-status-list') as AddStatusList;
     if ($addStatusList) {
-      $addStatusList.clickedAddStatus = this._clickedAddStatus;
+      $addStatusList.addClicked = this._clickedAddStatus;
     }
   }
 
@@ -99,7 +99,8 @@ export default class StatusList extends HTMLElement {
     try {
       const statusList = await getAllStatuses();
       statusList.forEach((status) => {
-        this.applyStatusUI(status.id, status.title);
+        console.log('');
+        this.applyStatusUI(status.id, status.statusTitle);
       });
     } catch (error: any) {
       console.log(error);

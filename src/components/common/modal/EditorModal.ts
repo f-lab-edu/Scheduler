@@ -127,7 +127,8 @@ export default class EiditorModal extends HTMLElement {
       const $description = this.querySelector('.description');
       if ($description) {
         const $textareaTarget = event.target as HTMLInputElement;
-        this._description = $textareaTarget.defaultValue;
+        this._description = $textareaTarget.value;
+        console.log('🐹', $textareaTarget.value);
       }
     });
   }

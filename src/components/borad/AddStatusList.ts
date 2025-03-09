@@ -16,11 +16,11 @@ export default class AddStatusList extends HTMLElement {
     this.setupStatusEventListeners();
   }
 
-  get clickedAddStatus() {
+  get addClicked() {
     return this._addClicked;
   }
 
-  set clickedAddStatus(isClicked: boolean) {
+  set addClicked(isClicked: boolean) {
     this._addClicked = isClicked;
     this.render();
   }
