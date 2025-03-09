@@ -31,6 +31,7 @@ export default class StatusHeader extends HTMLElement {
   get statusTitle() {
     return this.status;
   }
+
   set statusTitle(newTitle: string) {
     this.status = newTitle;
     this.render();
