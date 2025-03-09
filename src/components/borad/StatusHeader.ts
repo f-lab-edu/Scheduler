@@ -7,7 +7,6 @@ import moreIcon from '@/assets/three-dots.svg';
 import plusIcon from '@/assets/plus.svg';
 
 export default class StatusHeader extends HTMLElement {
-
   private status: string = '';
   private taskCount: number = 0;
   private isShowMoreList: boolean = false;
@@ -25,6 +24,7 @@ export default class StatusHeader extends HTMLElement {
   get statusTitle() {
     return this.status;
   }
+
   set statusTitle(newTitle: string) {
     this.status = newTitle;
     this.render();
