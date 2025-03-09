@@ -29,7 +29,7 @@ export default class Calendar extends HTMLElement {
     this.render();
     this.generateCalendarCell();
     this.setupButtonClickListeners();
-    this.loadStatus();
+    this.refreshTasks();
     this.setupTaskClickListener();
   }
 
@@ -84,7 +84,7 @@ export default class Calendar extends HTMLElement {
       this.year += 1;
     }
     this.render();
-    this.loadStatus();
+    this.refreshTasks();
   }
 
   private setupButtonClickListeners() {
@@ -110,7 +110,7 @@ export default class Calendar extends HTMLElement {
 
           $editorModal.addEventListener('update-complete', () => {
             this.render();
-            this.loadStatus();
+            this.refreshTasks();
           });
 
           document.body.appendChild($editorModal);
@@ -119,31 +119,23 @@ export default class Calendar extends HTMLElement {
     });
   }
 
-  private async loadStatus() {
+  private async refreshTasks() {
     try {
       const monthStr = this.month < 10 ? String(this.month + 1).padStart(2, '0') : this.month + 1;
       const monthlyData = await getTasksByMonth(`${this.year}-${monthStr}`);
 
-      this.applyStatusUI(monthlyData);
-
-      const $calendarContents = this.closest('calendar-contents');
-      if (!$calendarContents) {
-        return;
-      }
-      const $agenda = $calendarContents.querySelector('agenda-element') as Agenda;
-
-      $agenda.monthlyTasks = monthlyData;
+      this.updateCalendarTasks(monthlyData);
+      this.updateAgendaTasks(monthlyData);
     } catch (error: any) {
       console.log(error.message);
     }
   }
 
-  private applyStatusUI(data: ITask[]) {
-    const taskRowIndexMap = new Map<number, number>();
-    let nextAvailableRowIndex = 0;
+  private updateCalendarTasks(tasks: ITask[]) {
+    tasks.forEach((task) => {
+      const taskRowIndexMap = new Map<number, number>();
+      let nextAvailableRowIndex = 0;
 
-    data.forEach((task) => {
-      // rowIndex 있는지 쳌
       if (!taskRowIndexMap.has(Number(task.id))) {
         taskRowIndexMap.set(Number(task.id), nextAvailableRowIndex);
         nextAvailableRowIndex++;
@@ -174,6 +166,15 @@ export default class Calendar extends HTMLElement {
         current.setDate(current.getDate() + 1);
       }
     });
+  }
+
+  private updateAgendaTasks(tasks: ITask[]) {
+    const $calendarContents = this.closest('calendar-contents');
+    if (!$calendarContents) {
+      return;
+    }
+    const $agenda = $calendarContents.querySelector('agenda-element') as Agenda;
+    $agenda.monthlyTasks = tasks;
   }
 
   render() {
