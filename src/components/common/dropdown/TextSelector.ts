@@ -1,4 +1,4 @@
-import BaseDropdown from '@/components/common/dropdown/BasicDropdown';
+import BaseDropdown from '@/components/common/dropdown/BaseDropdown';
 
 export default class TextSelector extends BaseDropdown {
   connectedCallback() {
@@ -15,25 +15,16 @@ export default class TextSelector extends BaseDropdown {
       });
     }
   }
-  // render() {
-  //   this.innerHTML = `
-  //     <div class="dropdown-menu">
-  //         <ul>
-  //           <li class="remove-item">Remove list</li>
-  //         </ul>
-  //     </div>
-  //   `;
-  // }
 
+  // ${this.showList ? 'open' : 'closed'}
   protected render() {
     this.innerHTML = `
-      <div class="dropdown-menu ${this.showList ? 'open' : 'closed'}">
+      <div class="dropdown-menu">
         <ul>
           <li class="remove-item">Remove list</li>
         </ul>
       </div>
     `;
-    this.handleRemoveButtonClick();
   }
 }
 

@@ -13,13 +13,25 @@
   box-shadow: 4px 4px 10px 0px map.get(colors.$colors, shadow);
   z-index: 1;
   cursor: pointer;
-
-  .priority-list {
-    // position: absolute;
-  }
 }
 .dropdown-menu:hover {
   background-color: map.get(map.get(colors.$colors, hover), dropdown);
+}
+
+.filter-dropdown {
+  position: absolute;
+  top: 300px;
+  right: 0px;
+  min-width: 150px;
+  padding: 24px 14px;
+  margin-top: 10px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: colors.$white;
+}
+
+priority-list.hidden {
+  display: none;
 }
 
 .backdrop {
