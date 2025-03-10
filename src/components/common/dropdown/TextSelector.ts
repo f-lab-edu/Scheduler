@@ -1,4 +1,6 @@
-export default class TextSelector extends HTMLElement {
+import BaseDropdown from '@/components/common/dropdown/BasicDropdown';
+
+export default class TextSelector extends BaseDropdown {
   connectedCallback() {
     this.render();
     this.handleRemoveButtonClick();
@@ -13,14 +15,25 @@ export default class TextSelector extends HTMLElement {
       });
     }
   }
-  render() {
+  // render() {
+  //   this.innerHTML = `
+  //     <div class="dropdown-menu">
+  //         <ul>
+  //           <li class="remove-item">Remove list</li>
+  //         </ul>
+  //     </div>
+  //   `;
+  // }
+
+  protected render() {
     this.innerHTML = `
-      <div class="dropdown-menu">
-          <ul>
-            <li class="remove-item">Remove list</li>
-          </ul>
+      <div class="dropdown-menu ${this.showList ? 'open' : 'closed'}">
+        <ul>
+          <li class="remove-item">Remove list</li>
+        </ul>
       </div>
     `;
+    this.handleRemoveButtonClick();
   }
 }
 
