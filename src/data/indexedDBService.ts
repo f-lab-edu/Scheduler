@@ -120,7 +120,6 @@ export async function createTask(task: ITask): Promise<number> {
   });
 }
 
-
 export async function getTasks(taskId: number): Promise<ITask | undefined> {
   const db = await openDatabase();
   const transaction = db.transaction([TASK_STORE], 'readonly');
@@ -132,7 +131,7 @@ export async function getTasks(taskId: number): Promise<ITask | undefined> {
   });
 }
 
-export async function getTasksByStatus(statusId: number): Promise<ITask[]> {
+export async function getTasksByStatus(statusId: string): Promise<ITask[]> {
   const db = await openDatabase();
   const transaction = db.transaction([TASK_STORE], 'readonly');
   const store = transaction.objectStore(TASK_STORE);

@@ -2,6 +2,7 @@ export default class PriorityList extends HTMLElement {
   connectedCallback() {
     this.render();
     this.handleFilterPriorityClick();
+    this.setupCheckboxListeners();
   }
 
   private handleFilterPriorityClick() {
@@ -10,6 +11,24 @@ export default class PriorityList extends HTMLElement {
       $priorityList.addEventListener('click', (event: Event) => {
         event.stopPropagation();
         $priorityList.dispatchEvent(new CustomEvent('pritority-check', { bubbles: true }));
+      });
+    }
+  }
+
+  private setupCheckboxListeners() {
+    const $priorityList = this.querySelector('.priority-list');
+    if ($priorityList) {
+      $priorityList.addEventListener('change', (event: Event) => {
+        const $high = (this.querySelector('#high') as HTMLInputElement).checked;
+        const $medium = (this.querySelector('#medium') as HTMLInputElement).checked;
+        const $low = (this.querySelector('#low') as HTMLInputElement).checked;
+
+        const selectedPriorities = [];
+        if ($high) selectedPriorities.push('high');
+        if ($medium) selectedPriorities.push('medium');
+        if ($low) selectedPriorities.push('low');
+
+        this.dispatchEvent(new CustomEvent('priority-changed', { detail: { selectedPriorities }, bubbles: true }));
       });
     }
   }
