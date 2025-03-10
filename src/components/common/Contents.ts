@@ -120,7 +120,14 @@ export default class Contents extends HTMLElement {
       });
 
       const $calendar = this.querySelector('calendar-contents calendar-element') as Calendar;
+      if ($calendar) {
+        $calendar.filteredPriority = selectedPriorities;
+      }
       const $agenda = this.querySelector('calendar-contents agenda-element') as Calendar;
+
+      if ($agenda) {
+        $agenda.filteredPriority = selectedPriorities;
+      }
     });
   }
 

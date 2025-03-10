@@ -43,10 +43,5 @@ export function filterDataByPriorities(data: ITask[], selectedPriorities: TPrior
   if (!selectedPriorities.length) {
     return data;
   }
-  console.log(
-    '🐞🐞🐞',
-    data.filter((task) => selectedPriorities.includes(task.priority)),
-  );
-  // return data.filter((task) => selectedPriorities.includes(task.priority));
   return data.filter((task) => selectedPriorities.includes(task.priority));
 }
