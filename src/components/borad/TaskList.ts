@@ -1,19 +1,25 @@
-import { ITask } from 'types/types';
+import { ITask, TPriorities } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
-import { formatDate } from '@/util/helpers';
+import { filterDataByPriorities, filterDataBySearchValue, formatDate } from '@/util/helpers';
 import EiditorModal from '@/components/common/modal/EditorModal';
 import StatusHeader from '@/components/borad/StatusHeader';
 export default class TaskList extends HTMLElement {
   private _statusId: string | null;
   private _list: ITask[];
+  private _filteredList: ITask[];
   private _taskCount: number;
+  private selectedPriorities: TPriorities[];
+  private _searchValue: string;
 
   constructor() {
     super();
     this._list = [];
+    this._filteredList = [];
     this._statusId = null;
     this._taskCount = 0;
+    this.selectedPriorities = [];
+    this._searchValue = '';
   }
 
   connectedCallback() {
@@ -33,6 +39,16 @@ export default class TaskList extends HTMLElement {
 
   get taskCount() {
     return this._taskCount;
+  }
+
+  set filteredPriority(priorities: TPriorities[]) {
+    this.selectedPriorities = priorities;
+    this.render();
+  }
+
+  set searchValue(value: string) {
+    this._searchValue = value;
+    this.render();
   }
 
   async loadTasksByStatus() {
@@ -80,9 +96,16 @@ export default class TaskList extends HTMLElement {
   }
 
   render() {
+    const filteredByPriority =
+      this.selectedPriorities.length > 0 ? filterDataByPriorities(this._list, this.selectedPriorities) : this._list;
+
+    const list =
+      this._searchValue.length > 0
+        ? filterDataBySearchValue(filteredByPriority, this._searchValue)
+        : filteredByPriority;
     this.innerHTML = `
     <ul>
-    ${this._list
+    ${list
       ?.map((task: ITask) => {
         const isSameDate = task.startDate === task.endDate;
         const isToday = task.startDate === new Date().toISOString().split('T')[0];

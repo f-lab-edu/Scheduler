@@ -1,10 +1,11 @@
 import '@/components/common/ActionGroup';
 import '@/components/borad/StatusList';
-import '@/components/calendar/CalendarContenst';
+import '@/components/calendar/CalendarContents';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import { deleteStatus } from '@/data/indexedDBService';
 import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
+import Calendar from '@/components/calendar/Calendar';
 
 export default class Contents extends HTMLElement {
   private selectedTab: string;
@@ -23,6 +24,9 @@ export default class Contents extends HTMLElement {
     this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
     this.setupRemoveConfirmationHandler();
+    this.updateActionGroupCount();
+    this.setupPriorityChanged();
+    this.setupInputChangeListener();
   }
 
   handleAddNewButtonClick() {
@@ -46,23 +50,28 @@ export default class Contents extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === 'selected-tab' && oldValue !== newValue) {
       this.render();
+      this.updateActionGroupCount();
     }
   }
 
   private updateTotalTaskCount() {
     this.addEventListener('task-count-update', (event: Event) => {
-      this._totalCount = 0;
-
-      const $taskList = this.querySelectorAll('task-list') as NodeListOf<any>;
-      $taskList.forEach((task) => {
-        this._totalCount += task.taskCount;
-      });
-
-      const $actionGroup = this.querySelector('action-group') as ActionGroup;
-      if ($actionGroup) {
-        $actionGroup.totalCount = this._totalCount;
+      if ((this.getAttribute('selected-tab') || 'Board') === 'Board') {
+        this._totalCount = 0;
+        const $taskList = this.querySelectorAll('task-list') as NodeListOf<any>;
+        $taskList.forEach((task) => {
+          this._totalCount += task.taskCount;
+        });
       }
+      this.updateActionGroupCount();
     });
+  }
+
+  private updateActionGroupCount() {
+    const $actionGroup = this.querySelector('action-group') as ActionGroup;
+    if ($actionGroup) {
+      $actionGroup.totalCount = this._totalCount;
+    }
   }
 
   private setupRemoveConfirmationHandler() {
@@ -85,7 +94,7 @@ export default class Contents extends HTMLElement {
             if ($taskList) {
               await deleteStatus(Number($taskList.dataset.id));
               $taskList.remove();
-              this.updateTotalTaskCount();
+              this.dispatchEvent(new CustomEvent('task-count-update'));
             }
           }
         } catch (error: any) {
@@ -103,12 +112,42 @@ export default class Contents extends HTMLElement {
     });
   }
 
+  private setupPriorityChanged() {
+    this.addEventListener('priority-changed', (event: Event) => {
+      const { selectedPriorities } = (event as CustomEvent).detail;
+      const $taskLists = this.querySelectorAll('task-list');
+      $taskLists.forEach((taskList) => {
+        (taskList as any).filteredPriority = selectedPriorities;
+      });
+
+      const $calendar = this.querySelector('calendar-contents calendar-element') as Calendar;
+      if ($calendar) {
+        $calendar.filteredPriority = selectedPriorities;
+      }
+      const $agenda = this.querySelector('calendar-contents agenda-element') as Calendar;
+
+      if ($agenda) {
+        $agenda.filteredPriority = selectedPriorities;
+      }
+    });
+  }
+
+  private setupInputChangeListener() {
+    this.addEventListener('search-input-changed', (event: Event) => {
+      const { targetValue } = (event as CustomEvent).detail;
+      const $taskLists = this.querySelectorAll('task-list');
+      $taskLists.forEach((taskList) => {
+        (taskList as any).searchValue = targetValue;
+      });
+    });
+  }
+
   render() {
     const selectedTab = this.getAttribute('selected-tab') || 'Board';
     this.innerHTML = `
         <section class="contents">
             <action-group></action-group>
-            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents>캘린더</calendar-contents>'}
+            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents></calendar-contents>'}
         </section>
     `;
   }

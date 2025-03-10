@@ -3,17 +3,20 @@ import leftIcon from '@/assets/caret-left-fill.svg';
 import rightIcon from '@/assets/caret-right-fill.svg';
 import { getTasksByMonth } from '@/data/indexedDBService';
 import Agenda from '@/components/calendar/Agenda';
-import { ITask } from 'types/types';
-import { formatDashDate } from '@/util/helpers';
-import EiditorModal from '../common/modal/EditorModal';
+import { ITask, TPriorities } from 'types/types';
+import { filterDataByPriorities, formatDashDate } from '@/util/helpers';
+import EiditorModal from '@/components/common/modal/EditorModal';
 
 export default class Calendar extends HTMLElement {
-  MONTH_NAMES: string[];
-  WEEK: string[];
-  date: Date;
-  today: number;
-  month: number;
-  year: number;
+  private MONTH_NAMES: string[];
+  private WEEK: string[];
+  private date: Date;
+  private today: number;
+  private month: number;
+  private year: number;
+  private selectedPriorities: TPriorities[];
+  private _filteredList: ITask[];
+  private monthlyData: ITask[];
   constructor() {
     super();
     const date = new Date();
@@ -23,6 +26,9 @@ export default class Calendar extends HTMLElement {
     this.today = date.getDate();
     this.month = date.getMonth();
     this.year = date.getFullYear();
+    this.selectedPriorities = [];
+    this._filteredList = [];
+    this.monthlyData = [];
   }
 
   connectedCallback() {
@@ -31,6 +37,14 @@ export default class Calendar extends HTMLElement {
     this.setupButtonClickListeners();
     this.refreshTasks();
     this.setupTaskClickListener();
+  }
+
+  set filteredPriority(priorities: TPriorities[]) {
+    this.selectedPriorities = priorities;
+    this._filteredList = filterDataByPriorities(this.monthlyData, priorities);
+    const taskRenderList = this.selectedPriorities.length > 0 ? this._filteredList : this.monthlyData;
+    this.updateCalendarTasks(taskRenderList);
+    this.updateAgendaTasks(taskRenderList);
   }
 
   private generateCalendarCell() {
@@ -122,16 +136,23 @@ export default class Calendar extends HTMLElement {
   private async refreshTasks() {
     try {
       const monthStr = this.month < 10 ? String(this.month + 1).padStart(2, '0') : this.month + 1;
-      const monthlyData = await getTasksByMonth(`${this.year}-${monthStr}`);
+      this.monthlyData = await getTasksByMonth(`${this.year}-${monthStr}`);
 
-      this.updateCalendarTasks(monthlyData);
-      this.updateAgendaTasks(monthlyData);
+      const taskRenderList = this.selectedPriorities.length > 0 ? this._filteredList : this.monthlyData;
+      this.updateCalendarTasks(taskRenderList);
+      this.updateAgendaTasks(taskRenderList);
     } catch (error: any) {
       console.log(error.message);
     }
   }
 
   private updateCalendarTasks(tasks: ITask[]) {
+    const dayCells = this.querySelectorAll('.day-cell');
+    dayCells.forEach(($cell) => {
+      const existingTaskBars = $cell.querySelectorAll('.task-bar');
+      existingTaskBars.forEach(($bar) => $bar.remove());
+    });
+
     tasks.forEach((task) => {
       const taskRowIndexMap = new Map<number, number>();
       let nextAvailableRowIndex = 0;
