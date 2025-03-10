@@ -6,18 +6,15 @@ import '@/components/common/dropdown/PriorityList';
 export default class ActionGroup extends HTMLElement {
   private _totalCount: number;
   private clickFilterButton: boolean;
-  private showList: boolean;
 
   constructor() {
     super();
     this._totalCount = 0;
     this.clickFilterButton = false;
-    this.showList = false;
   }
 
   connectedCallback() {
     this.render();
-
     this.setupButtonClickListener();
   }
 
