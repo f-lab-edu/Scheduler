@@ -2,12 +2,10 @@ import { ITask, TPriorities } from 'types/types';
 
 export default class Agenda extends HTMLElement {
   private _monthlyTasks: ITask[];
-  private selectedPriorities: TPriorities[];
 
   constructor() {
     super();
     this._monthlyTasks = [];
-    this.selectedPriorities = [];
   }
   connectedCallback() {
     this.render();
@@ -17,12 +15,6 @@ export default class Agenda extends HTMLElement {
   set monthlyTasks(tasks: ITask[]) {
     this._monthlyTasks = tasks;
     this.renderTasks();
-  }
-
-  set filteredPriority(priorities: TPriorities[]) {
-    this.selectedPriorities = priorities;
-    console.log('🟢', priorities);
-    //TODO: filtering 해야함
   }
 
   private renderTasks() {
