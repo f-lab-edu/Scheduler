@@ -1,3 +1,5 @@
+import BaseDropdown from '@/components/common/dropdown/BaseDropdown';
+
 export default class PriorityList extends HTMLElement {
   connectedCallback() {
     this.render();
@@ -13,27 +15,30 @@ export default class PriorityList extends HTMLElement {
       });
     }
   }
-  render() {
+  protected render() {
     this.innerHTML = `
-      <div class="dropdown-menu">
+      <div class="filter-dropdown">
+          <div>Priorities</div>
+          <hr/>
           <ul class="priority-list">
               <li>
-                  <div class="priority-check-wrapper">
-                      <input type="checkbox"/>
-                      <span>High priority</span>
-                  </div>
-                  <div class="priority-check-wrapper">
-                      <input type="checkbox"/>
-                      <span>Medium priority</span>
-                  </div>
-                  <div class="priority-check-wrapper">
-                      <input type="checkbox"/>
-                      <span>Low priority</span>
-                  </div>
+                <div class="priority-check-wrapper">
+                  <input type="checkbox" id="high"/>
+                  <label for="high">High priority</label>
+                </div>
+                <div class="priority-check-wrapper">
+                  <input type="checkbox"id="medium"/>
+                  <label for="medium">Medium priority</label>
+                </div>
+                <div class="priority-check-wrapper">
+                  <input type="checkbox"id="low"/>
+                  <label for="low">Low priority</label>
+                </div>
               </li>
-          </ul>
+            </ul>
       </div>
     `;
+    this.handleFilterPriorityClick();
   }
 }
 
