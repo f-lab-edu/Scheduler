@@ -23,6 +23,7 @@ export default class Contents extends HTMLElement {
     this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
     this.setupRemoveConfirmationHandler();
+    this.updateActionGroupCount();
   }
 
   handleAddNewButtonClick() {
@@ -46,23 +47,28 @@ export default class Contents extends HTMLElement {
   attributeChangedCallback(name: string, oldValue: string, newValue: string) {
     if (name === 'selected-tab' && oldValue !== newValue) {
       this.render();
+      this.updateActionGroupCount();
     }
   }
 
   private updateTotalTaskCount() {
     this.addEventListener('task-count-update', (event: Event) => {
-      this._totalCount = 0;
-
-      const $taskList = this.querySelectorAll('task-list') as NodeListOf<any>;
-      $taskList.forEach((task) => {
-        this._totalCount += task.taskCount;
-      });
-
-      const $actionGroup = this.querySelector('action-group') as ActionGroup;
-      if ($actionGroup) {
-        $actionGroup.totalCount = this._totalCount;
+      if ((this.getAttribute('selected-tab') || 'Board') === 'Board') {
+        this._totalCount = 0;
+        const $taskList = this.querySelectorAll('task-list') as NodeListOf<any>;
+        $taskList.forEach((task) => {
+          this._totalCount += task.taskCount;
+        });
       }
+      this.updateActionGroupCount();
     });
+  }
+
+  private updateActionGroupCount() {
+    const $actionGroup = this.querySelector('action-group') as ActionGroup;
+    if ($actionGroup) {
+      $actionGroup.totalCount = this._totalCount;
+    }
   }
 
   private setupRemoveConfirmationHandler() {
@@ -85,7 +91,7 @@ export default class Contents extends HTMLElement {
             if ($taskList) {
               await deleteStatus(Number($taskList.dataset.id));
               $taskList.remove();
-              this.updateTotalTaskCount();
+              this.dispatchEvent(new CustomEvent('task-count-update'));
             }
           }
         } catch (error: any) {
