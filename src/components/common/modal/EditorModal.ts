@@ -5,6 +5,7 @@ import { TPriorities } from 'types/types';
 import { createTask, getTasks, updateTask } from '@/data/indexedDBService';
 import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
 import TaskList from '@/components/borad/TaskList';
+import { getMonthsBetween } from '@/util/helpers';
 
 export default class EiditorModal extends HTMLElement {
   selectedPriority: TPriorities;
@@ -15,6 +16,8 @@ export default class EiditorModal extends HTMLElement {
   _showSaveButton: boolean;
   _statusId: string | null;
   _taskId: string | null;
+  _startMonth: string;
+  _endMonth: string;
 
   constructor() {
     const today = new Date().toISOString().split('T')[0];
@@ -27,6 +30,8 @@ export default class EiditorModal extends HTMLElement {
     this._showSaveButton = false;
     this._statusId = null;
     this._taskId = null;
+    this._startMonth = '';
+    this._endMonth = '';
   }
   connectedCallback() {
     this.render();
@@ -83,6 +88,7 @@ export default class EiditorModal extends HTMLElement {
             description: this._description || '',
             priority: this.selectedPriority,
             statusId: this._statusId,
+            months: getMonthsBetween(this._startDate, this._endDate),
           };
 
           if (!this._title || !this._startDate || !this._endDate) {
@@ -107,6 +113,9 @@ export default class EiditorModal extends HTMLElement {
                   await createTask(taskData);
                 }
 
+                const event = new CustomEvent('update-complete', { bubbles: true });
+                this.dispatchEvent(event);
+
                 const $taskList = document.querySelector(
                   `ul.task-list[data-id="${taskData.statusId}"] task-list`,
                 ) as TaskList;
@@ -116,7 +125,7 @@ export default class EiditorModal extends HTMLElement {
                 document.body.removeChild(this);
                 return;
               } catch (error: any) {
-                console.log(error);
+                console.log(error.message);
               }
             };
             const cancelHandler = () => {

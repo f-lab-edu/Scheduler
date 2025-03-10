@@ -81,22 +81,27 @@ export default class TaskList extends HTMLElement {
 
   render() {
     this.innerHTML = `
-      <ul>
-        ${this._list
-          ?.map((task: ITask) => {
-            return `
+    <ul>
+    ${this._list
+      ?.map((task: ITask) => {
+        const isSameDate = task.startDate === task.endDate;
+        const isToday = task.startDate === new Date().toISOString().split('T')[0];
+
+        let dateStr = '';
+        if (isSameDate && isToday) {
+          dateStr = 'Today';
+        } else if (isSameDate) {
+          dateStr = `<time>${formatDate(task.startDate)}</time>`;
+        } else {
+          dateStr = `<time>${formatDate(task.startDate)}</time> ~ <time>${formatDate(task.endDate)}</time>`;
+        }
+        return `
                   <li data-task-id="${task.id}">
                     <article class="task-card ${task.priority.toLowerCase()}">
                       <header class="task-card-header">
                         <span class="date-wrapper">
                           <img src="${date}" alt="date">
-                          ${
-                            task.startDate === task.endDate && task.startDate === new Date().toISOString().split('T')[0]
-                              ? 'Today'
-                              : task.startDate === task.endDate
-                                ? `<time>${formatDate(task.startDate)}</time>`
-                                : `<time>${formatDate(task.startDate)}</time> ~ <time>${formatDate(task.endDate)}</time>`
-                          }
+                          ${dateStr}
                         </span>
                         <span class="priority">${task.priority} priority</span>
                       </header>
@@ -107,8 +112,8 @@ export default class TaskList extends HTMLElement {
                     </article>
                   </li>
             `;
-          })
-          .join('')}
+      })
+      .join('')}
       </ul>
 `;
   }

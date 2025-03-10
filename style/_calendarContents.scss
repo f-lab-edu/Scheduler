@@ -1,0 +1,115 @@
+@use 'sass:map';
+@use './colors' as colors;
+@use './mixins' as mix;
+
+.calendar-contents {
+  display: flex;
+  justify-content: center;
+}
+
+.calendar {
+  width: 700px;
+  margin-right: 52px;
+  background-color: colors.$white;
+}
+
+.calendar-header {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  text-align: start;
+  margin: 30px 0 16px;
+  color: colors.$font-white;
+
+  .prev-button,
+  .next-button {
+    border: none;
+    background-color: transparent;
+
+    img {
+      width: 24px;
+    }
+    cursor: pointer;
+  }
+}
+.week-days,
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 700px;
+  margin: 0 auto;
+}
+.week-days {
+  div {
+    text-align: center;
+    padding: 20px;
+    border-bottom: 1px solid colors.$light-gray;
+  }
+}
+.calendar-grid div {
+  min-height: 100px;
+  border-bottom: 1px solid colors.$light-gray;
+}
+
+.day-cell span {
+  top: 4px;
+  right: 4px;
+}
+.day-cell {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  padding-top: 20px;
+
+  width: 100px;
+
+  .task-bar {
+    height: 20px;
+    background-color: pink;
+
+    margin-top: 4px;
+    min-height: 20px;
+    padding: 2px 2px 2px 5px;
+    color: map.get(map.get(colors.$colors, font), taskDescription);
+    font-size: 14px;
+    display: inline-block;
+    cursor: pointer;
+  }
+}
+.day-num {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+}
+.prev-month-day,
+.next-month-day {
+  color: map.get(map.get(colors.$colors, font), placeholder);
+}
+
+.agenda {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  color: colors.$white;
+  background-color: colors.$white;
+  .priority-color {
+    width: 20px;
+    height: 20px;
+    border-radius: 5px;
+  }
+  .task-wrapper {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+}
+
+agenda-element {
+  .agenda {
+    background-color: map.get(map.get(colors.$colors, background), agenda);
+    width: 350px;
+    min-height: 488px;
+    margin-top: 75px;
+    padding: 50px;
+  }
+}

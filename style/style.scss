@@ -6,6 +6,7 @@
 @use './icon';
 @use './boardContents';
 @use './modal';
+@use './calendarContents';
 
 @each $priority, $color in colors.$priorities {
   .#{$priority} {
@@ -18,4 +19,3 @@
     @include mix.priority-color($color);
   }
 }
-

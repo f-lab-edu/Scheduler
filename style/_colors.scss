@@ -22,14 +22,17 @@ $colors: (
     taskList: #836e8c80,
     count: #27083480,
     input: #6a6c93,
+    agenda: #47426b,
   ),
   border: (
     search: #a8a8a8,
     inputBottom: #001b41,
     editor: #8f8e8e,
+    lightGray: #ccc,
   ),
   button: (
     filter: #2d2a4f,
+    prevNext: #f7edff4d,
   ),
   hover: (
     add: #1c63fe,
@@ -54,3 +57,4 @@ $priorities: (
 );
 $task-list-bg: map.get(map.get($colors, background), taskList);
 $main-blue: map.get($colors, mainBlue);
+$light-gray: map.get(map.get($colors, border), lightGray);

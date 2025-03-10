@@ -1,5 +1,6 @@
 import '@/components/common/ActionGroup';
 import '@/components/borad/StatusList';
+import '@/components/calendar/CalendarContenst';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import { deleteStatus } from '@/data/indexedDBService';
@@ -17,7 +18,7 @@ export default class Contents extends HTMLElement {
     this._totalCount = 0;
   }
 
-  async connectedCallback() {
+  connectedCallback() {
     this.render();
     this.handleAddNewButtonClick();
     this.updateTotalTaskCount();
@@ -72,19 +73,23 @@ export default class Contents extends HTMLElement {
       const cancelHandler = () => {
         document.body.removeChild($confirmDialog);
       };
-      const confirmHandler = () => {
-        document.body.removeChild($confirmDialog);
-        const $statusList = this.querySelector('status-list') as HTMLElement;
+      const confirmHandler = async () => {
+        try {
+          document.body.removeChild($confirmDialog);
+          const $statusList = this.querySelector('status-list') as HTMLElement;
 
-        if ($statusList) {
-          const $targetButton = event.target as HTMLElement;
-          const $taskList = $targetButton.closest('ul.task-list') as HTMLUListElement | null;
+          if ($statusList) {
+            const $targetButton = event.target as HTMLElement;
+            const $taskList = $targetButton.closest('ul.task-list') as HTMLUListElement | null;
 
-          if ($taskList) {
-            deleteStatus(Number($taskList.dataset.id));
-            $taskList.remove();
-            this.updateTotalTaskCount();
+            if ($taskList) {
+              await deleteStatus(Number($taskList.dataset.id));
+              $taskList.remove();
+              this.updateTotalTaskCount();
+            }
           }
+        } catch (error: any) {
+          console.log(error.message);
         }
       };
       const $confirmDialog = createConfirmDialog(
@@ -103,7 +108,7 @@ export default class Contents extends HTMLElement {
     this.innerHTML = `
         <section class="contents">
             <action-group></action-group>
-            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar>캘린더</calendar>'}
+            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents>캘린더</calendar-contents>'}
         </section>
     `;
   }
