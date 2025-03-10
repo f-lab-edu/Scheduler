@@ -1,5 +1,3 @@
-import BaseDropdown from '@/components/common/dropdown/BaseDropdown';
-
 export default class PriorityList extends HTMLElement {
   connectedCallback() {
     this.render();
