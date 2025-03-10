@@ -1,10 +1,12 @@
 import '@/components/common/ActionGroup';
 import '@/components/borad/StatusList';
-import '@/components/calendar/CalendarContenst';
+import '@/components/calendar/CalendarContents';
 import StatusList from '@/components/borad/StatusList';
 import ActionGroup from '@/components/common/ActionGroup';
 import { deleteStatus } from '@/data/indexedDBService';
 import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
+import Calendar from '@/components/calendar/Calendar';
+import TaskList from '@/components/borad/TaskList';
 export default class Contents extends HTMLElement {
   private selectedTab: string;
   private addClicked: boolean;
@@ -23,6 +25,7 @@ export default class Contents extends HTMLElement {
     this.updateTotalTaskCount();
     this.setupRemoveConfirmationHandler();
     this.updateActionGroupCount();
+    this.setupPriorityChanged();
   }
 
   handleAddNewButtonClick() {
@@ -108,12 +111,25 @@ export default class Contents extends HTMLElement {
     });
   }
 
+  private setupPriorityChanged() {
+    this.addEventListener('priority-changed', (event: Event) => {
+      const { selectedPriorities } = (event as CustomEvent).detail;
+      const $taskLists = this.querySelectorAll('task-list');
+      $taskLists.forEach((taskList) => {
+        (taskList as any).filteredPriority = selectedPriorities;
+      });
+
+      const $calendar = this.querySelector('calendar-contents calendar-element') as Calendar;
+      const $agenda = this.querySelector('calendar-contents agenda-element') as Calendar;
+    });
+  }
+
   render() {
     const selectedTab = this.getAttribute('selected-tab') || 'Board';
     this.innerHTML = `
         <section class="contents">
             <action-group></action-group>
-            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents>캘린더</calendar-contents>'}
+            ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents></calendar-contents>'}
         </section>
     `;
   }

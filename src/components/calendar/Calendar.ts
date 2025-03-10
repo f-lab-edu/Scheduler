@@ -3,17 +3,18 @@ import leftIcon from '@/assets/caret-left-fill.svg';
 import rightIcon from '@/assets/caret-right-fill.svg';
 import { getTasksByMonth } from '@/data/indexedDBService';
 import Agenda from '@/components/calendar/Agenda';
-import { ITask } from 'types/types';
+import { ITask, TPriorities } from 'types/types';
 import { formatDashDate } from '@/util/helpers';
 import EiditorModal from '../common/modal/EditorModal';
 
 export default class Calendar extends HTMLElement {
-  MONTH_NAMES: string[];
-  WEEK: string[];
-  date: Date;
-  today: number;
-  month: number;
-  year: number;
+  private MONTH_NAMES: string[];
+  private WEEK: string[];
+  private date: Date;
+  private today: number;
+  private month: number;
+  private year: number;
+  private selectedPriorities: TPriorities[];
   constructor() {
     super();
     const date = new Date();
@@ -23,6 +24,7 @@ export default class Calendar extends HTMLElement {
     this.today = date.getDate();
     this.month = date.getMonth();
     this.year = date.getFullYear();
+    this.selectedPriorities = [];
   }
 
   connectedCallback() {
@@ -31,6 +33,12 @@ export default class Calendar extends HTMLElement {
     this.setupButtonClickListeners();
     this.refreshTasks();
     this.setupTaskClickListener();
+  }
+
+  set filteredPriority(priorities: TPriorities[]) {
+    this.selectedPriorities = priorities;
+    console.log('🟢', priorities);
+    //TODO: filtering 해야함
   }
 
   private generateCalendarCell() {

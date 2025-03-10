@@ -1,3 +1,5 @@
+import { ITask, TPriorities } from 'types/types';
+
 //Month date. year
 export function formatDate(dateStr: string) {
   const date = new Date(dateStr);
@@ -35,4 +37,16 @@ export function getMonthsBetween(startDate: string, endDate: string): string[] {
     current.setMonth(current.getMonth() + 1);
   }
   return result;
+}
+
+export function filterDataByPriorities(data: ITask[], selectedPriorities: TPriorities[]): ITask[] {
+  if (!selectedPriorities.length) {
+    return data;
+  }
+  console.log(
+    '🐞🐞🐞',
+    data.filter((task) => selectedPriorities.includes(task.priority)),
+  );
+  // return data.filter((task) => selectedPriorities.includes(task.priority));
+  return data.filter((task) => selectedPriorities.includes(task.priority));
 }
