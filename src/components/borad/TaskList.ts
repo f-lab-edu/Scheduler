@@ -1,7 +1,7 @@
 import { ITask, TPriorities } from 'types/types';
 import date from '@/assets/calendar-check.svg';
 import { getTasksByStatus } from '@/data/indexedDBService';
-import { filterDataByPriorities, formatDate } from '@/util/helpers';
+import { filterDataByPriorities, filterDataBySearchValue, formatDate } from '@/util/helpers';
 import EiditorModal from '@/components/common/modal/EditorModal';
 import StatusHeader from '@/components/borad/StatusHeader';
 export default class TaskList extends HTMLElement {
@@ -10,6 +10,7 @@ export default class TaskList extends HTMLElement {
   private _filteredList: ITask[];
   private _taskCount: number;
   private selectedPriorities: TPriorities[];
+  private _searchValue: string;
 
   constructor() {
     super();
@@ -18,6 +19,7 @@ export default class TaskList extends HTMLElement {
     this._statusId = null;
     this._taskCount = 0;
     this.selectedPriorities = [];
+    this._searchValue = '';
   }
 
   connectedCallback() {
@@ -41,7 +43,11 @@ export default class TaskList extends HTMLElement {
 
   set filteredPriority(priorities: TPriorities[]) {
     this.selectedPriorities = priorities;
-    this._filteredList = filterDataByPriorities(this._list, priorities);
+    this.render();
+  }
+
+  set searchValue(value: string) {
+    this._searchValue = value;
     this.render();
   }
 
@@ -90,7 +96,13 @@ export default class TaskList extends HTMLElement {
   }
 
   render() {
-    const list = this.selectedPriorities.length > 0 ? this._filteredList : this._list;
+    const filteredByPriority =
+      this.selectedPriorities.length > 0 ? filterDataByPriorities(this._list, this.selectedPriorities) : this._list;
+
+    const list =
+      this._searchValue.length > 0
+        ? filterDataBySearchValue(filteredByPriority, this._searchValue)
+        : filteredByPriority;
     this.innerHTML = `
     <ul>
     ${list

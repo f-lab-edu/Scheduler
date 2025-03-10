@@ -16,6 +16,7 @@ export default class ActionGroup extends HTMLElement {
   connectedCallback() {
     this.render();
     this.setupButtonClickListener();
+    this.setupInputChange();
   }
 
   get totalCount() {
@@ -73,6 +74,32 @@ export default class ActionGroup extends HTMLElement {
     this.clickFilterButton = false;
   };
 
+  private setupInputChange() {
+    const $searchInput = this.querySelector('.search-input') as HTMLInputElement;
+    if (!$searchInput) return;
+
+    let debounceTimer: number | undefined;
+    const debounceDelay = 300;
+
+    $searchInput.addEventListener('input', (event: Event) => {
+      const $targetValue = (event.target as HTMLInputElement).value;
+
+      // 디바운스 있으면
+      if (debounceTimer) {
+        clearTimeout(debounceTimer);
+      }
+
+      debounceTimer = window.setTimeout(() => {
+        this.dispatchEvent(
+          new CustomEvent('search-input-changed', {
+            bubbles: true,
+            detail: { targetValue: $targetValue },
+          }),
+        );
+      }, debounceDelay);
+    });
+  }
+
   private render() {
     this.innerHTML = `
           <section class="action-group">
@@ -82,8 +109,9 @@ export default class ActionGroup extends HTMLElement {
               </div>
               <div class="right-actions">
                   <div class="search-bar">
-                      <img class="search-icon" src="${search}" alt="search icon" />
-                      <input value="" placeholder="Type your search keyword" />
+                  <img class="search-icon" src="${search}" alt="search icon" />
+                  <input class="search-input" value="" placeholder="Type your task" />
+                  
                   </div>
                 ${createIconTextButton('filter-button', filter, 'filter-icon', 'Filters')}
               </div>
