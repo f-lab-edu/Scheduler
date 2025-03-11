@@ -52,26 +52,33 @@ export default class TaskList extends HTMLElement {
   }
 
   async loadTasksByStatus() {
-    if (!this._statusId) return;
-    const tasks = await getTasksByStatus(this._statusId);
-    this._taskCount = tasks.length;
-
-    const $taskList = this.closest('ul.task-list');
-    if ($taskList) {
-      const $statusHeader = $taskList.querySelector('status-header') as StatusHeader;
-      if ($statusHeader) {
-        $statusHeader.count = this._taskCount;
+    try {
+      if (!this._statusId) {
+        return;
       }
+      const tasks = await getTasksByStatus(this._statusId);
+      tasks.sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+      this._taskCount = tasks.length;
+
+      const $taskList = this.closest('ul.task-list');
+      if ($taskList) {
+        const $statusHeader = $taskList.querySelector('status-header') as StatusHeader;
+        if ($statusHeader) {
+          $statusHeader.count = this._taskCount;
+        }
+      }
+
+      this.dispatchEvent(
+        new CustomEvent('task-count-update', {
+          detail: { count: this._taskCount },
+          bubbles: true,
+        }),
+      );
+
+      this.taskList = tasks;
+    } catch (error: any) {
+      console.log(error.message);
     }
-
-    this.dispatchEvent(
-      new CustomEvent('task-count-update', {
-        detail: { count: this._taskCount },
-        bubbles: true,
-      }),
-    );
-
-    this.taskList = tasks;
   }
 
   private setupTaskCardListener() {
@@ -119,7 +126,7 @@ export default class TaskList extends HTMLElement {
           dateStr = `<time>${formatDate(task.startDate)}</time> ~ <time>${formatDate(task.endDate)}</time>`;
         }
         return `
-                  <li data-task-id="${task.id}">
+                  <li data-task-id="${task.id}" class="draggable" draggable="true">
                     <article class="task-card ${task.priority.toLowerCase()}">
                       <header class="task-card-header">
                         <span class="date-wrapper">
