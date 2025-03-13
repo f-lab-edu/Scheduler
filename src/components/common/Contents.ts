@@ -6,7 +6,7 @@ import ActionGroup from '@/components/common/ActionGroup';
 import { deleteStatus } from '@/data/indexedDBService';
 import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
 import Calendar from '@/components/calendar/Calendar';
-import TaskList from '@/components/borad/TaskList';
+
 export default class Contents extends HTMLElement {
   private selectedTab: string;
   private addClicked: boolean;
@@ -26,6 +26,7 @@ export default class Contents extends HTMLElement {
     this.setupRemoveConfirmationHandler();
     this.updateActionGroupCount();
     this.setupPriorityChanged();
+    this.setupInputChangeListener();
   }
 
   handleAddNewButtonClick() {
@@ -128,6 +129,16 @@ export default class Contents extends HTMLElement {
       if ($agenda) {
         $agenda.filteredPriority = selectedPriorities;
       }
+    });
+  }
+
+  private setupInputChangeListener() {
+    this.addEventListener('search-input-changed', (event: Event) => {
+      const { targetValue } = (event as CustomEvent).detail;
+      const $taskLists = this.querySelectorAll('task-list');
+      $taskLists.forEach((taskList) => {
+        (taskList as any).searchValue = targetValue;
+      });
     });
   }
 
