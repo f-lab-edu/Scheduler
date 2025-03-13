@@ -1,4 +1,4 @@
-import { ITask } from 'types/types';
+import { ITask, TPriorities } from 'types/types';
 
 export default class Agenda extends HTMLElement {
   private _monthlyTasks: ITask[];
