@@ -27,7 +27,7 @@ export default class StatusList extends HTMLElement {
     this.loadStatus();
     this.setEventListener();
     this.setupStatusCreationHandler();
-    this.handleDragDropUpdate();
+    this.handleDragDropAction();
   }
 
   get totalTaskCount(): number {
@@ -127,7 +127,7 @@ export default class StatusList extends HTMLElement {
     $taskList.statusId = id.toString();
   }
 
-  private handleDragDropUpdate() {
+  private handleDragDropAction() {
     let $dragTarget: HTMLElement | null = null;
     let $originalParent: HTMLElement | null = null; // 드래그 시작 시 task-list
 
