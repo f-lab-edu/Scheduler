@@ -71,7 +71,7 @@ export default {
   ],
 
   optimization: {
-    usedExports: true,
+    usedExports: true, //export를 식별-> 사용 않는 코드 제거
     minimize: true,
     minimizer: [
       new TerserPlugin({
