@@ -68,6 +68,5 @@ export default {
     }),
   ],
 
-  // 개발 모드/프로덕션 모드에 따라 달리 설정 가능
-  mode: 'development',
+  mode: 'production',
 };
