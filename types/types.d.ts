@@ -18,6 +18,7 @@ export interface ITask extends IDefaultInfo {
   statusId: string | null;
   taskId?: string; //수정 시에만 필요
   months?: string[]; //calendar 달별로 가져올 때
+  order?: number; //drag&drop 순서
 }
 
 export interface IStatusList {

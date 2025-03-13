@@ -3,7 +3,7 @@ import '@/components/borad/TaskList';
 import '@/components/borad/AddStatusList';
 import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
-import { createStatus, getAllStatuses } from '@/data/indexedDBService';
+import { createStatus, getAllStatuses, updateTask } from '@/data/indexedDBService';
 import TaskList from '@/components/borad/TaskList';
 import { TPriorities } from 'types/types';
 
@@ -27,6 +27,7 @@ export default class StatusList extends HTMLElement {
     this.loadStatus();
     this.setEventListener();
     this.setupStatusCreationHandler();
+    this.handleDragDropUpdate();
   }
 
   get totalTaskCount(): number {
@@ -126,12 +127,134 @@ export default class StatusList extends HTMLElement {
     $taskList.statusId = id.toString();
   }
 
+  private handleDragDropUpdate() {
+    let $dragTarget: HTMLElement | null = null;
+    let $originalParent: HTMLElement | null = null; // 드래그 시작 시 task-list
+
+    // 드래그 시작
+    this.addEventListener('dragstart', (event: DragEvent) => {
+      if (!event.target) return;
+      if (!(event.target instanceof HTMLElement)) return;
+
+      const $targetTask = event.target.closest('li');
+      if (!$targetTask) return;
+      $dragTarget = $targetTask;
+      $originalParent = $targetTask.parentElement as HTMLElement;
+      $targetTask.classList.add('dragging');
+    });
+
+    this.addEventListener('dragover', (event: DragEvent) => {
+      event.preventDefault(); // drop 허용
+
+      if (!event.target) {
+        return;
+      }
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+      const $targetTask = event.target.closest('li');
+      if (!$targetTask) {
+        return;
+      }
+      // 자기 자신이면 무시
+      if ($targetTask === $dragTarget) {
+        return;
+      }
+      // 마우스 위치, task의 영역을 비교
+      const bounding = $targetTask.getBoundingClientRect();
+      const offset = event.clientY - bounding.top;
+
+      if (offset > bounding.height / 2) {
+        // 마우스가 task 하단 절반에 위치 시
+        $targetTask.parentElement?.insertBefore($dragTarget!, $targetTask.nextSibling);
+      } else {
+        // 마우스가 task 상단 절반에 위치 시
+        $targetTask.parentElement?.insertBefore($dragTarget!, $targetTask);
+      }
+
+      if ($targetTask && $targetTask !== $dragTarget) {
+        $targetTask.classList.add('over');
+      }
+    });
+
+    // 드래그 대상이 영역을 벗어날 시
+    this.addEventListener('dragleave', (event: DragEvent) => {
+      if (!event.target) {
+        return;
+      }
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+
+      const $targetTask = event.target.closest('li');
+      if ($targetTask && $targetTask !== $dragTarget) {
+        $targetTask.classList.remove('over');
+      }
+    });
+
+    //드롭 시점에 DOM 재배치 & 데이터 갱신
+    this.addEventListener('drop', (event: DragEvent) => {
+      event.preventDefault();
+      if (!event.target) {
+        return;
+      }
+      if (!(event.target instanceof HTMLElement)) {
+        return;
+      }
+
+      const $targetTask = event.target.closest('li');
+      const $targetTaskList = event.target.closest('.task-list') as HTMLElement; // 다른 status로 옮길 수도 있게
+
+      if ($dragTarget) {
+        // 동일 status 내에서 순서 바꾸기
+        if ($targetTask && $targetTask.parentElement === $dragTarget.parentElement) {
+          $targetTask.parentElement?.insertBefore($dragTarget, $targetTask);
+        }
+        // 다른 status로 이동
+        else if ($targetTaskList && $targetTaskList !== $dragTarget.parentElement) {
+          $targetTaskList.appendChild($dragTarget);
+        }
+
+        const $newStatusId = $targetTaskList
+          ? $targetTaskList.getAttribute('data-id')
+          : $dragTarget.parentElement?.getAttribute('data-id');
+
+        if ($targetTaskList && $newStatusId) {
+          this.updateIndexedDB($targetTaskList, $newStatusId);
+        }
+        $dragTarget.classList.remove('dragging');
+        document.querySelectorAll('.over').forEach((el) => el.classList.remove('over'));
+
+        $dragTarget = null;
+        $originalParent = null;
+      }
+    });
+
+    // 성공실패 상관없이 drag끝났을 때
+    this.addEventListener('dragend', () => {
+      if ($dragTarget) {
+        $dragTarget.classList.remove('dragging');
+        $dragTarget = null;
+      }
+    });
+  }
+
+  private async updateIndexedDB($targetTaskList: HTMLElement, newStatusId: string) {
+    const $lis = $targetTaskList.querySelectorAll('li');
+    $lis.forEach((li, index) => {
+      const taskId = li.getAttribute('data-task-id');
+      if (taskId) {
+        updateTask(Number(taskId), { statusId: newStatusId, order: index });
+      }
+    });
+  }
+
   render() {
     this.innerHTML = `
         <section class="status-list">
             <add-status-list></add-status-list>
         </section>
-            `;
+    `;
   }
 }
 
