@@ -6,6 +6,7 @@ import ActionGroup from '@/components/common/ActionGroup';
 import { deleteStatus } from '@/data/indexedDBService';
 import { createConfirmDialog } from '@/components/common/modal/ModalTemplates';
 import Calendar from '@/components/calendar/Calendar';
+import TaskList from '../borad/TaskList';
 
 export default class Contents extends HTMLElement {
   private selectedTab: string;
@@ -56,9 +57,10 @@ export default class Contents extends HTMLElement {
 
   private updateTotalTaskCount() {
     this.addEventListener('task-count-update', (event: Event) => {
-      if ((this.getAttribute('selected-tab') || 'Board') === 'Board') {
+      const selectedTabAttr = this.getAttribute('selected-tab');
+      if (selectedTabAttr === null || selectedTabAttr === 'Board') {
         this._totalCount = 0;
-        const $taskList = this.querySelectorAll('task-list') as NodeListOf<any>;
+        const $taskList = this.querySelectorAll('task-list') as NodeListOf<TaskList>;
         $taskList.forEach((task) => {
           this._totalCount += task.taskCount;
         });
