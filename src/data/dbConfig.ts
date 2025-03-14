@@ -20,7 +20,7 @@ export function openDatabase(): Promise<IDBDatabase> {
     };
 
     //IndexedDB의 버전이 변경될 때 실행
-    request.onupgradeneeded = (event) => {
+    request.onupgradeneeded = (event: Event) => {
       const $target = event.target as IDBRequest<IDBDatabase>;
       const db = $target.result;
       // status 스토어 생성
@@ -48,7 +48,7 @@ export function openDatabase(): Promise<IDBDatabase> {
       }
     };
 
-    request.onsuccess = (event) => {
+    request.onsuccess = (event: Event) => {
       const $target = event.target as IDBRequest<IDBDatabase>;
       dbInstance = $target.result;
       resolve($target.result);
