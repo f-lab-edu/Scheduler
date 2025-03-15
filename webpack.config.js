@@ -2,6 +2,8 @@
 import path from 'path';
 import { fileURLToPath } from 'url';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
+import TerserPlugin from 'terser-webpack-plugin';
+import { optimize } from 'webpack';
 
 // __dirname, __filename을 ESM에서 사용하기 위한 처리
 const __filename = fileURLToPath(import.meta.url);
@@ -67,6 +69,23 @@ export default {
       filename: 'style.css',
     }),
   ],
+
+  optimization: {
+    usedExports: true, //export를 식별-> 사용 않는 코드 제거
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          compress: {
+            drop_console: true, //콘솔 제거
+          },
+          format: {
+            comments: false, //주석 제거
+          },
+        },
+      }),
+    ],
+  },
 
   mode: 'production',
 };

@@ -5,7 +5,6 @@ import StatusHeader from '@/components/borad/StatusHeader';
 import AddStatusList from '@/components/borad/AddStatusList';
 import { createStatus, getAllStatuses, updateTask } from '@/data/indexedDBService';
 import TaskList from '@/components/borad/TaskList';
-import { TPriorities } from 'types/types';
 
 export default class StatusList extends HTMLElement {
   private totalCount: number;
@@ -27,7 +26,7 @@ export default class StatusList extends HTMLElement {
     this.loadStatus();
     this.setEventListener();
     this.setupStatusCreationHandler();
-    this.handleDragDropUpdate();
+    this.setupDragDropListeners();
   }
 
   get totalTaskCount(): number {
@@ -127,17 +126,19 @@ export default class StatusList extends HTMLElement {
     $taskList.statusId = id.toString();
   }
 
-  private handleDragDropUpdate() {
+  private setupDragDropListeners() {
     let $dragTarget: HTMLElement | null = null;
     let $originalParent: HTMLElement | null = null; // 드래그 시작 시 task-list
 
     // 드래그 시작
     this.addEventListener('dragstart', (event: DragEvent) => {
-      if (!event.target) return;
-      if (!(event.target instanceof HTMLElement)) return;
-
-      const $targetTask = event.target.closest('li');
-      if (!$targetTask) return;
+      if (!event.target) {
+        return;
+      }
+      const $targetTask = (event.target as HTMLElement).closest('li');
+      if (!$targetTask) {
+        return;
+      }
       $dragTarget = $targetTask;
       $originalParent = $targetTask.parentElement as HTMLElement;
       $targetTask.classList.add('dragging');
@@ -149,10 +150,7 @@ export default class StatusList extends HTMLElement {
       if (!event.target) {
         return;
       }
-      if (!(event.target instanceof HTMLElement)) {
-        return;
-      }
-      const $targetTask = event.target.closest('li');
+      const $targetTask = (event.target as HTMLElement).closest('li');
       if (!$targetTask) {
         return;
       }
@@ -182,11 +180,8 @@ export default class StatusList extends HTMLElement {
       if (!event.target) {
         return;
       }
-      if (!(event.target instanceof HTMLElement)) {
-        return;
-      }
 
-      const $targetTask = event.target.closest('li');
+      const $targetTask = (event.target as HTMLElement).closest('li');
       if ($targetTask && $targetTask !== $dragTarget) {
         $targetTask.classList.remove('over');
       }
@@ -202,7 +197,7 @@ export default class StatusList extends HTMLElement {
         return;
       }
 
-      const $targetTask = event.target.closest('li');
+      const $targetTask = (event.target as HTMLElement).closest('li');
       const $targetTaskList = event.target.closest('.task-list') as HTMLElement; // 다른 status로 옮길 수도 있게
 
       if ($dragTarget) {
