@@ -30,7 +30,7 @@ jobs:
         with:
           source-directory: 'output'
           destination-github-username: davinahi
-          destination-repository-name: scheduler
+          destination-repository-name: ourScheduler
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
           commit-message: ${{ github.event.commits[0].message }}
           target-branch: main

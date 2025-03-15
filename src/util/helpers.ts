@@ -46,7 +46,7 @@ export function filterDataByPriorities(data: ITask[], selectedPriorities: TPrior
   return data.filter((task) => selectedPriorities.includes(task.priority));
 }
 export function filterDataBySearchValue(data: ITask[], value: string): ITask[] {
-  if (!value.length) {
+  if (value.length === 0) {
     return data;
   }
   return data.filter((task) => task.title.toLowerCase().includes(value.toLowerCase()));
