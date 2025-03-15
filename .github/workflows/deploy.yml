@@ -2,8 +2,7 @@ name: scheduler-gihub-actions
 
 on:
   push:
-    # branches: [main]
-    branches: [fix/deploy-settings]
+    branches: [main]
 
 jobs:
   build:
