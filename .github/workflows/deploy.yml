@@ -28,7 +28,7 @@ jobs:
         env:
           API_TOKEN_GITHUB: ${{ secrets.API_TOKEN_GITHUB }}
         with:
-          source-directory: 'output'
+          source-directory: 'dist'
           destination-github-username: davinahi
           destination-repository-name: scheduler
           user-email: ${{ secrets.OFFICIAL_ACCOUNT_EMAIL }}
