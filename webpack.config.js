@@ -3,6 +3,8 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import CopyWebpackPlugin from 'copy-webpack-plugin';
 
 // __dirname, __filename을 ESM에서 사용하기 위한 처리
 const __filename = fileURLToPath(import.meta.url);
@@ -66,6 +68,15 @@ export default {
     // CSS를 별도 파일로 추출
     new MiniCssExtractPlugin({
       filename: 'style.css',
+    }),
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: 'index.html', // 빌드 결과물로 dist 폴더에 들어갈 HTML 파일명
+    }),
+    new CopyWebpackPlugin({
+      patterns: [
+        { from: 'public', to: '.' }, // public 폴더 내 파일들을 dist로 복사(favicon)
+      ],
     }),
   ],
 
