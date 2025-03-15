@@ -75,7 +75,13 @@ export default {
     }),
     new CopyWebpackPlugin({
       patterns: [
-        { from: 'public', to: '.' }, // public 폴더 내 파일들을 dist로 복사(favicon)
+        {
+          from: 'public',
+          to: '.',
+          globOptions: {
+            ignore: ['**/index.html'], // index.html은 복사하지 않음
+          },
+        },
       ],
     }),
   ],
