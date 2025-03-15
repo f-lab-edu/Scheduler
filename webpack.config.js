@@ -3,7 +3,6 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import TerserPlugin from 'terser-webpack-plugin';
-import { optimize } from 'webpack';
 
 // __dirname, __filename을 ESM에서 사용하기 위한 처리
 const __filename = fileURLToPath(import.meta.url);
