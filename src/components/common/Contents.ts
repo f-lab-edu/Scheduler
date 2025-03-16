@@ -148,7 +148,7 @@ export default class Contents extends HTMLElement {
     const selectedTab = this.getAttribute('selected-tab') || 'Board';
     this.innerHTML = `
         <section class="contents">
-            <action-group></action-group>
+            <action-group selected-tab="${selectedTab}"></action-group>
             ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents></calendar-contents>'}
         </section>
     `;

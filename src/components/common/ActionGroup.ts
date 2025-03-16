@@ -6,17 +6,32 @@ import '@/components/common/dropdown/PriorityList';
 export default class ActionGroup extends HTMLElement {
   private _totalCount: number;
   private clickFilterButton: boolean;
+  private selectedCalendar: boolean;
 
   constructor() {
     super();
     this._totalCount = 0;
     this.clickFilterButton = false;
+    this.selectedCalendar = false;
   }
 
   connectedCallback() {
     this.render();
     this.setupButtonClickListener();
     this.setupInputChange();
+  }
+
+  static get observedAttributes() {
+    return ['selected-tab'];
+  }
+
+  attributeChangedCallback(name: string, oldValue: string, newValue: string) {
+    if (name === 'selected-tab' && oldValue !== newValue) {
+      if (newValue === 'Calendar') {
+        this.selectedCalendar = true;
+        this.render();
+      }
+    }
   }
 
   get totalCount() {
@@ -105,7 +120,7 @@ export default class ActionGroup extends HTMLElement {
           <section class="action-group">
               <div class="left-actions">
                   <div class="total-tasks">${this._totalCount} tasks</div>
-                  ${createIconTextButton('add-new-button', plus, 'plus-icon', 'Add New')}
+                  ${this.selectedCalendar ? '' : createIconTextButton('add-new-button', plus, 'plus-icon', 'Add New')}
               </div>
               <div class="right-actions">
                   <div class="search-bar">
