@@ -126,11 +126,6 @@ export default class Contents extends HTMLElement {
       if ($calendar) {
         $calendar.filteredPriority = selectedPriorities;
       }
-      const $agenda = this.querySelector('calendar-contents agenda-element') as Calendar;
-
-      if ($agenda) {
-        $agenda.filteredPriority = selectedPriorities;
-      }
     });
   }
 
@@ -141,6 +136,11 @@ export default class Contents extends HTMLElement {
       $taskLists.forEach((taskList) => {
         (taskList as any).searchValue = targetValue;
       });
+
+      const $calendar = this.querySelector('calendar-contents calendar-element') as Calendar;
+      if ($calendar) {
+        $calendar.searchValue = targetValue;
+      }
     });
   }
 
@@ -148,7 +148,7 @@ export default class Contents extends HTMLElement {
     const selectedTab = this.getAttribute('selected-tab') || 'Board';
     this.innerHTML = `
         <section class="contents">
-            <action-group></action-group>
+            <action-group selected-tab="${selectedTab}"></action-group>
             ${selectedTab === 'Board' ? '<status-list></status-list>' : '<calendar-contents></calendar-contents>'}
         </section>
     `;

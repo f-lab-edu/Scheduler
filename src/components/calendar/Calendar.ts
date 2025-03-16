@@ -4,7 +4,7 @@ import rightIcon from '@/assets/caret-right-fill.svg';
 import { getTasksByMonth } from '@/data/indexedDBService';
 import Agenda from '@/components/calendar/Agenda';
 import { ITask, TPriorities } from 'types/types';
-import { filterDataByPriorities, formatDashDate } from '@/util/helpers';
+import { filterDataByPriorities, filterDataBySearchValue, formatDashDate } from '@/util/helpers';
 import EiditorModal from '@/components/common/modal/EditorModal';
 
 export default class Calendar extends HTMLElement {
@@ -17,6 +17,7 @@ export default class Calendar extends HTMLElement {
   private selectedPriorities: TPriorities[];
   private _filteredList: ITask[];
   private monthlyData: ITask[];
+  private _searchValue: string = '';
   constructor() {
     super();
     const date = new Date();
@@ -29,6 +30,7 @@ export default class Calendar extends HTMLElement {
     this.selectedPriorities = [];
     this._filteredList = [];
     this.monthlyData = [];
+    this._searchValue = '';
   }
 
   connectedCallback() {
@@ -45,6 +47,15 @@ export default class Calendar extends HTMLElement {
     const taskRenderList = this.selectedPriorities.length > 0 ? this._filteredList : this.monthlyData;
     this.updateCalendarTasks(taskRenderList);
     this.updateAgendaTasks(taskRenderList);
+  }
+
+  set searchValue(value: string) {
+    this._searchValue = value;
+
+    const filteredTasks = value.length > 0 ? filterDataBySearchValue(this.monthlyData, value) : this.monthlyData;
+
+    this.updateCalendarTasks(filteredTasks);
+    this.updateAgendaTasks(filteredTasks);
   }
 
   private generateCalendarCell() {

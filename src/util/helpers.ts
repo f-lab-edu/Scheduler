@@ -49,5 +49,8 @@ export function filterDataBySearchValue(data: ITask[], value: string): ITask[] {
   if (value.length === 0) {
     return data;
   }
-  return data.filter((task) => task.title.toLowerCase().includes(value.toLowerCase()));
+  const lowerValue = value.toLowerCase();
+  return data.filter(
+    (task) => task.title.toLowerCase().includes(lowerValue) || task.description.toLowerCase().includes(lowerValue),
+  );
 }

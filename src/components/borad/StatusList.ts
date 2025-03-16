@@ -235,8 +235,8 @@ export default class StatusList extends HTMLElement {
   }
 
   private async updateIndexedDB($targetTaskList: HTMLElement, newStatusId: string) {
-    const $lis = $targetTaskList.querySelectorAll('li');
-    $lis.forEach((li, index) => {
+    const $list = $targetTaskList.querySelectorAll('li');
+    $list.forEach((li, index) => {
       const taskId = li.getAttribute('data-task-id');
       if (taskId) {
         updateTask(Number(taskId), { statusId: newStatusId, order: index });
