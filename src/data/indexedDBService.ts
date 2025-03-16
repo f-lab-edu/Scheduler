@@ -88,7 +88,7 @@ export async function deleteStatus(statusId: number): Promise<void> {
 
     deleteStatusReq.onerror = () => reject(new Error(deleteStatusReq.error?.message || 'IndexedDB error'));
     deleteStatusReq.onsuccess = () => {
-      // statusId에 종속된 Task 모두 삭제
+      // statusId의 Task 모두 삭제
       const index = taskStore.index('statusId');
       const cursorReq = index.openCursor(String(statusId));
 

@@ -1,5 +1,5 @@
 #!/bin/sh
 cd ../
 mkdir output
-cp -R ./scheduler/* ./output
-cp -R ./output ./scheduler/
+cp -R ./Scheduler/* ./output
+cp -R ./output ./Scheduler/
