@@ -217,6 +217,14 @@ export default class StatusList extends HTMLElement {
         if ($targetTaskList && $newStatusId) {
           this.updateIndexedDB($targetTaskList, $newStatusId);
         }
+
+        if ($targetTaskList) {
+          this.updateCountForTaskList($targetTaskList);
+        }
+
+        if ($originalParent && $originalParent !== $targetTaskList) {
+          this.updateCountForTaskList($originalParent);
+        }
         $dragTarget.classList.remove('dragging');
         document.querySelectorAll('.over').forEach((el) => el.classList.remove('over'));
 
@@ -232,6 +240,15 @@ export default class StatusList extends HTMLElement {
         $dragTarget = null;
       }
     });
+  }
+
+  private updateCountForTaskList($taskList: HTMLElement) {
+    const taskCount = $taskList.querySelectorAll('li').length;
+    const $statusHeader = $taskList.querySelector('status-header') as StatusHeader;
+
+    if ($statusHeader) {
+      $statusHeader.count = taskCount;
+    }
   }
 
   private async updateIndexedDB($targetTaskList: HTMLElement, newStatusId: string) {
