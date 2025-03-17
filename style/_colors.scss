@@ -1,8 +1,8 @@
 @use 'sass:map';
 
 $colors: (
-  mainBlue: #0851ee,
-  brightPurple: #600598,
+  mainBlue: #374370,
+  brightPurple: #2e3653,
   white: #ffffff,
   card: (
     high: #5feef8,
@@ -11,32 +11,32 @@ $colors: (
   ),
   font: (
     primary: #ffffff,
-    tabInactive: #9b87a4,
+    tabInactive: #8e95af,
     taskDescription: #4f4f4f,
     placeholder: #959090,
   ),
   background: (
-    startPurple: #430279,
+    startPurple: #222841,
     endBlack: #001b41,
-    searchBar: #011c41,
-    taskList: #836e8c80,
-    count: #27083480,
+    searchBar: #373f60,
+    taskList: #2e3551,
+    count: #434b70,
     input: #6a6c93,
-    agenda: #47426b,
+    agenda: #2e3551,
   ),
   border: (
-    search: #a8a8a8,
+    search: #817a7a,
     inputBottom: #001b41,
     editor: #8f8e8e,
     lightGray: #ccc,
     gray: #2d2d2d,
   ),
   button: (
-    filter: #2d2a4f,
+    filter: #2e3653,
     prevNext: #f7edff4d,
   ),
   hover: (
-    add: #1c63fe,
+    add: #3c4b7e,
     filter: #403c6d,
     dropdown: #e5e4ee,
   ),
