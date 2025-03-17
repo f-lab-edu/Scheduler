@@ -54,4 +54,7 @@ export default class Tabs extends HTMLElement {
   }
 }
 
-customElements.define('tabs-element', Tabs);
+const isRegistered = customElements.get('tabs-element');
+if (!isRegistered) {
+  customElements.define('tabs-element', Tabs);
+}

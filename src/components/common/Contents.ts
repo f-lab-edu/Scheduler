@@ -155,4 +155,7 @@ export default class Contents extends HTMLElement {
   }
 }
 
-customElements.define('contents-element', Contents);
+const isRegistered = customElements.get('contents-element');
+if (!isRegistered) {
+  customElements.define('contents-element', Contents);
+}

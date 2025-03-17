@@ -253,4 +253,7 @@ export default class StatusList extends HTMLElement {
   }
 }
 
-customElements.define('status-list', StatusList);
+const isRegistered = customElements.get('status-list');
+if (!isRegistered) {
+  customElements.define('status-list', StatusList);
+}

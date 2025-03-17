@@ -136,4 +136,7 @@ export default class ActionGroup extends HTMLElement {
   }
 }
 
-customElements.define('action-group', ActionGroup);
+const isRegistered = customElements.get('action-group');
+if (!isRegistered) {
+  customElements.define('action-group', ActionGroup);
+}

@@ -42,4 +42,7 @@ export default class TextSelector extends HTMLElement {
   }
 }
 
-customElements.define('text-selector', TextSelector);
+const isRegistered = customElements.get('text-selector');
+if (!isRegistered) {
+  customElements.define('text-selector', TextSelector);
+}

@@ -104,4 +104,7 @@ export default class StatusHeader extends HTMLElement {
   }
 }
 
-customElements.define('status-header', StatusHeader);
+const isRegistered = customElements.get('status-header');
+if (!isRegistered) {
+  customElements.define('status-header', StatusHeader);
+}

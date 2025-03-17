@@ -16,4 +16,7 @@ export default class CalendarContents extends HTMLElement {
   }
 }
 
-customElements.define('calendar-contents', CalendarContents);
+const isRegistered = customElements.get('calendar-contents');
+if (!isRegistered) {
+  customElements.define('calendar-contents', CalendarContents);
+}

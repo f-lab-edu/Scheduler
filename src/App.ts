@@ -46,4 +46,7 @@ export class App extends HTMLElement {
   }
 }
 
-customElements.define('app-root', App);
+const isRegistered = customElements.get('app-root');
+if (!isRegistered) {
+  customElements.define('app-root', App);
+}

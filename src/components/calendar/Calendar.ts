@@ -227,4 +227,7 @@ export default class Calendar extends HTMLElement {
   }
 }
 
-customElements.define('calendar-element', Calendar);
+const isRegistered = customElements.get('calendar-element');
+if (!isRegistered) {
+  customElements.define('calendar-element', Calendar);
+}

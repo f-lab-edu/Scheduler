@@ -28,4 +28,7 @@ export default class IconTextButton extends IconButton {
   }
 }
 
-customElements.define('icon-text-button', IconTextButton);
+const isRegistered = customElements.get('icon-text-button');
+if (!isRegistered) {
+  customElements.define('icon-text-button', IconTextButton);
+}
