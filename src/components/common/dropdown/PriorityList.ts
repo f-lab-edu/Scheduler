@@ -59,4 +59,7 @@ export default class PriorityList extends HTMLElement {
   }
 }
 
-customElements.define('priority-list', PriorityList);
+const isRegistered = customElements.get('priority-list');
+if (!isRegistered) {
+  customElements.define('priority-list', PriorityList);
+}

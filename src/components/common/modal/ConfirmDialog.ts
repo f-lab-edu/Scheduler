@@ -71,4 +71,7 @@ export default class ConfirmDialog extends HTMLElement {
   }
 }
 
-customElements.define('confirm-dialog', ConfirmDialog);
+const isRegistered = customElements.get('confirm-dialog');
+if (!isRegistered) {
+  customElements.define('confirm-dialog', ConfirmDialog);
+}

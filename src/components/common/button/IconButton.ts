@@ -30,4 +30,7 @@ export default class IconButton extends HTMLElement {
   }
 }
 
-customElements.define('icon-button', IconButton);
+const isRegistered = customElements.get('icon-button');
+if (!isRegistered) {
+  customElements.define('icon-button', IconButton);
+}

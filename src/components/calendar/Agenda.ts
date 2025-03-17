@@ -44,4 +44,7 @@ export default class Agenda extends HTMLElement {
   }
 }
 
-customElements.define('agenda-element', Agenda);
+const isRegistered = customElements.get('agenda-element');
+if (!isRegistered) {
+  customElements.define('agenda-element', Agenda);
+}

@@ -149,4 +149,7 @@ export default class TaskList extends HTMLElement {
   }
 }
 
-customElements.define('task-list', TaskList);
+const isRegistered = customElements.get('task-list');
+if (!isRegistered) {
+  customElements.define('task-list', TaskList);
+}

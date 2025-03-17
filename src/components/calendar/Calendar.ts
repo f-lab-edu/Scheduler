@@ -1,11 +1,11 @@
-import { createIconButton } from '../common/button/buttonTemplates';
 import leftIcon from '@/assets/caret-left-fill.svg';
 import rightIcon from '@/assets/caret-right-fill.svg';
-import { getTasksByMonth } from '@/data/indexedDBService';
 import Agenda from '@/components/calendar/Agenda';
+import { createIconButton } from '@/components/common/button/buttonTemplates';
+import EiditorModal from '@/components/common/modal/EditorModal';
+import { getTasksByMonth } from '@/data/indexedDBService';
 import { ITask, TPriorities } from 'types/types';
 import { filterDataByPriorities, filterDataBySearchValue, formatDashDate } from '@/util/helpers';
-import EiditorModal from '@/components/common/modal/EditorModal';
 
 export default class Calendar extends HTMLElement {
   private MONTH_NAMES: string[];
@@ -227,4 +227,7 @@ export default class Calendar extends HTMLElement {
   }
 }
 
-customElements.define('calendar-element', Calendar);
+const isRegistered = customElements.get('calendar-element');
+if (!isRegistered) {
+  customElements.define('calendar-element', Calendar);
+}

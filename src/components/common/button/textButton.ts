@@ -27,4 +27,7 @@ export default class TextButton extends HTMLElement {
   }
 }
 
-customElements.define('text-button', TextButton);
+const isRegistered = customElements.get('text-button');
+if (!isRegistered) {
+  customElements.define('text-button', TextButton);
+}

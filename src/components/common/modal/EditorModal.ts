@@ -231,4 +231,7 @@ export default class EiditorModal extends HTMLElement {
   }
 }
 
-customElements.define('editor-modal', EiditorModal);
+const isRegistered = customElements.get('editor-modal');
+if (!isRegistered) {
+  customElements.define('editor-modal', EiditorModal);
+}
