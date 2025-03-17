@@ -2,6 +2,10 @@
 @use './colors' as colors;
 @use './mixins' as mix;
 
+.logo {
+  color: colors.$font-white;
+}
+
 .dropdown-menu {
   position: absolute;
   right: -35px;
