@@ -13,4 +13,7 @@
 - 등록한 스케줄을 우선순위와 상태에(예정,진행,완료 외 설정한 값) 따라 필터링 및 검색 기능
 - drag & drop과 같은 동작을 통해 보다 유연한 사용자 경험을 제공
 
+### 회고
+[회고 글](https://velog.io/@dadak/JS%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B8%ED%9A%8C%EA%B3%A0)
+
 ![디자인](https://github.com/user-attachments/assets/3a5d7e75-cdb8-4785-8b01-b82939e195b4)
